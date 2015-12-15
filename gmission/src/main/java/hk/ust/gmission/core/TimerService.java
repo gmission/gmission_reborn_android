@@ -13,6 +13,11 @@ import android.support.v4.app.NotificationCompat;
 
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import hk.ust.gmission.events.PauseTimerEvent;
+import hk.ust.gmission.events.ResumeTimerEvent;
+import hk.ust.gmission.events.StopTimerEvent;
+import hk.ust.gmission.events.TimerPausedEvent;
+import hk.ust.gmission.events.TimerTickEvent;
 import hk.ust.gmission.ui.BootstrapTimerActivity;
 import hk.ust.gmission.util.Ln;
 import com.squareup.otto.Bus;

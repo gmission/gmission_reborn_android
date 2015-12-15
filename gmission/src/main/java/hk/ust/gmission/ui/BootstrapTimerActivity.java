@@ -12,12 +12,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import hk.ust.gmission.R;
-import hk.ust.gmission.core.PauseTimerEvent;
-import hk.ust.gmission.core.ResumeTimerEvent;
-import hk.ust.gmission.core.StopTimerEvent;
-import hk.ust.gmission.core.TimerPausedEvent;
+import hk.ust.gmission.events.PauseTimerEvent;
+import hk.ust.gmission.events.ResumeTimerEvent;
+import hk.ust.gmission.events.StopTimerEvent;
+import hk.ust.gmission.events.TimerPausedEvent;
 import hk.ust.gmission.core.TimerService;
-import hk.ust.gmission.core.TimerTickEvent;
+import hk.ust.gmission.events.TimerTickEvent;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

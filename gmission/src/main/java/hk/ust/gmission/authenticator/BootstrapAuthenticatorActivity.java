@@ -38,7 +38,7 @@ import hk.ust.gmission.R.string;
 import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.BootstrapService;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.core.Storage;
+import hk.ust.gmission.events.Storage;
 import hk.ust.gmission.core.User;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.ui.TextWatcherAdapter;

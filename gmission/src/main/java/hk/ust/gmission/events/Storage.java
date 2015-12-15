@@ -1,4 +1,4 @@
-package hk.ust.gmission.core;
+package hk.ust.gmission.events;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import hk.ust.gmission.BootstrapApplication;
+import hk.ust.gmission.core.User;
 
 /**
  * Created by rui on 14-2-10.

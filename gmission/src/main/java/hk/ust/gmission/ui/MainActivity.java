@@ -3,7 +3,6 @@
 package hk.ust.gmission.ui;
 
 import android.accounts.OperationCanceledException;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -14,18 +13,14 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import hk.ust.gmission.BootstrapServiceProvider;
-import hk.ust.gmission.R;
-import hk.ust.gmission.core.BootstrapService;
-import hk.ust.gmission.events.NavItemSelectedEvent;
-import hk.ust.gmission.util.Ln;
-import hk.ust.gmission.util.SafeAsyncTask;
-import hk.ust.gmission.util.UIUtils;
-import com.squareup.otto.Subscribe;
-
 import javax.inject.Inject;
 
 import butterknife.Views;
+import hk.ust.gmission.BootstrapServiceProvider;
+import hk.ust.gmission.R;
+import hk.ust.gmission.core.BootstrapService;
+import hk.ust.gmission.util.SafeAsyncTask;
+import hk.ust.gmission.util.UIUtils;
 
 
 /**
@@ -135,10 +130,13 @@ public class MainActivity extends BootstrapFragmentActivity {
     private void initScreen() {
         if (userHasAuthenticated) {
 
-            Ln.d("Foo");
             final FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.container, new CarouselFragment())
+//                    .commit();
+
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new CarouselFragment())
+                    .replace(R.id.container, new UserListFragment())
                     .commit();
         }
 
@@ -182,7 +180,7 @@ public class MainActivity extends BootstrapFragmentActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
-                //menuDrawer.toggleMenu();
+//                menuDrawer.toggleMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,4 +1,4 @@
-package hk.ust.gmission.core;
+package hk.ust.gmission.events;
 
 /**
  * Marker class for Otto for a pause event for the timer.

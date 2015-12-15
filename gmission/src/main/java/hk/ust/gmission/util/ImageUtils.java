@@ -1,4 +1,4 @@
-package hk.ust.gmission.core;
+package hk.ust.gmission.util;
 
 
 import android.graphics.Bitmap;
