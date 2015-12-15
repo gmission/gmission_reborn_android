@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
@@ -180,35 +181,12 @@ public class MainActivity extends BootstrapFragmentActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
+                Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
                 //menuDrawer.toggleMenu();
-                return true;
-            case R.id.timer:
-                navigateToTimer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void navigateToTimer() {
-        final Intent i = new Intent(this, BootstrapTimerActivity.class);
-        startActivity(i);
-    }
-
-    @Subscribe
-    public void onNavigationItemSelected(NavItemSelectedEvent event) {
-
-        Ln.d("Selected: %1$s", event.getItemPosition());
-
-        switch(event.getItemPosition()) {
-            case 0:
-                // Home
-                // do nothing as we're already on the home screen.
-                break;
-            case 1:
-                // Timer
-                navigateToTimer();
-                break;
-        }
-    }
 }

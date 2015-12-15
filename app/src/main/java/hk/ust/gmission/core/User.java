@@ -2,88 +2,105 @@ package hk.ust.gmission.core;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
 
     private static final long serialVersionUID = -7495897652017488896L;
 
-    protected String firstName;
-    protected String lastName;
-    protected String username;
-    protected String phone;
-    protected String objectId;
-    protected String sessionToken;
-    protected String gravatarId;
-    protected String avatarUrl;
+    @Expose
+    @SerializedName("id") protected int id;
+    @Expose @SerializedName("name") protected String name;
+    @Expose @SerializedName("res") protected int res;
+    @Expose @SerializedName("expire") protected String expire;
+    @Expose @SerializedName("token") protected String token;
+    @Expose @SerializedName("email") protected String email;
+    @Expose @SerializedName("credit") protected int credit;
 
+    private int reuqestCnt = 0;
+    private int answerCnt = 0;
+//    private CheckIn indoorCheckIn;
+//    private CheckIn globalCheckIn;
 
-    public String getUsername() {
-        return username;
+    public User() {
     }
 
-    public void setUsername(final String username) {
-        this.username = username;
+    public int getId() {
+        return id;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setPhone(final String phone) {
-        this.phone = phone;
+    public String getName() {
+        return name;
     }
 
-    public String getObjectId() {
-        return objectId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setObjectId(final String objectId) {
-        this.objectId = objectId;
+    public int getRes() {
+        return res;
     }
 
-    public String getSessionToken() {
-        return sessionToken;
+    public void setRes(int res) {
+        this.res = res;
     }
 
-    public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
+    public String getExpire() {
+        return expire;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public void setExpire(String expire) {
+        this.expire = expire;
     }
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
+    public String getToken() {
+        return token;
     }
 
-    public String getLastName() {
-        return lastName;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
-    public String getGravatarId() {
-        return gravatarId;
+    public String getEmail() {
+        return email;
     }
 
-    public String getAvatarUrl() {
-        if (TextUtils.isEmpty(avatarUrl)) {
-            String gravatarId = getGravatarId();
-            if (TextUtils.isEmpty(gravatarId))
-                gravatarId = GravatarUtils.getHash(getUsername());
-            avatarUrl = getAvatarUrl(gravatarId);
-        }
-        return avatarUrl;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    private String getAvatarUrl(String id) {
-        if (!TextUtils.isEmpty(id))
-            return "https://secure.gravatar.com/avatar/" + id + "?d=404";
-        else
-            return null;
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
+
+    public int getReuqestCnt() {
+        return reuqestCnt;
+    }
+
+    public void setReuqestCnt(int reuqestCnt) {
+        this.reuqestCnt = reuqestCnt;
+    }
+
+    public int getAnswerCnt() {
+        return answerCnt;
+    }
+
+    public void setAnswerCnt(int answerCnt) {
+        this.answerCnt = answerCnt;
     }
 }

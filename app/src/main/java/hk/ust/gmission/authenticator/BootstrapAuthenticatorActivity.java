@@ -8,6 +8,8 @@ import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.KEYCODE_ENTER;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+import static com.github.kevinsawicki.http.HttpRequest.post;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -16,9 +18,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -34,14 +35,19 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.R.id;
 import hk.ust.gmission.R.layout;
 import hk.ust.gmission.R.string;
+import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.BootstrapService;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.core.Storage;
 import hk.ust.gmission.core.User;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.ui.TextWatcherAdapter;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
+
+import com.github.kevinsawicki.http.HttpRequest;
 import com.github.kevinsawicki.wishlist.Toaster;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -51,6 +57,7 @@ import java.util.List;
 
 import butterknife.InjectView;
 import butterknife.Views;
+import hk.ust.gmission.util.Strings;
 import retrofit.RetrofitError;
 
 /**
@@ -84,7 +91,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     @Inject BootstrapService bootstrapService;
     @Inject Bus bus;
 
-    @InjectView(id.et_email) protected AutoCompleteTextView emailText;
+    @InjectView(id.et_username) protected AutoCompleteTextView usernameText;
     @InjectView(id.et_password) protected EditText passwordText;
     @InjectView(id.b_signin) protected Button signInButton;
 
@@ -93,6 +100,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     private SafeAsyncTask<Boolean> authenticationTask;
     private String authToken;
     private String authTokenType;
+    private int accountid = -1;
 
     /**
      * If set we are just checking that the user knows their credentials; this
@@ -100,7 +108,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
      */
     private Boolean confirmCredentials = false;
 
-    private String email;
+    private String username;
 
     private String password;
 
@@ -126,17 +134,17 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         accountManager = AccountManager.get(this);
 
         final Intent intent = getIntent();
-        email = intent.getStringExtra(PARAM_USERNAME);
+        username = intent.getStringExtra(PARAM_USERNAME);
         authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         confirmCredentials = intent.getBooleanExtra(PARAM_CONFIRM_CREDENTIALS, false);
 
-        requestNewAccount = email == null;
+        requestNewAccount = username == null;
 
         setContentView(layout.login_activity);
 
         Views.inject(this);
 
-        emailText.setAdapter(new ArrayAdapter<String>(this,
+        usernameText.setAdapter(new ArrayAdapter<String>(this,
                 simple_dropdown_item_1line, userEmailAccounts()));
 
         passwordText.setOnKeyListener(new OnKeyListener() {
@@ -163,12 +171,12 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
             }
         });
 
-        emailText.addTextChangedListener(watcher);
+        usernameText.addTextChangedListener(watcher);
         passwordText.addTextChangedListener(watcher);
 
-        final TextView signUpText = (TextView) findViewById(id.tv_signup);
-        signUpText.setMovementMethod(LinkMovementMethod.getInstance());
-        signUpText.setText(Html.fromHtml(getString(string.signup_link)));
+//        final TextView signUpText = (TextView) findViewById(id.tv_signup);
+//        signUpText.setMovementMethod(LinkMovementMethod.getInstance());
+//        signUpText.setText(Html.fromHtml(getString(string.signup_link)));
     }
 
     private List<String> userEmailAccounts() {
@@ -203,7 +211,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     }
 
     private void updateUIWithValidation() {
-        final boolean populated = populated(emailText) && populated(passwordText);
+        final boolean populated = populated(usernameText) && populated(passwordText);
         signInButton.setEnabled(populated);
     }
 
@@ -233,6 +241,10 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         Toaster.showLong(BootstrapAuthenticatorActivity.this, R.string.message_bad_credentials);
     }
 
+    public void handleRegister(final View view) {
+        startActivityForResult(new Intent(this, BootstrapAccountRegister.class), 1);
+    }
+
     /**
      * Handles onClick event on the Submit button. Sends username/password to
      * the server for authentication.
@@ -247,7 +259,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         }
 
         if (requestNewAccount) {
-            email = emailText.getText().toString();
+            username = usernameText.getText().toString();
         }
 
         password = passwordText.getText().toString();
@@ -256,13 +268,31 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         authenticationTask = new SafeAsyncTask<Boolean>() {
             public Boolean call() throws Exception {
 
-                final String query = String.format("%s=%s&%s=%s",
-                        PARAM_USERNAME, email, PARAM_PASSWORD, password);
+                final String query = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username, password);
+                Log.i("PostContent", query);
+                HttpRequest request = post(RESTClient.URL_AUTH).contentType("application/json").send(query);
 
-                User loginResponse = bootstrapService.authenticate(email, password);
-                token = loginResponse.getSessionToken();
 
-                return true;
+                Ln.d("Authentication response=%s", request.code());
+
+                if (request.ok()) {
+                    final User model = new Gson().fromJson(
+                            Strings.toString(request.buffer()),
+                            User.class
+                    );
+
+                    if( model.getRes() == -1 ) return false;
+
+                    model.setEmail(username);
+                    Storage.user = model;
+                    Storage.writeUser();
+                    token = model.getToken();
+                    accountid = model.getId();
+                    Ln.d("token = %s %d", token, accountid);
+
+                }
+
+                return request.ok();
             }
 
             @Override
@@ -298,7 +328,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
      * @param result
      */
     protected void finishConfirmCredentials(final boolean result) {
-        final Account account = new Account(email, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
+        final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
         accountManager.setPassword(account, password);
 
         final Intent intent = new Intent();
@@ -316,7 +346,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
      */
 
     protected void finishLogin() {
-        final Account account = new Account(email, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
+        final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
 
         if (requestNewAccount) {
             accountManager.addAccountExplicitly(account, password, null);
@@ -327,7 +357,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         authToken = token;
 
         final Intent intent = new Intent();
-        intent.putExtra(KEY_ACCOUNT_NAME, email);
+        intent.putExtra(KEY_ACCOUNT_NAME, username);
         intent.putExtra(KEY_ACCOUNT_TYPE, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
 
         if (authTokenType != null

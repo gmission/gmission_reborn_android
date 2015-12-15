@@ -23,9 +23,13 @@
     <string name="choose">Choose</string>
 
     <!-- AuthenticatorActivity -->
+    <string name="label_user_name">User Name</string>
     <string name="label_email_address">Email Address</string>
-    <string name="label_password">Password</string>
+    <string name="label_password">Password (min: 6 characters)</string>
     <string name="label_sign_in">Sign In</string>
+    <string name="label_sign_up">Register</string>
+    <string name="label_sign_out">Logout</string>
+    <string name="label_register">Register</string>
     <string name="message_signing_in">Signing in…</string>
     <string name="blank_field_warning">Please populate this field</string>
     <string name="signup_link">New to Bootstrap? &lt;a href=http://www.androidbootstrap.com>Click here&lt;/a> to learn more.</string>
@@ -43,6 +47,9 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
     <string name="title_home">Home</string>
-
+    <string name="message_reg_error">Register failed, please try again.</string>
+    <string name="message_signing_up">Signing up…</string>
+    <string name="register_check_password">You\'ll need to type in your password a second time to confirm it.</string>
+    <string name="register_check_email">Invalid email address.</string>
 
 </resources>

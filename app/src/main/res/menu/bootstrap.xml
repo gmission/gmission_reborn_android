@@ -11,12 +11,12 @@
         android:title="@string/refresh_action" >
     </item>
 
-    <item
-        android:id="@+id/timer"
-        android:icon="@drawable/ic_action_timer"
-        bootstrap:showAsAction="always"
-        android:title="@string/title_timer">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/timer"-->
+        <!--android:icon="@drawable/ic_action_timer"-->
+        <!--bootstrap:showAsAction="always"-->
+        <!--android:title="@string/title_timer">-->
+    <!--</item>-->
 
     <item
         android:id="@+id/logout"

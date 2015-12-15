@@ -31,12 +31,12 @@ public class UserActivity extends BootstrapActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Picasso.with(this).load(user.getAvatarUrl())
-                .placeholder(R.drawable.gravatar_icon)
-                .into(avatar);
-
-        name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+//
+//        Picasso.with(this).load(user.getAvatarUrl())
+//                .placeholder(R.drawable.gravatar_icon)
+//                .into(avatar);
+//
+        name.setText(String.format("%s", user.getName()));
 
     }
 

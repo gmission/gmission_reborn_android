@@ -4,6 +4,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 
 import hk.ust.gmission.authenticator.ApiKeyProvider;
+import hk.ust.gmission.authenticator.BootstrapAccountRegister;
 import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.BootstrapService;
@@ -42,6 +43,7 @@ import retrofit.converter.GsonConverter;
         injects = {
                 BootstrapApplication.class,
                 BootstrapAuthenticatorActivity.class,
+                BootstrapAccountRegister.class,
                 MainActivity.class,
                 BootstrapTimerActivity.class,
                 CheckInsListFragment.class,

@@ -17,7 +17,7 @@
 
     <application
         android:name=".BootstrapApplication"
-        android:icon="@drawable/icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Bootstrap.Dark">
 
@@ -44,6 +44,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hk.ust.gmission.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name="hk.ust.gmission.authenticator.BootstrapAccountRegister"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:parentActivityName="hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity" >
+
+            <!--
+                No intent-filter here! This activity is only ever launched by
+                someone who explicitly knows the class name
+            -->
         </activity>
 
         <service android:name=".core.TimerService" android:enabled="true" android:exported="false" />

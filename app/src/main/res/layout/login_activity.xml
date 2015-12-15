@@ -6,17 +6,17 @@
     android:background="@drawable/main_background"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/tv_signup"
-        style="@style/ShadowText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/stripe_repeat"
-        android:gravity="center"
-        android:padding="5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/text"
-        android:textColorLink="@color/text_link" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_signup"-->
+        <!--style="@style/ShadowText"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/stripe_repeat"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="5dp"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textColor="@color/text"-->
+        <!--android:textColorLink="@color/text_link" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,16 +39,16 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/label_email_address"
+                android:text="@string/label_user_name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/text" />
 
             <AutoCompleteTextView
-                android:id="@+id/et_email"
+                android:id="@+id/et_username"
                 style="@style/SignInEditText"
                 android:completionThreshold="1"
                 android:imeOptions="actionNext"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:nextFocusDown="@+id/et_password" />
 
             <TextView
@@ -81,6 +81,21 @@
                 android:onClick="handleLogin"
                 android:padding="10dp"
                 android:text="@string/label_sign_in"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/b_register"
+                style="@style/ShadowText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_background_states"
+                android:gravity="center"
+                android:onClick="handleRegister"
+                android:padding="10dp"
+                android:text="@string/label_register"
                 android:textColor="@color/text"
                 android:textSize="20sp"
                 android:textStyle="bold" />
