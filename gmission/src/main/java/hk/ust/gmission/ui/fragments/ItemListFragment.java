@@ -1,5 +1,5 @@
 
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,6 +25,9 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.R.id;
 import hk.ust.gmission.R.layout;
 import hk.ust.gmission.authenticator.LogoutService;
+import hk.ust.gmission.ui.adapters.HeaderFooterListAdapter;
+import hk.ust.gmission.ui.ThrowableLoader;
+
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.github.kevinsawicki.wishlist.Toaster;
 import com.github.kevinsawicki.wishlist.ViewUtils;
@@ -159,26 +162,12 @@ public abstract class ItemListFragment<E> extends Fragment
             case id.refresh:
                 forceRefresh();
                 return true;
-            case R.id.logout:
-                logout();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    protected abstract LogoutService getLogoutService();
 
-    private void logout() {
-        getLogoutService().logout(new Runnable() {
-            @Override
-            public void run() {
-                // Calling a refresh will force the service to look for a logged in user
-                // and when it finds none the user will be requested to log in again.
-                forceRefresh();
-            }
-        });
-    }
 
     /**
      * Force a refresh of the items displayed ignoring any cached items

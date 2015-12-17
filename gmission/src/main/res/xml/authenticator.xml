@@ -1,5 +1,5 @@
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="hk.ust.gmission"
-    android:icon="@drawable/icon"
+    android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:smallIcon="@drawable/icon" />
+    android:smallIcon="@mipmap/ic_launcher" />

@@ -115,7 +115,7 @@ public final class Constants {
         private Notification() {
         }
 
-        public static final int TIMER_NOTIFICATION_ID = 1000; // Why 1000? Why not? :)
+
     }
 
 }

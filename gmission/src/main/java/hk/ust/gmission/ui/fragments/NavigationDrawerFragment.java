@@ -1,6 +1,5 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.fragments;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -108,10 +107,11 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 new String[] {
-                        getString(R.string.title_campaign),
                         getString(R.string.title_home),
-                        getString(R.string.title_logout),
-                        getString(R.string.title_message)
+                        getString(R.string.title_campaign),
+                        getString(R.string.title_map),
+                        getString(R.string.title_message),
+                        getString(R.string.title_logout)
                 }));
         drawerListView.setItemChecked(currentSelectedPosition, true);
         return drawerListView;

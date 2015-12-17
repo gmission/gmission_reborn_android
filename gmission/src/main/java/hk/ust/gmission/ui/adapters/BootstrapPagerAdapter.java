@@ -1,6 +1,6 @@
 
 
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.adapters;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import hk.ust.gmission.R;
+import hk.ust.gmission.ui.fragments.CheckInsListFragment;
+import hk.ust.gmission.ui.fragments.NewsListFragment;
+import hk.ust.gmission.ui.fragments.UserListFragment;
 
 /**
  * Pager adapter

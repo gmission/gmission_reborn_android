@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.fragments;
 
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
@@ -13,6 +13,10 @@ import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.User;
+import hk.ust.gmission.ui.ThrowableLoader;
+import hk.ust.gmission.ui.activities.UserActivity;
+import hk.ust.gmission.ui.adapters.UserListAdapter;
+
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
 import java.util.Collections;
@@ -25,7 +29,6 @@ import static hk.ust.gmission.core.Constants.Extra.USER;
 public class UserListFragment extends ItemListFragment<User> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
-    @Inject protected LogoutService logoutService;
 
 
     @Override
@@ -50,11 +53,6 @@ public class UserListFragment extends ItemListFragment<User> {
 
         getListAdapter().addHeader(activity.getLayoutInflater()
                 .inflate(R.layout.user_list_item_labels, null));
-    }
-
-    @Override
-    protected LogoutService getLogoutService() {
-        return logoutService;
     }
 
     @Override

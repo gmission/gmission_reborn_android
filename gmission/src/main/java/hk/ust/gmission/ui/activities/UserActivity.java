@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.activities;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.User;
-import com.squareup.picasso.Picasso;
 
 import butterknife.InjectView;
 

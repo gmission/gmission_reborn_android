@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.adapters;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -52,10 +52,10 @@ public class UserListAdapter extends SingleTypeAdapter<User> {
     @Override
     protected void update(final int position, final User user) {
 
-//        Picasso.with(BootstrapApplication.getInstance())
-//                .load(user.getAvatarUrl())
-//                .placeholder(R.drawable.gravatar_icon)
-//                .into(imageView(0));
+        Picasso.with(BootstrapApplication.getInstance())
+                .load("https://www.google.com.hk/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwjx84uw8d_JAhUC4aYKHY72DaoQjRwIBw&url=http%3A%2F%2Fwww.cnet.com%2Fandroid-update%2F&psig=AFQjCNEIU5E8BIsN_Yi8bDplkM6RRpBKcQ&ust=1450338309102634")
+                .placeholder(R.drawable.gravatar_icon)
+                .into(imageView(0));
 
         setText(1, String.format("%1$s", user.getName()));
 

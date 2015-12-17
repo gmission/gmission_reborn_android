@@ -8,7 +8,7 @@
     <fragment
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
-            android:name="hk.ust.gmission.ui.NavigationDrawerFragment" />
+            android:name="hk.ust.gmission.ui.fragments.NavigationDrawerFragment" />
 
     <LinearLayout
             android:id="@+id/container"

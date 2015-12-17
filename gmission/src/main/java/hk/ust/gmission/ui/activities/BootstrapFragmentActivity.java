@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

@@ -1,5 +1,5 @@
 
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.adapters;
 
 import android.view.LayoutInflater;
 

@@ -1,8 +1,10 @@
 package hk.ust.gmission.events;
 
+import hk.ust.gmission.ui.activities.MainActivity;
+
 /**
  * Pub/Sub event used to communicate between fragment and activity.
- * Subscription occurs in the {@link hk.ust.gmission.ui.MainActivity}
+ * Subscription occurs in the {@link MainActivity}
  */
 public class NavItemSelectedEvent {
     private int itemPosition;

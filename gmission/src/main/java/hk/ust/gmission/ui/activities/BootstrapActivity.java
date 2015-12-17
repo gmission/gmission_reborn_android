@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

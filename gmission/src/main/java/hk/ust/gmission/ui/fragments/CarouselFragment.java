@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,7 @@ import com.viewpagerindicator.TitlePageIndicator;
 
 import butterknife.InjectView;
 import butterknife.Views;
+import hk.ust.gmission.ui.adapters.BootstrapPagerAdapter;
 
 /**
  * Fragment which houses the View pager.

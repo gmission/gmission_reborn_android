@@ -41,8 +41,9 @@
     <color name="nav_button_pressed">#1fb6ed</color>
     <color name="nav_button_disabled">#646464</color>
     <color name="nav_button_text_disabled">#464646</color>
-
+haidao
     <color name="dark_grey">#1f1f1f</color>
     <color name="navigation_drawer_item_separator">#c2c2c2</color>
+
 
 </resources>

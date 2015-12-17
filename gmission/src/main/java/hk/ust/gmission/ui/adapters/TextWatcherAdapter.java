@@ -1,6 +1,6 @@
 
 
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;

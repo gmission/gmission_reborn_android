@@ -12,16 +12,14 @@ import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.PostFromAnyThreadBus;
 import hk.ust.gmission.core.RestAdapterRequestInterceptor;
 import hk.ust.gmission.core.RestErrorHandler;
-import hk.ust.gmission.core.TimerService;
 import hk.ust.gmission.core.UserAgentProvider;
-import hk.ust.gmission.ui.BootstrapTimerActivity;
-import hk.ust.gmission.ui.CheckInsListFragment;
-import hk.ust.gmission.ui.MainActivity;
-import hk.ust.gmission.ui.NavigationDrawerFragment;
-import hk.ust.gmission.ui.NewsActivity;
-import hk.ust.gmission.ui.NewsListFragment;
-import hk.ust.gmission.ui.UserActivity;
-import hk.ust.gmission.ui.UserListFragment;
+import hk.ust.gmission.ui.fragments.CheckInsListFragment;
+import hk.ust.gmission.ui.activities.MainActivity;
+import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
+import hk.ust.gmission.ui.activities.NewsActivity;
+import hk.ust.gmission.ui.fragments.NewsListFragment;
+import hk.ust.gmission.ui.activities.UserActivity;
+import hk.ust.gmission.ui.fragments.UserListFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Bus;
@@ -45,14 +43,12 @@ import retrofit.converter.GsonConverter;
                 BootstrapAuthenticatorActivity.class,
                 BootstrapAccountRegister.class,
                 MainActivity.class,
-                BootstrapTimerActivity.class,
                 CheckInsListFragment.class,
                 NavigationDrawerFragment.class,
                 NewsActivity.class,
                 NewsListFragment.class,
                 UserActivity.class,
-                UserListFragment.class,
-                TimerService.class
+                UserListFragment.class
         }
 )
 public class BootstrapModule {

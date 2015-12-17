@@ -1,24 +1,35 @@
 
 
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.activities;
 
 import android.accounts.OperationCanceledException;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
+
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
 import butterknife.Views;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
+import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.BootstrapService;
+import hk.ust.gmission.events.NavItemSelectedEvent;
+import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
+import hk.ust.gmission.ui.fragments.NewsListFragment;
+import hk.ust.gmission.ui.fragments.UserListFragment;
 import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.UIUtils;
 
@@ -32,6 +43,12 @@ import hk.ust.gmission.util.UIUtils;
 public class MainActivity extends BootstrapFragmentActivity {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
+    @Inject protected Bus eventBus;
+    @Inject protected LogoutService logoutService;
+
+
+    private Fragment currentFragment = null;
+    private int currentNavItemPosition = -1;
 
     private boolean userHasAuthenticated = false;
 
@@ -40,6 +57,54 @@ public class MainActivity extends BootstrapFragmentActivity {
     private CharSequence drawerTitle;
     private CharSequence title;
     private NavigationDrawerFragment navigationDrawerFragment;
+
+    @Subscribe
+    public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
+
+        if (currentNavItemPosition == event.getItemPosition()){
+            return;
+        } else {
+            currentNavItemPosition = event.getItemPosition();
+            switch (currentNavItemPosition) {
+                case 0://home page
+                    replaceCurrentFragment(new UserListFragment());
+                    break;
+                case 1: //campaign
+                    replaceCurrentFragment(new NewsListFragment());
+                    break;
+                case 4://log out
+                    Log.d("logout","log out");
+                    logoutService.logout(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkAuth();
+                        }
+                    });
+
+                break;
+                default:
+                    return;
+            }
+        }
+
+        Log.d("event",String.valueOf(event.getItemPosition()));
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        eventBus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+//        eventBus.unregister(this);
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -130,15 +195,25 @@ public class MainActivity extends BootstrapFragmentActivity {
     private void initScreen() {
         if (userHasAuthenticated) {
 
-            final FragmentManager fragmentManager = getSupportFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.container, new CarouselFragment())
-//                    .commit();
+//                replaceCurrentFragment(new CarouselFragment());
+            replaceCurrentFragment(new UserListFragment());
+        }
 
+    }
+
+    private void replaceCurrentFragment(Fragment newFragment){
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        if (currentFragment == null){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new UserListFragment())
+                    .replace(R.id.container, newFragment)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(currentFragment.getId(), newFragment)
                     .commit();
         }
+
+        currentFragment = newFragment;
 
     }
 

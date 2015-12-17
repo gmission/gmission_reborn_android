@@ -28,7 +28,7 @@ import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.Storage;
 import hk.ust.gmission.core.User;
-import hk.ust.gmission.ui.TextWatcherAdapter;
+import hk.ust.gmission.ui.adapters.TextWatcherAdapter;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
 //import butterknife.ButterKnife;

@@ -4,8 +4,8 @@
 
     <gradient
         android:angle="270"
-        android:endColor="@color/actionbar_background_end"
-        android:startColor="@color/actionbar_background_start" />
+        android:endColor="@color/button_background_enabled_start"
+        android:startColor="@color/nav_button_pressed" />
 
     <corners android:radius="0dp" />
 

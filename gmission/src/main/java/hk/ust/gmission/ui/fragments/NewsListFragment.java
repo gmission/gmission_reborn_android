@@ -1,4 +1,4 @@
-package hk.ust.gmission.ui;
+package hk.ust.gmission.ui.fragments;
 
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
@@ -13,6 +13,10 @@ import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.News;
+import hk.ust.gmission.ui.activities.NewsActivity;
+import hk.ust.gmission.ui.adapters.NewsListAdapter;
+import hk.ust.gmission.ui.ThrowableLoader;
+
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
 import java.util.Collections;
@@ -25,7 +29,6 @@ import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 public class NewsListFragment extends ItemListFragment<News> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
-    @Inject protected LogoutService logoutService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,7 @@ public class NewsListFragment extends ItemListFragment<News> {
                         .inflate(R.layout.news_list_item_labels, null));
     }
 
-    @Override
-    protected LogoutService getLogoutService() {
-        return logoutService;
-    }
+
 
     @Override
     public void onDestroyView() {
