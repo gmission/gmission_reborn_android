@@ -9,7 +9,7 @@ Some used techniques:
 
 1. RxJava (RxAndroid)
 
-    [RxJava](https://github.com/ReactiveX/RxJava) is a pretty nice implementation of Observer Pattern. You can use it to solve a huge mass of task with a similar process. If you have not hear about that, try it!
+    [RxJava](https://github.com/ReactiveX/RxJava) is a pretty nice implementation of Observer Pattern. You can use it to resolve a huge mass of task with a similar process. If you have not hear about that, try it!
     Here are some usefully tutorials:
     
     * An [introduction](http://gank.io/post/560e15be2dca930e00da1083) of RxJava (in Chinese).
