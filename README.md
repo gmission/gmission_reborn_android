@@ -12,6 +12,7 @@ Some used techniques:
     [RxJava](https://github.com/ReactiveX/RxJava) is a pretty nice implementation of Observer Pattern. You can use it to resolve a huge mass of task with a similar process. If you have not hear about that, try it!
     Here are some usefully tutorials:
     
+    * [Tutorial](http://reactivex.io/tutorials.html) from official website.
     * An [introduction](http://gank.io/post/560e15be2dca930e00da1083) of RxJava (in Chinese).
     * A [tutorial](https://newcircle.com/s/post/1744/2015/06/29/learning-rxjava-for-android-by-example) of RxJava by Kaushik Gopal with 5 interesting examples.
     * An [example project](https://github.com/kaushikgopal/RxJava-Android-Samples) of RxAndroid by Kaushik Gopal.

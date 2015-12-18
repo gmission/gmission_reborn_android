@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hk.ust.gmission"
     android:versionCode="102"
-    android:versionName="1.1" >
+    android:versionName="1.1">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -15,12 +14,15 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".BootstrapApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Bootstrap.Dark">
-
         <activity
             android:name=".ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -29,26 +31,13 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="hk.ust.gmission.authenticator.BootstrapAccountRegister"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:parentActivityName="hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity" >
-
-            <!--
-                No intent-filter here! This activity is only ever launched by
-                someone who explicitly knows the class name
-            -->
-        </activity>
-
         <service
             android:name=".authenticator.AccountAuthenticatorService"
-            android:process=":auth" >
+            android:process=":auth">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -60,17 +49,25 @@
 
         <activity
             android:name=".authenticator.BootstrapAuthenticatorActivity"
-            android:excludeFromRecents="true" >
+            android:excludeFromRecents="true">
 
             <!--
                 No intent-filter here! This activity is only ever launched by
                 someone who explicitly knows the class name
             -->
         </activity>
-
         <activity android:name=".ui.activities.NewsActivity" />
-        <activity android:name=".ui.activities.UserActivity" android:label="@string/app_name" />
-
+        <activity
+            android:name=".ui.activities.UserActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".authenticator.BootstrapAccountRegisterActivity"
+            android:label="@string/title_activity_bootstrap_account_register"
+            android:parentActivityName=".authenticator.ActionBarAccountAuthenticatorActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hk.ust.gmission.authenticator.ActionBarAccountAuthenticatorActivity" />
+        </activity>
     </application>
 
 </manifest>

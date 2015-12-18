@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
+import hk.ust.gmission.services.BootstrapService;
 
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static hk.ust.gmission.core.Constants.Auth.AUTHTOKEN_TYPE;
@@ -39,7 +39,7 @@ public class ApiKeyProvider {
      *
      *
      * @return API key to be used for authorization with a
-     * {@link hk.ust.gmission.core.BootstrapService} instance
+     * {@link BootstrapService} instance
      * @throws AccountsException
      * @throws IOException
      */

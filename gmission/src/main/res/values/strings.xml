@@ -51,7 +51,11 @@
     <string name="title_map">Map</string>
     <string name="message_reg_error">Register failed, please try again.</string>
     <string name="message_signing_up">Signing up…</string>
-    <string name="register_check_password">You\'ll need to type in your password a second time to confirm it.</string>
+    <string name="register_check_password_same">You\'ll need to type in your password a second time to confirm it.</string>
     <string name="register_check_email">Invalid email address.</string>
+    <string name="register_check_name">Invalid Name (at least 6 characters).</string>
+    <string name="register_check_passwd">Invalid Password (at least 6 characters).</string>
+    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity
+    </string>
 
 </resources>

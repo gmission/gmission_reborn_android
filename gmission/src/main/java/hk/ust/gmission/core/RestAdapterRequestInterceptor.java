@@ -6,6 +6,7 @@ import static hk.ust.gmission.core.Constants.Http.HEADER_PARSE_REST_API_KEY;
 import static hk.ust.gmission.core.Constants.Http.PARSE_APP_ID;
 import static hk.ust.gmission.core.Constants.Http.PARSE_REST_API_KEY;
 
+import hk.ust.gmission.models.UserAgentProvider;
 import retrofit.RequestInterceptor;
 
 public class RestAdapterRequestInterceptor implements RequestInterceptor {

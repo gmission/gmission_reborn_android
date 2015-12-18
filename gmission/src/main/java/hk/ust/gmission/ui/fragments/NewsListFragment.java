@@ -8,21 +8,20 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ListView;
 
-import hk.ust.gmission.BootstrapServiceProvider;
-import hk.ust.gmission.Injector;
-import hk.ust.gmission.R;
-import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.core.News;
-import hk.ust.gmission.ui.activities.NewsActivity;
-import hk.ust.gmission.ui.adapters.NewsListAdapter;
-import hk.ust.gmission.ui.ThrowableLoader;
-
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import hk.ust.gmission.BootstrapServiceProvider;
+import hk.ust.gmission.Injector;
+import hk.ust.gmission.R;
+import hk.ust.gmission.models.News;
+import hk.ust.gmission.ui.ThrowableLoader;
+import hk.ust.gmission.ui.activities.NewsActivity;
+import hk.ust.gmission.ui.adapters.NewsListAdapter;
 
 import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 

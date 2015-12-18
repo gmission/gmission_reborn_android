@@ -1,4 +1,4 @@
-package hk.ust.gmission.core;
+package hk.ust.gmission.models;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;

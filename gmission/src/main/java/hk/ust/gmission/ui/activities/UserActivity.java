@@ -4,17 +4,16 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import hk.ust.gmission.R;
-import hk.ust.gmission.core.User;
-
-import butterknife.InjectView;
+import hk.ust.gmission.models.User;
 
 import static hk.ust.gmission.core.Constants.Extra.USER;
 
 public class UserActivity extends BootstrapActivity {
 
-    @InjectView(R.id.iv_avatar) protected ImageView avatar;
-    @InjectView(R.id.tv_name) protected TextView name;
+    @Bind(R.id.iv_avatar) protected ImageView avatar;
+    @Bind(R.id.tv_name) protected TextView name;
 
     private User user;
 

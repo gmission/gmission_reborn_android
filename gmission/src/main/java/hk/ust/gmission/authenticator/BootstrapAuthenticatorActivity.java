@@ -1,15 +1,5 @@
 package hk.ust.gmission.authenticator;
 
-import static android.R.layout.simple_dropdown_item_1line;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
-import static android.view.KeyEvent.ACTION_DOWN;
-import static android.view.KeyEvent.KEYCODE_ENTER;
-import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
-import static com.github.kevinsawicki.http.HttpRequest.post;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -30,35 +20,44 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import hk.ust.gmission.Injector;
-import hk.ust.gmission.R;
-import hk.ust.gmission.R.id;
-import hk.ust.gmission.R.layout;
-import hk.ust.gmission.R.string;
-import hk.ust.gmission.RESTClient;
-import hk.ust.gmission.core.BootstrapService;
-import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.events.Storage;
-import hk.ust.gmission.core.User;
-import hk.ust.gmission.events.UnAuthorizedErrorEvent;
-import hk.ust.gmission.ui.adapters.TextWatcherAdapter;
-import hk.ust.gmission.util.Ln;
-import hk.ust.gmission.util.SafeAsyncTask;
-
 import com.github.kevinsawicki.http.HttpRequest;
 import com.github.kevinsawicki.wishlist.Toaster;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
-import butterknife.Views;
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import hk.ust.gmission.R;
+import hk.ust.gmission.R.id;
+import hk.ust.gmission.R.layout;
+import hk.ust.gmission.R.string;
+import hk.ust.gmission.RESTClient;
+import hk.ust.gmission.services.BootstrapService;
+import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.models.User;
+import hk.ust.gmission.events.Storage;
+import hk.ust.gmission.events.UnAuthorizedErrorEvent;
+import hk.ust.gmission.ui.adapters.TextWatcherAdapter;
+import hk.ust.gmission.util.Ln;
+import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.Strings;
 import retrofit.RetrofitError;
+
+import static android.R.layout.simple_dropdown_item_1line;
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
+import static android.view.KeyEvent.ACTION_DOWN;
+import static android.view.KeyEvent.KEYCODE_ENTER;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+import static com.github.kevinsawicki.http.HttpRequest.post;
 
 /**
  * Activity to authenticate the user against an API (example API on Parse.com)
@@ -91,9 +90,9 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     @Inject BootstrapService bootstrapService;
     @Inject Bus bus;
 
-    @InjectView(id.et_username) protected AutoCompleteTextView usernameText;
-    @InjectView(id.et_password) protected EditText passwordText;
-    @InjectView(id.b_signin) protected Button signInButton;
+    @Bind(id.et_username) protected AutoCompleteTextView usernameText;
+    @Bind(id.et_password) protected EditText passwordText;
+    @Bind(id.b_signin) protected Button signInButton;
 
     private final TextWatcher watcher = validationTextWatcher();
 
@@ -129,7 +128,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        Injector.inject(this);
+
 
         accountManager = AccountManager.get(this);
 
@@ -141,8 +140,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         requestNewAccount = username == null;
 
         setContentView(layout.login_activity);
-
-        Views.inject(this);
+        ButterKnife.bind(this);
 
         usernameText.setAdapter(new ArrayAdapter<String>(this,
                 simple_dropdown_item_1line, userEmailAccounts()));
@@ -174,9 +172,6 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         usernameText.addTextChangedListener(watcher);
         passwordText.addTextChangedListener(watcher);
 
-//        final TextView signUpText = (TextView) findViewById(id.tv_signup);
-//        signUpText.setMovementMethod(LinkMovementMethod.getInstance());
-//        signUpText.setText(Html.fromHtml(getString(string.signup_link)));
     }
 
     private List<String> userEmailAccounts() {
@@ -242,7 +237,19 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     }
 
     public void handleRegister(final View view) {
-        startActivityForResult(new Intent(this, BootstrapAccountRegister.class), 1);
+        startActivityForResult(new Intent(this, BootstrapAccountRegisterActivity.class), 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK){
+            setAccountAuthenticatorResult(data.getExtras());
+            setResult(RESULT_OK, data);
+            finish();
+        }
+
     }
 
     /**

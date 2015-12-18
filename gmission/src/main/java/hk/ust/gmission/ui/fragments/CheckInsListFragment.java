@@ -12,8 +12,7 @@ import android.widget.ListView;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
-import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.core.CheckIn;
+import hk.ust.gmission.models.CheckIn;
 import hk.ust.gmission.ui.adapters.CheckInsListAdapter;
 import hk.ust.gmission.ui.ThrowableLoader;
 

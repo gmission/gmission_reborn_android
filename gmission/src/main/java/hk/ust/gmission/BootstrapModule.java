@@ -3,23 +3,6 @@ package hk.ust.gmission;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-import hk.ust.gmission.authenticator.ApiKeyProvider;
-import hk.ust.gmission.authenticator.BootstrapAccountRegister;
-import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
-import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.core.BootstrapService;
-import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.core.PostFromAnyThreadBus;
-import hk.ust.gmission.core.RestAdapterRequestInterceptor;
-import hk.ust.gmission.core.RestErrorHandler;
-import hk.ust.gmission.core.UserAgentProvider;
-import hk.ust.gmission.ui.fragments.CheckInsListFragment;
-import hk.ust.gmission.ui.activities.MainActivity;
-import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
-import hk.ust.gmission.ui.activities.NewsActivity;
-import hk.ust.gmission.ui.fragments.NewsListFragment;
-import hk.ust.gmission.ui.activities.UserActivity;
-import hk.ust.gmission.ui.fragments.UserListFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Bus;
@@ -28,6 +11,23 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import hk.ust.gmission.authenticator.ApiKeyProvider;
+import hk.ust.gmission.authenticator.BootstrapAccountRegisterActivity;
+import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
+import hk.ust.gmission.authenticator.LogoutService;
+import hk.ust.gmission.services.BootstrapService;
+import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.core.PostFromAnyThreadBus;
+import hk.ust.gmission.core.RestAdapterRequestInterceptor;
+import hk.ust.gmission.core.RestErrorHandler;
+import hk.ust.gmission.models.UserAgentProvider;
+import hk.ust.gmission.ui.activities.MainActivity;
+import hk.ust.gmission.ui.activities.NewsActivity;
+import hk.ust.gmission.ui.activities.UserActivity;
+import hk.ust.gmission.ui.fragments.CheckInsListFragment;
+import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
+import hk.ust.gmission.ui.fragments.NewsListFragment;
+import hk.ust.gmission.ui.fragments.UserListFragment;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -41,7 +41,7 @@ import retrofit.converter.GsonConverter;
         injects = {
                 BootstrapApplication.class,
                 BootstrapAuthenticatorActivity.class,
-                BootstrapAccountRegister.class,
+                BootstrapAccountRegisterActivity.class,
                 MainActivity.class,
                 CheckInsListFragment.class,
                 NavigationDrawerFragment.class,

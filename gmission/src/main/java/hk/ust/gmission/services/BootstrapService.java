@@ -1,8 +1,11 @@
 
-package hk.ust.gmission.core;
+package hk.ust.gmission.services;
 
 import java.util.List;
 
+import hk.ust.gmission.models.CheckIn;
+import hk.ust.gmission.models.News;
+import hk.ust.gmission.models.User;
 import retrofit.RestAdapter;
 
 /**

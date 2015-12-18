@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import hk.ust.gmission.R;
 import com.viewpagerindicator.TitlePageIndicator;
 
-import butterknife.InjectView;
-import butterknife.Views;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import hk.ust.gmission.R;
 import hk.ust.gmission.ui.adapters.BootstrapPagerAdapter;
 
 /**
@@ -19,10 +19,10 @@ import hk.ust.gmission.ui.adapters.BootstrapPagerAdapter;
  */
 public class CarouselFragment extends Fragment {
 
-    @InjectView(R.id.tpi_header)
+    @Bind(R.id.tpi_header)
     protected TitlePageIndicator indicator;
 
-    @InjectView(R.id.vp_pages)
+    @Bind(R.id.vp_pages)
     protected ViewPager pager;
 
     @Override
@@ -34,7 +34,7 @@ public class CarouselFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Views.inject(this, getView());
+        ButterKnife.bind(this, this.getView());
 
         pager.setAdapter(new BootstrapPagerAdapter(getResources(), getChildFragmentManager()));
         indicator.setViewPager(pager);

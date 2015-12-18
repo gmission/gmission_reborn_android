@@ -5,17 +5,14 @@ import android.accounts.AccountsException;
 import android.app.Activity;
 
 import hk.ust.gmission.authenticator.ApiKeyProvider;
-import hk.ust.gmission.core.BootstrapService;
-import hk.ust.gmission.core.UserAgentProvider;
+import hk.ust.gmission.services.BootstrapService;
 
 import java.io.IOException;
-
-import javax.inject.Inject;
 
 import retrofit.RestAdapter;
 
 /**
- * Provider for a {@link hk.ust.gmission.core.BootstrapService} instance
+ * Provider for a {@link BootstrapService} instance
  */
 public class BootstrapServiceProvider {
 

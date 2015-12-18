@@ -3,10 +3,9 @@ package hk.ust.gmission.ui.activities;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import hk.ust.gmission.R;
-import hk.ust.gmission.core.News;
-
-import butterknife.InjectView;
+import hk.ust.gmission.models.News;
 
 import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 
@@ -14,8 +13,8 @@ public class NewsActivity extends BootstrapActivity {
 
     private News newsItem;
 
-    @InjectView(R.id.tv_title) protected TextView title;
-    @InjectView(R.id.tv_content) protected TextView content;
+    @Bind(R.id.tv_title) protected TextView title;
+    @Bind(R.id.tv_content) protected TextView content;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

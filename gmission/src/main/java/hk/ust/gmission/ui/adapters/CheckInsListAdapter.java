@@ -3,7 +3,7 @@ package hk.ust.gmission.ui.adapters;
 import android.view.LayoutInflater;
 
 import hk.ust.gmission.R;
-import hk.ust.gmission.core.CheckIn;
+import hk.ust.gmission.models.CheckIn;
 
 import java.util.List;
 

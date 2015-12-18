@@ -1,6 +1,4 @@
-package hk.ust.gmission.core;
-
-import com.google.gson.annotations.SerializedName;
+package hk.ust.gmission.models;
 
 import java.util.List;
 

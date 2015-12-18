@@ -9,7 +9,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +18,16 @@ import android.widget.Toast;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+
 import javax.inject.Inject;
 
-import butterknife.Views;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.core.BootstrapService;
+import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.events.NavItemSelectedEvent;
+import hk.ust.gmission.ui.fragments.CarouselFragment;
+import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.NewsListFragment;
 import hk.ust.gmission.ui.fragments.UserListFragment;
@@ -43,7 +44,7 @@ import hk.ust.gmission.util.UIUtils;
 public class MainActivity extends BootstrapFragmentActivity {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
-    @Inject protected Bus eventBus;
+    @Inject protected Bus bus;
     @Inject protected LogoutService logoutService;
 
 
@@ -72,6 +73,12 @@ public class MainActivity extends BootstrapFragmentActivity {
                 case 1: //campaign
                     replaceCurrentFragment(new NewsListFragment());
                     break;
+                case 2: //campaign
+                    replaceCurrentFragment(new CarouselFragment());
+                    break;
+                case 3: //campaign
+                    replaceCurrentFragment(new CheckInsListFragment());
+                    break;
                 case 4://log out
                     Log.d("logout","log out");
                     logoutService.logout(new Runnable() {
@@ -96,7 +103,7 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        eventBus.register(this);
+        bus.register(this);
     }
 
     @Override
@@ -120,7 +127,7 @@ public class MainActivity extends BootstrapFragmentActivity {
         }
 
         // View injection with Butterknife
-        Views.inject(this);
+//        Views.inject(this);
 
         // Set up navigation drawer
         title = drawerTitle = getTitle();
@@ -206,11 +213,11 @@ public class MainActivity extends BootstrapFragmentActivity {
         if (currentFragment == null){
             fragmentManager.beginTransaction()
                     .replace(R.id.container, newFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else {
             fragmentManager.beginTransaction()
                     .replace(currentFragment.getId(), newFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
 
         currentFragment = newFragment;

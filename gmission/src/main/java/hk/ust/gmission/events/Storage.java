@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import hk.ust.gmission.BootstrapApplication;
-import hk.ust.gmission.core.User;
+import hk.ust.gmission.models.User;
 
 /**
  * Created by rui on 14-2-10.

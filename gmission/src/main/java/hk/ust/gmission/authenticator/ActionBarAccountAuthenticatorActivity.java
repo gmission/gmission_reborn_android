@@ -5,6 +5,8 @@ import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import hk.ust.gmission.Injector;
+
 
 /**
  * Base class for implementing an Activity that is used to help implement an
@@ -44,7 +46,7 @@ public class ActionBarAccountAuthenticatorActivity extends ActionBarActivity {
      */
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        Injector.inject(this);
         accountAuthenticatorResponse =
                 getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 

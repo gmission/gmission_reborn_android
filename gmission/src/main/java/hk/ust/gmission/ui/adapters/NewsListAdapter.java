@@ -3,7 +3,7 @@ package hk.ust.gmission.ui.adapters;
 import android.view.LayoutInflater;
 
 import hk.ust.gmission.R;
-import hk.ust.gmission.core.News;
+import hk.ust.gmission.models.News;
 
 import java.util.List;
 

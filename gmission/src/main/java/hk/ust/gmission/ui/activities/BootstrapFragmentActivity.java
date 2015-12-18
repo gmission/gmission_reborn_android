@@ -3,13 +3,12 @@ package hk.ust.gmission.ui.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import hk.ust.gmission.Injector;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
-import butterknife.InjectView;
-import butterknife.Views;
+import butterknife.ButterKnife;
+import hk.ust.gmission.Injector;
 
 /**
  * Base class for all Bootstrap Activities that need fragments.
@@ -30,7 +29,7 @@ public class BootstrapFragmentActivity extends ActionBarActivity {
     public void setContentView(final int layoutResId) {
         super.setContentView(layoutResId);
 
-        Views.inject(this);
+        ButterKnife.bind(this);
     }
 
     @Override

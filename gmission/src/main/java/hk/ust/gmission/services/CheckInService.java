@@ -1,7 +1,7 @@
-package hk.ust.gmission.core;
+package hk.ust.gmission.services;
 
-import java.util.List;
-
+import hk.ust.gmission.models.CheckInWrapper;
+import hk.ust.gmission.core.Constants;
 import retrofit.http.GET;
 
 public interface CheckInService {
