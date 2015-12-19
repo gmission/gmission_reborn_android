@@ -35,7 +35,7 @@ public class BootstrapService {
         return getRestAdapter().create(UserService.class);
     }
 
-    private NewsService getNewsService() {
+    public NewsService getNewsService() {
         return getRestAdapter().create(NewsService.class);
     }
 
@@ -50,9 +50,9 @@ public class BootstrapService {
     /**
      * Get all bootstrap News that exists on Parse.com
      */
-    public List<News> getNews() {
-        return getNewsService().getNews().getResults();
-    }
+//    public List<News> getNews() {
+//        return getNewsService().getNews().getResults();
+//    }
 
     /**
      * Get all bootstrap Users that exist on Parse.com

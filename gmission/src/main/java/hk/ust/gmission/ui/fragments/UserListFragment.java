@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
@@ -15,6 +19,11 @@ import hk.ust.gmission.models.User;
 import hk.ust.gmission.ui.ThrowableLoader;
 import hk.ust.gmission.ui.activities.UserActivity;
 import hk.ust.gmission.ui.adapters.UserListAdapter;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.PtrUIHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
+import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
@@ -29,7 +38,6 @@ public class UserListFragment extends ItemListFragment<User> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
 
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +45,83 @@ public class UserListFragment extends ItemListFragment<User> {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.item_list, null);
+    }
+
+    private void configPullToRefresh(final View view){
+
+        final StoreHouseHeader header = new StoreHouseHeader(this.getActivity().getApplicationContext());
+        header.setPadding(0, 15, 0, 0);
+        header.initWithString("loading...");
+        final PtrFrameLayout frame = (PtrFrameLayout) view.findViewById(R.id.ptr_frame);
+        frame.addPtrUIHandler(new PtrUIHandler() {
+
+            @Override
+            public void onUIReset(PtrFrameLayout frame) {
+                String string = "refreshing...";
+                header.initWithString(string);
+            }
+
+            @Override
+            public void onUIRefreshPrepare(PtrFrameLayout frame) {
+                String string = "refreshing...";
+            }
+
+            @Override
+            public void onUIRefreshBegin(PtrFrameLayout frame) {
+
+            }
+
+            @Override
+            public void onUIRefreshComplete(PtrFrameLayout frame) {
+
+            }
+
+            @Override
+            public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
+
+            }
+        });
+
+        frame.setDurationToCloseHeader(1000);
+        frame.setHeaderView(header);
+        frame.addPtrUIHandler(header);
+        frame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                frame.autoRefresh(false);
+            }
+        }, 200);
+
+        frame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                if (canScrollUp(listView)){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.refreshComplete();
+                    }
+                }, 200);
+            }
+        });
+    }
+    @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         setEmptyText(R.string.no_users);
+        configPullToRefresh(getView());
+
     }
 
     @Override

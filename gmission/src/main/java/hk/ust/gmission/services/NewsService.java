@@ -3,6 +3,7 @@ package hk.ust.gmission.services;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.NewsWrapper;
 import retrofit.http.GET;
+import rx.Observable;
 
 
 /**
@@ -11,6 +12,6 @@ import retrofit.http.GET;
 public interface NewsService {
 
     @GET(Constants.Http.URL_NEWS_FRAG)
-    NewsWrapper getNews();
+    Observable<NewsWrapper> getNews();
 
 }

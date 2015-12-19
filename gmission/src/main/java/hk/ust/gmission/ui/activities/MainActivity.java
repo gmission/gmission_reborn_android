@@ -201,8 +201,6 @@ public class MainActivity extends BootstrapFragmentActivity {
 
     private void initScreen() {
         if (userHasAuthenticated) {
-
-//                replaceCurrentFragment(new CarouselFragment());
             replaceCurrentFragment(new UserListFragment());
         }
 

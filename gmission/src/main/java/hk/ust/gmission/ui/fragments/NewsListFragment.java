@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,9 +20,11 @@ import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.models.News;
+import hk.ust.gmission.models.NewsWrapper;
 import hk.ust.gmission.ui.ThrowableLoader;
 import hk.ust.gmission.ui.activities.NewsActivity;
 import hk.ust.gmission.ui.adapters.NewsListAdapter;
+import rx.functions.Action1;
 
 import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 
@@ -72,7 +75,22 @@ public class NewsListFragment extends ItemListFragment<News> {
             public List<News> loadData() throws Exception {
                 try {
                     if (getActivity() != null) {
-                        return serviceProvider.getService(getActivity()).getNews();
+                        final List<News> list = new ArrayList<News>();
+                        serviceProvider.getService(getActivity()).getNewsService().getNews()
+                                .doOnNext(new Action1<NewsWrapper>() {
+                                    @Override
+                                    public void call(NewsWrapper newsWrapper) {
+                                        list.addAll(newsWrapper.getResults());
+                                    }
+                                })
+                                .doOnError(new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable e) {
+                                        e.printStackTrace();
+                                    }
+                                })
+                                .subscribe();
+                        return list;
                     } else {
                         return Collections.emptyList();
                     }

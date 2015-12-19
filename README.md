@@ -16,6 +16,7 @@ Some used techniques:
     * An [introduction](http://gank.io/post/560e15be2dca930e00da1083) of RxJava (in Chinese).
     * A [tutorial](https://newcircle.com/s/post/1744/2015/06/29/learning-rxjava-for-android-by-example) of RxJava by Kaushik Gopal with 5 interesting examples.
     * An [example project](https://github.com/kaushikgopal/RxJava-Android-Samples) of RxAndroid by Kaushik Gopal.
+    * [One nice Blog](http://huxian99.github.io) that translates good technical articles to Chinese.
 
 2. Otto (event bus)
 

@@ -29,7 +29,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:1.1.1'
     compile 'com.squareup.okhttp:okhttp:1.5.4'
     compile 'com.squareup.retrofit:retrofit:1.5.1'
-    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.github.nicolasjafelle:paginglistview:1.2'
 
     androidTestCompile 'junit:junit:4.11'
@@ -41,6 +40,10 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
 
     compile 'com.jakewharton.timber:timber:2.4.2'
+
+
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile 'in.srain.cube:cube-sdk:1.0.44@aar'
 
 }
 

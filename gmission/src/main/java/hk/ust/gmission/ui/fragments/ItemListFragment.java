@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
@@ -21,19 +23,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import hk.ust.gmission.R;
-import hk.ust.gmission.R.id;
-import hk.ust.gmission.R.layout;
-import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.ui.adapters.HeaderFooterListAdapter;
-import hk.ust.gmission.ui.ThrowableLoader;
-
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.github.kevinsawicki.wishlist.Toaster;
 import com.github.kevinsawicki.wishlist.ViewUtils;
 
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import hk.ust.gmission.R;
+import hk.ust.gmission.R.id;
+import hk.ust.gmission.R.layout;
+import hk.ust.gmission.ui.ThrowableLoader;
+import hk.ust.gmission.ui.adapters.HeaderFooterListAdapter;
 
 
 /**
@@ -64,17 +67,17 @@ public abstract class ItemListFragment<E> extends Fragment
     /**
      * List view
      */
-    protected ListView listView;
+    @Bind(android.R.id.list) ListView listView;
 
     /**
      * Empty view
      */
-    protected TextView emptyView;
+    @Bind(android.R.id.empty) TextView emptyView;
 
     /**
      * Progress bar
      */
-    protected ProgressBar progressBar;
+    @Bind(id.pb_loading) ProgressBar progressBar;
 
     /**
      * Is the list currently shown?
@@ -98,6 +101,21 @@ public abstract class ItemListFragment<E> extends Fragment
         return inflater.inflate(layout.item_list, null);
     }
 
+    public boolean canScrollUp(View view) {
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            if (view instanceof AbsListView) {
+                final AbsListView absListView = (AbsListView) view;
+                return absListView.getChildCount() > 0
+                        && (absListView.getFirstVisiblePosition() > 0 || absListView
+                        .getChildAt(0).getTop() < absListView.getPaddingTop());
+            } else {
+                return view.getScrollY() > 0;
+            }
+        } else {
+            return ViewCompat.canScrollVertically(view, -1);
+        }
+    }
+
     /**
      * Detach from list view.
      */
@@ -115,6 +133,8 @@ public abstract class ItemListFragment<E> extends Fragment
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         listView = (ListView) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -128,8 +148,12 @@ public abstract class ItemListFragment<E> extends Fragment
 
         emptyView = (TextView) view.findViewById(android.R.id.empty);
 
+        ButterKnife.bind(getActivity());
         configureList(getActivity(), getListView());
+
     }
+
+
 
     /**
      * Configure list after view has been created
