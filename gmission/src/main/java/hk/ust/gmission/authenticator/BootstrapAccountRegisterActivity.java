@@ -39,6 +39,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func4;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
@@ -58,7 +59,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     @Bind(R.id.b_signin) Button mBSigninBtn;
     @Bind(R.id.tv_notice) TextView mTvNotice;
 
-
+    private CompositeSubscription subcriptions = new CompositeSubscription();
 
     private SafeAsyncTask<Boolean> authenticationTask;
 
@@ -66,8 +67,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     private Observable<CharSequence> emailChangeObservable;
     private Observable<CharSequence> passwd1ChangeObservable;
     private Observable<CharSequence> passwd2ChangeObservable;
-    private Subscription formSubscription = null;
-    private Subscription buttonSubscription = null;
+
 
     private AccountManager accountManager;
 
@@ -105,13 +105,13 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     @Override
     public void onPause() {
         super.onPause();
-        formSubscription.unsubscribe();
+        subcriptions.unsubscribe();
     }
 
 
     private void subscribeRegisterButton(){
 
-        buttonSubscription = RxView.clicks(mBSigninBtn)
+        Subscription buttonSubscription = RxView.clicks(mBSigninBtn)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Object, Object>() {
                     @Override
@@ -173,10 +173,11 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                 })
 
                 .subscribe();
+        subcriptions.add(buttonSubscription);
     }
 
     private void combineLatestEvents() {
-        formSubscription = Observable.combineLatest(nameChangeObservable,
+        Subscription formSubscription = Observable.combineLatest(nameChangeObservable,
                 emailChangeObservable,
                 passwd1ChangeObservable,
                 passwd2ChangeObservable,
@@ -240,6 +241,8 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                         mBSigninBtn.setEnabled(formValid);
                     }
                 });
+
+        subcriptions.add(formSubscription);
     }
 
     /**

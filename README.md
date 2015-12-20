@@ -1,9 +1,11 @@
 # gMission App
 
-This is a rebuilt gMission Android client. You can modify or build it with android studio 2.0 or later version.
+This is an rebuilt gMission Android client. You can modify or build it with [Android Studio](http://developer.android.com/sdk/index.html?gclid=Cj0KEQiAwNmzBRCaw9uR3dGt950BEiQAnbK962IP5pZlhxCC6jHLgVQErBvAQmCXz1YXYcn_F8AJjsEaAmlq8P8HAQ) in version 2.0 (current is [preview version](http://tools.android.com/download/studio/builds/android-studio-2-0-preview-4)) or later version. I recommend you throw away Eclipse+plugins, which is too old. If you are still using Eclipse, try Android Studio, which is definitely more efficient.
 
-The home page of gMission project is http://www.gmissionhkust.com. You can find more information about gMission project and other related open-source project there.
+You can find more information about gMission project and other related open-source project on [gMission's Home Page](http://www.gmissionhkust.com).
 
+
+The architecture of this android project can be find in this [article](https://medium.com/ribot-labs/android-application-architecture-8b6e34acda65#.ynyp3cazw) ([Chinese Version](http://huxian99.github.io/2015/12/07/Android-应用架构/)).
 
 Some used techniques:
 
@@ -21,3 +23,6 @@ Some used techniques:
 2. Otto (event bus)
 
     [Otto](http://square.github.io/otto/) is an event bus designed to decouple different parts of your application while still allowing them to communicate efficiently.Forked from Guava, Otto adds unique functionality to an already refined event bus as well as specializing it to the Android platform.
+    
+3. Dagger (Dependency Injector)
+    [Dagger](http://square.github.io/dagger/) is a fast dependency injector for Android and Java.

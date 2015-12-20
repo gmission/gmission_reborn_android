@@ -183,9 +183,9 @@ public abstract class ItemListFragment<E> extends Fragment
             return false;
         }
         switch (item.getItemId()) {
-            case id.refresh:
-                forceRefresh();
-                return true;
+//            case id.refresh:
+//                forceRefresh();
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
