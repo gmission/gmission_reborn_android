@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -27,28 +26,18 @@
             android:background="@color/pager_background"
             android:clickable="true"
             android:padding="10dp">
-
-
-            <ListView
-                android:id="@android:id/list"
-                style="@style/ListView"
+            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/list"
+                android:name="hk.ust.gmission.ui.fragments.CampaignFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@android:id/empty"
-                style="@style/ListSubtitleText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/pb_loading"
-                style="@style/ListSpinner"
-                android:layout_centerInParent="true" />
-
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:context=".ui.fragments.CampaignRecyclerViewFragment"
+                tools:listitem="@layout/campaign_item" />
         </LinearLayout>
 
     </android:in.srain.cube.views.ptr.PtrFrameLayout>
@@ -56,6 +45,3 @@
 
 
 </RelativeLayout>
-
-
-

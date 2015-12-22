@@ -27,6 +27,7 @@ import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.github.kevinsawicki.wishlist.Toaster;
 import com.github.kevinsawicki.wishlist.ViewUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,8 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.R.id;
-import hk.ust.gmission.R.layout;
-import hk.ust.gmission.ui.ThrowableLoader;
+import hk.ust.gmission.R.layout;import hk.ust.gmission.ui.ThrowableLoader;
 import hk.ust.gmission.ui.adapters.HeaderFooterListAdapter;
 
 
@@ -62,7 +62,7 @@ public abstract class ItemListFragment<E> extends Fragment
     /**
      * List items provided to {@link #onLoadFinished(Loader, List)}
      */
-    protected List<E> items = Collections.emptyList();
+    protected List<E> items = new ArrayList<E>();
 
     /**
      * List view
@@ -91,8 +91,6 @@ public abstract class ItemListFragment<E> extends Fragment
         if (!items.isEmpty()) {
             setListShown(true, false);
         }
-
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -230,6 +228,24 @@ public abstract class ItemListFragment<E> extends Fragment
      * @return string resource id
      */
     protected abstract int getErrorMessage(final Exception exception);
+
+
+    @Override
+    public Loader<List<E>> onCreateLoader(int id, Bundle args) {
+
+
+        return new ThrowableLoader<List<E>>(getActivity(), items) {
+
+            @Override
+            public List<E> loadData() throws Exception {
+                if (getActivity() != null) {
+                    return items;
+                } else {
+                    return Collections.emptyList();
+                }
+            }
+        };
+    }
 
     public void onLoadFinished(final Loader<List<E>> loader, final List<E> items) {
 

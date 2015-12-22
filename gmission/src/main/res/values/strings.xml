@@ -19,6 +19,7 @@
     <string name="error_loading_checkins">Loading check-ins failed</string>
     <string name="no_users">No Users</string>
     <string name="no_news">No News</string>
+    <string name="no_campaign">No Campaign</string>
     <string name="avatar">Avatar</string>
     <string name="choose">Choose</string>
 
@@ -42,6 +43,8 @@
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="home">Home</string>
+    <string name="loading">Loading...</string>
+    <string name="refreshing">Refreshing...</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
     <string name="title_campaign">Campaign</string>
@@ -57,5 +60,8 @@
     <string name="register_check_passwd">Invalid Password (at least 6 characters).</string>
     <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity
     </string>
+
+
+
 
 </resources>

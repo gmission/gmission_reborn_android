@@ -5,6 +5,7 @@ import hk.ust.gmission.models.User;
 import hk.ust.gmission.models.UsersWrapper;
 import retrofit.http.GET;
 import retrofit.http.Query;
+import rx.Observable;
 
 /**
  * User service for connecting the the REST API and
@@ -13,7 +14,7 @@ import retrofit.http.Query;
 public interface UserService {
 
     @GET(Constants.Http.URL_USERS_FRAG)
-    UsersWrapper getUsers();
+    Observable<UsersWrapper> getUsers();
 
     /**
      * The {@link retrofit.http.Query} values will be transform into query string paramters

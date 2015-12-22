@@ -31,7 +31,7 @@ public class BootstrapService {
         this.restAdapter = restAdapter;
     }
 
-    private UserService getUserService() {
+    public UserService getUserService() {
         return getRestAdapter().create(UserService.class);
     }
 
@@ -39,7 +39,7 @@ public class BootstrapService {
         return getRestAdapter().create(NewsService.class);
     }
 
-    private CheckInService getCheckInService() {
+    public CheckInService getCheckInService() {
         return getRestAdapter().create(CheckInService.class);
     }
 
@@ -47,19 +47,6 @@ public class BootstrapService {
         return restAdapter;
     }
 
-    /**
-     * Get all bootstrap News that exists on Parse.com
-     */
-//    public List<News> getNews() {
-//        return getNewsService().getNews().getResults();
-//    }
-
-    /**
-     * Get all bootstrap Users that exist on Parse.com
-     */
-    public List<User> getUsers() {
-        return getUserService().getUsers().getResults();
-    }
 
     /**
      * Get all bootstrap Checkins that exists on Parse.com

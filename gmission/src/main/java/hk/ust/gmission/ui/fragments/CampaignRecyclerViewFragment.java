@@ -1,28 +1,25 @@
 package hk.ust.gmission.ui.fragments;
 
 import android.accounts.AccountsException;
-import android.accounts.OperationCanceledException;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import com.squareup.otto.Subscribe;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import hk.ust.gmission.events.NewsItemClickEvent;
 import hk.ust.gmission.models.News;
 import hk.ust.gmission.models.NewsWrapper;
-import hk.ust.gmission.models.User;
-import hk.ust.gmission.models.UsersWrapper;
-import hk.ust.gmission.ui.ThrowableLoader;
-import hk.ust.gmission.ui.activities.UserActivity;
-import hk.ust.gmission.ui.adapters.UserListAdapter;
+import hk.ust.gmission.ui.activities.NewsActivity;
+import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
+import hk.ust.gmission.ui.adapters.NewsListAdapter;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
@@ -33,52 +30,52 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
+import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import static hk.ust.gmission.core.Constants.Extra.USER;
-
-public class UserListFragment extends ItemListFragment<User> {
+public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<News, CampaignRecyclerViewAdapter> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
+    @Inject protected CampaignRecyclerViewAdapter campaignRecyclerViewAdapter;
 
     private boolean isLoaderInitialized = false;
 
-    protected UserListFragment userListFragment = this;
-
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Injector.inject(this);
     }
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.item_list, null);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setEmptyText(getString(R.string.no_campaign));
+
+        mRecyclerView.setAdapter(campaignRecyclerViewAdapter);
+
+
+        configPullToRefresh(getView());
+
     }
 
     private void loadData() throws IOException, AccountsException {
-        serviceProvider.getService(getActivity()).getUserService().getUsers()
+        serviceProvider.getService(getActivity()).getNewsService().getNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<UsersWrapper>() {
+                .doOnNext(new Action1<NewsWrapper>() {
                     @Override
-                    public void call(UsersWrapper newsWrapper) {
-
+                    public void call(NewsWrapper newsWrapper) {
                         if (!isLoaderInitialized){
-                            items = newsWrapper.getResults();
+                            getAdapter().setNewsList(newsWrapper.getResults());
                         } else {
-                            User user = new User();
-                            user.setName("Test");
-
-                            items.add(user);
+                            News news = new News();
+                            news.setTitle("Test News");
+                            news.setContent("This is a test news");
+                            news.setObjectId("I1");
+                            getAdapter().addNewItem(news);
                         }
-
                     }
                 })
                 .doOnError(new Action1<Throwable>() {
@@ -92,16 +89,40 @@ public class UserListFragment extends ItemListFragment<User> {
                     @Override
                     public void call() {
                         if (!isLoaderInitialized){
-                            getLoaderManager().initLoader(0, null, userListFragment);
                             isLoaderInitialized = true;
-                        } else {
-                            userListFragment.getListAdapter().getWrappedAdapter().setItems(items);
-                            userListFragment.getListAdapter().getWrappedAdapter().notifyDataSetChanged();
                         }
+
+                        getAdapter().notifyDataSetChanged();
 
                     }
                 })
                 .subscribe();
+    }
+
+
+
+
+
+    @Override
+    public void onDestroyView() {
+        getAdapter().setNewsList(null);
+
+        super.onDestroyView();
+    }
+
+
+    @Subscribe
+    public void onListItemClick(NewsItemClickEvent event) {
+        int position = mRecyclerView.indexOfChild(event.getView());
+        CampaignRecyclerViewAdapter adapter = (CampaignRecyclerViewAdapter) mRecyclerView.getAdapter();
+
+        News news = adapter.getItem(position);
+
+        startActivity(new Intent(getActivity(), NewsActivity.class).putExtra(NEWS_ITEM, news));
+    }
+
+    protected int getErrorMessage(Exception exception) {
+        return R.string.error_loading_news;
     }
 
 
@@ -157,7 +178,7 @@ public class UserListFragment extends ItemListFragment<User> {
         frame.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                if (canScrollUp(listView)){
+                if (canScrollUp(mRecyclerView)){
                     return false;
                 } else {
                     return true;
@@ -174,45 +195,5 @@ public class UserListFragment extends ItemListFragment<User> {
                 }, 200);
             }
         });
-    }
-    @Override
-    public void onActivityCreated(final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        setEmptyText(R.string.no_users);
-        configPullToRefresh(getView());
-
-    }
-
-    @Override
-    protected void configureList(final Activity activity, final ListView listView) {
-        super.configureList(activity, listView);
-
-        listView.setFastScrollEnabled(true);
-        listView.setDividerHeight(10);
-
-    }
-
-
-    public void onListItemClick(final ListView l, final View v, final int position, final long id) {
-        final User user = ((User) l.getItemAtPosition(position));
-
-        startActivity(new Intent(getActivity(), UserActivity.class).putExtra(USER, user));
-    }
-
-    @Override
-    public void onLoadFinished(final Loader<List<User>> loader, final List<User> items) {
-        super.onLoadFinished(loader, items);
-
-    }
-
-    @Override
-    protected int getErrorMessage(final Exception exception) {
-        return R.string.error_loading_users;
-    }
-
-    @Override
-    protected SingleTypeAdapter<User> createAdapter(final List<User> items) {
-        return new UserListAdapter(getActivity().getLayoutInflater(), items);
     }
 }

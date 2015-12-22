@@ -16,37 +16,37 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.events.NewsItemClickEvent;
 import hk.ust.gmission.models.News;
 
-public class NewsListAdapter extends BaseRecyclerViewAdapter<NewsListAdapter.NewsViewHolder, News> {
+public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, News> {
 
     @Override
-    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CampaignViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_list_item, parent, false);
+                .inflate(R.layout.campaign_item, parent, false);
 
-        return new NewsViewHolder(itemView);
+        return new CampaignViewHolder(itemView);
     }
 
     @Inject
-    public NewsListAdapter() {
+    public CampaignRecyclerViewAdapter() {
         items = new ArrayList<>();
     }
 
     @Override
-    public void onBindViewHolder(NewsViewHolder holder, int position) {
+    public void onBindViewHolder(CampaignViewHolder holder, int position) {
         News news = items.get(position);
-        holder.nameTextView.setText(String.format("%s %s",
+        holder.id.setText(String.format("%s %s",
                 news.getTitle(), news.getObjectId()));
-        holder.emailTextView.setText(news.getContent().substring(0, 10));
+        holder.content.setText(news.getContent().substring(0, 10));
     }
 
 
-    class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class CampaignViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @Bind(R.id.view_hex_color) View hexColorView;
-        @Bind(R.id.text_name) TextView nameTextView;
-        @Bind(R.id.text_email) TextView emailTextView;
 
-        public NewsViewHolder(View itemView) {
+        @Bind(R.id.id) TextView id;
+        @Bind(R.id.content) TextView content;
+
+        public CampaignViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

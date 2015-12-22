@@ -24,6 +24,7 @@ import hk.ust.gmission.models.UserAgentProvider;
 import hk.ust.gmission.ui.activities.MainActivity;
 import hk.ust.gmission.ui.activities.NewsActivity;
 import hk.ust.gmission.ui.activities.UserActivity;
+import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.NewsListFragment;
@@ -48,7 +49,8 @@ import retrofit.converter.GsonConverter;
                 NewsActivity.class,
                 NewsListFragment.class,
                 UserActivity.class,
-                UserListFragment.class
+                UserListFragment.class,
+                CampaignRecyclerViewFragment.class
         }
 )
 public class BootstrapModule {

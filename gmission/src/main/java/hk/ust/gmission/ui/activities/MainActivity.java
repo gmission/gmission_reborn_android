@@ -26,6 +26,7 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.events.NavItemSelectedEvent;
+import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CarouselFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
@@ -68,15 +69,19 @@ public class MainActivity extends BootstrapFragmentActivity {
             currentNavItemPosition = event.getItemPosition();
             switch (currentNavItemPosition) {
                 case 0://home page
+                    title = "home";
                     replaceCurrentFragment(new UserListFragment());
                     break;
                 case 1: //campaign
-                    replaceCurrentFragment(new NewsListFragment());
+                    title = "campaign";
+                    replaceCurrentFragment(new CampaignRecyclerViewFragment());
                     break;
-                case 2: //campaign
+                case 2: //map
+                    title = "map";
                     replaceCurrentFragment(new CarouselFragment());
                     break;
-                case 3: //campaign
+                case 3: //messages
+                    title = "messages";
                     replaceCurrentFragment(new CheckInsListFragment());
                     break;
                 case 4://log out
@@ -93,9 +98,6 @@ public class MainActivity extends BootstrapFragmentActivity {
                     return;
             }
         }
-
-        Log.d("event",String.valueOf(event.getItemPosition()));
-
 
     }
 
