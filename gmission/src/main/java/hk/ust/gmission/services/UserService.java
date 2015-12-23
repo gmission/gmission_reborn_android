@@ -1,8 +1,9 @@
 package hk.ust.gmission.services;
 
+import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.User;
-import hk.ust.gmission.models.UsersWrapper;
+import hk.ust.gmission.models.dao.User;
+import hk.ust.gmission.models.wrapper.UsersWrapper;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;
@@ -13,18 +14,18 @@ import rx.Observable;
  */
 public interface UserService {
 
-    @GET(Constants.Http.URL_USERS_FRAG)
+    @GET(RESTClient.URL_AUTH)
     Observable<UsersWrapper> getUsers();
 
     /**
      * The {@link retrofit.http.Query} values will be transform into query string paramters
      * via Retrofit
      *
-     * @param email The users email
+     * @param username The users email
      * @param password The users password
      * @return A login response.
      */
-    @GET(Constants.Http.URL_AUTH_FRAG)
-    User authenticate(@Query(Constants.Http.PARAM_USERNAME) String email,
+    @GET(RESTClient.URL_AUTH)
+    User authenticate(@Query(Constants.Http.PARAM_USERNAME) String username,
                       @Query(Constants.Http.PARAM_PASSWORD) String password);
 }

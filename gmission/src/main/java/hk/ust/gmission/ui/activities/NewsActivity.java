@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.News;
+import hk.ust.gmission.models.dao.News;
 
 import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 

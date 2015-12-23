@@ -3,9 +3,8 @@ package hk.ust.gmission.services;
 
 import java.util.List;
 
-import hk.ust.gmission.models.CheckIn;
-import hk.ust.gmission.models.News;
-import hk.ust.gmission.models.User;
+import hk.ust.gmission.models.dao.CheckIn;
+import hk.ust.gmission.models.dao.User;
 import retrofit.RestAdapter;
 
 /**
@@ -39,6 +38,10 @@ public class BootstrapService {
         return getRestAdapter().create(NewsService.class);
     }
 
+    public CampaignService getCampaignService() {
+        return getRestAdapter().create(CampaignService.class);
+    }
+
     public CheckInService getCheckInService() {
         return getRestAdapter().create(CheckInService.class);
     }
@@ -52,10 +55,10 @@ public class BootstrapService {
      * Get all bootstrap Checkins that exists on Parse.com
      */
     public List<CheckIn> getCheckIns() {
-       return getCheckInService().getCheckIns().getResults();
+        return getCheckInService().getCheckIns().getResults();
     }
 
-    public User authenticate(String email, String password) {
-        return getUserService().authenticate(email, password);
+    public User authenticate(String username, String password) {
+        return getUserService().authenticate(username, password);
     }
 }

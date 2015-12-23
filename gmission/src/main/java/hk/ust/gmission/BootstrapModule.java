@@ -5,7 +5,18 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.squareup.otto.Bus;
+
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Singleton;
 
@@ -54,6 +65,26 @@ import retrofit.converter.GsonConverter;
         }
 )
 public class BootstrapModule {
+    private static final String[] DATE_FORMATS = new String[] {
+            "yyyy-MM-dd'T'HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd"
+    };
+    private static class DateDeserializer implements JsonDeserializer<Date> {
+        @Override
+        public Date deserialize(JsonElement jsonElement, Type typeOF,
+                                JsonDeserializationContext context) throws JsonParseException {
+            for (String format : DATE_FORMATS) {
+                try {
+                    return new SimpleDateFormat(format, Locale.US).parse(jsonElement.getAsString());
+                } catch (ParseException e) {
+                }
+            }
+            throw new JsonParseException("Unparseable date: \"" + jsonElement.getAsString()
+                    + "\". Supported formats: " + Arrays.toString(DATE_FORMATS));
+        }
+    }
+
 
     @Singleton
     @Provides
@@ -73,8 +104,8 @@ public class BootstrapModule {
     }
 
     @Provides
-    BootstrapServiceProvider provideBootstrapServiceProvider(RestAdapter restAdapter, ApiKeyProvider apiKeyProvider) {
-        return new BootstrapServiceProvider(restAdapter, apiKeyProvider);
+    BootstrapServiceProvider provideBootstrapServiceProvider(RestAdapter restAdapter) {
+        return new BootstrapServiceProvider(restAdapter);
     }
 
     @Provides
@@ -96,7 +127,11 @@ public class BootstrapModule {
          * public static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd")
          *         .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES).create();
          */
-        return new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        return new GsonBuilder()
+//                    .excludeFieldsWithoutExposeAnnotation()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .registerTypeAdapter(Date.class, new DateDeserializer())
+                .create();
     }
 
     @Provides
@@ -111,8 +146,9 @@ public class BootstrapModule {
 
     @Provides
     RestAdapter provideRestAdapter(RestErrorHandler restErrorHandler, RestAdapterRequestInterceptor restRequestInterceptor, Gson gson) {
+        Gson GSON;
         return new RestAdapter.Builder()
-                .setEndpoint(Constants.Http.URL_BASE)
+                .setEndpoint(RESTClient.URL_BASE)
                 .setErrorHandler(restErrorHandler)
                 .setRequestInterceptor(restRequestInterceptor)
                 .setLogLevel(RestAdapter.LogLevel.FULL)

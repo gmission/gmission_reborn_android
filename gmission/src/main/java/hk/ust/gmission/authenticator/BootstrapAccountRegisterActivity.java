@@ -25,8 +25,7 @@ import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.User;
-import hk.ust.gmission.events.Storage;
+import hk.ust.gmission.models.dao.User;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.Strings;
@@ -163,8 +162,8 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                             model.setEmail(email);
                             token = model.getToken();
                             accountid = model.getId();
-                            Storage.user = model;
-                            Storage.writeUser();
+//                            Storage.user = model;
+//                            Storage.writeUser();
                             Ln.d("token = %s %d", token, accountid);
                         }
 
@@ -265,10 +264,11 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     protected void finishLogin() {
         final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
 
+        authToken = token;
+        Constants.Http.SESSION_TOKEN = authToken;
         accountManager.addAccountExplicitly(account, passwd, null);
+        accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
 
-
-        authToken = String.valueOf(accountid) + ":" + token;
 
         final Intent intent = new Intent();
         intent.putExtra(KEY_ACCOUNT_NAME, username);

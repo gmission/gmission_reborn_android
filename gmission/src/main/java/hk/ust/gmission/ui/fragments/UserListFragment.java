@@ -1,7 +1,6 @@
 package hk.ust.gmission.ui.fragments;
 
 import android.accounts.AccountsException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,16 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.News;
-import hk.ust.gmission.models.NewsWrapper;
-import hk.ust.gmission.models.User;
-import hk.ust.gmission.models.UsersWrapper;
-import hk.ust.gmission.ui.ThrowableLoader;
+import hk.ust.gmission.models.dao.User;
+import hk.ust.gmission.models.wrapper.UsersWrapper;
 import hk.ust.gmission.ui.activities.UserActivity;
 import hk.ust.gmission.ui.adapters.UserListAdapter;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -36,7 +30,6 @@ import rx.schedulers.Schedulers;
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;

@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 
 import hk.ust.gmission.BootstrapApplication;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.User;
+import hk.ust.gmission.models.dao.User;
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
 import com.squareup.picasso.Picasso;
 

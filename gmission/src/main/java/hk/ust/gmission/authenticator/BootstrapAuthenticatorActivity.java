@@ -38,11 +38,10 @@ import hk.ust.gmission.R.id;
 import hk.ust.gmission.R.layout;
 import hk.ust.gmission.R.string;
 import hk.ust.gmission.RESTClient;
-import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.User;
-import hk.ust.gmission.events.Storage;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
+import hk.ust.gmission.models.dao.User;
+import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.ui.adapters.TextWatcherAdapter;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
@@ -291,8 +290,8 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
                     if( model.getRes() == -1 ) return false;
 
                     model.setEmail(username);
-                    Storage.user = model;
-                    Storage.writeUser();
+//                    Storage.user = model;
+//                    Storage.writeUser();
                     token = model.getToken();
                     accountid = model.getId();
                     Ln.d("token = %s %d", token, accountid);
@@ -354,14 +353,14 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
 
     protected void finishLogin() {
         final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
-
+        authToken = token;
+        Constants.Http.SESSION_TOKEN = authToken;
         if (requestNewAccount) {
             accountManager.addAccountExplicitly(account, password, null);
         } else {
             accountManager.setPassword(account, password);
         }
-
-        authToken = token;
+        accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
 
         final Intent intent = new Intent();
         intent.putExtra(KEY_ACCOUNT_NAME, username);

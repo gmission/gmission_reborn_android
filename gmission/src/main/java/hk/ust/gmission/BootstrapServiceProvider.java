@@ -17,11 +17,9 @@ import retrofit.RestAdapter;
 public class BootstrapServiceProvider {
 
     private RestAdapter restAdapter;
-    private ApiKeyProvider keyProvider;
 
-    public BootstrapServiceProvider(RestAdapter restAdapter, ApiKeyProvider keyProvider) {
+    public BootstrapServiceProvider(RestAdapter restAdapter) {
         this.restAdapter = restAdapter;
-        this.keyProvider = keyProvider;
     }
 
     /**
@@ -36,7 +34,7 @@ public class BootstrapServiceProvider {
     public BootstrapService getService(final Activity activity)
             throws IOException, AccountsException {
         // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
-//        keyProvider.getAuthKey(activity);
+
 
         // TODO: See how that affects the bootstrap service.
         return new BootstrapService(restAdapter);

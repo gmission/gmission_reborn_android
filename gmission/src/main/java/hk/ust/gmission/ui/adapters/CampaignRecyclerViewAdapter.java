@@ -14,9 +14,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.NewsItemClickEvent;
-import hk.ust.gmission.models.News;
+import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.models.dao.News;
 
-public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, News> {
+public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, Campaign> {
 
     @Override
     public CampaignViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,10 +34,10 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
 
     @Override
     public void onBindViewHolder(CampaignViewHolder holder, int position) {
-        News news = items.get(position);
+        Campaign campaign = items.get(position);
         holder.id.setText(String.format("%s %s",
-                news.getTitle(), news.getObjectId()));
-        holder.content.setText(news.getContent().substring(0, 10));
+                campaign.getTitle(), campaign.getId()));
+        holder.content.setText(campaign.getBrief());
     }
 
 

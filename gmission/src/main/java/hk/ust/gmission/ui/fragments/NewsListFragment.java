@@ -15,8 +15,8 @@ import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.NewsItemClickEvent;
-import hk.ust.gmission.models.News;
-import hk.ust.gmission.models.NewsWrapper;
+import hk.ust.gmission.models.dao.News;
+import hk.ust.gmission.models.wrapper.NewsWrapper;
 import hk.ust.gmission.ui.activities.NewsActivity;
 import hk.ust.gmission.ui.adapters.NewsListAdapter;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -67,7 +67,7 @@ public class NewsListFragment extends BaseRecyclerViewFragment<News, NewsListAda
                     @Override
                     public void call(NewsWrapper newsWrapper) {
                         if (!isLoaderInitialized){
-                            getAdapter().setNewsList(newsWrapper.getResults());
+                            getAdapter().setItems(newsWrapper.getResults());
                         } else {
                             News news = new News();
                             news.setTitle("Test News");
@@ -104,7 +104,7 @@ public class NewsListFragment extends BaseRecyclerViewFragment<News, NewsListAda
 
     @Override
     public void onDestroyView() {
-        getAdapter().setNewsList(null);
+        getAdapter().setItems(null);
 
         super.onDestroyView();
     }

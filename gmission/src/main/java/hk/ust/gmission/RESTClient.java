@@ -6,7 +6,7 @@ package hk.ust.gmission;
 public class RESTClient {
 
 
-    private final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
+    public final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
     private final static String URL_REST = "/rest";
     private final static String URL_IMAGE = "/image";
     private final static String URL_VIDEO = "/video";
@@ -19,6 +19,7 @@ public class RESTClient {
     public  final static String URL_AUTH = URL_BASE + "/user/auth";
     public  final static String URL_REG = URL_BASE + "/user/register";
 
-
+    public static final String URL_CAMPAIGNS_FRAG =  "/rest/campaign";
+    public static final String URL_CAMPAIGNS = URL_BASE + URL_CAMPAIGNS_FRAG;
 
 }

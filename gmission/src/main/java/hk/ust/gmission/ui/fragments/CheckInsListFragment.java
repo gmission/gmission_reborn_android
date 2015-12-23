@@ -12,7 +12,7 @@ import android.widget.ListView;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.CheckIn;
+import hk.ust.gmission.models.dao.CheckIn;
 import hk.ust.gmission.ui.adapters.CheckInsListAdapter;
 import hk.ust.gmission.ui.ThrowableLoader;
 

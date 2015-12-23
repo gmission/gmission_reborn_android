@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Context;
+import android.util.Log;
 
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.util.Ln;
@@ -42,7 +43,7 @@ public class LogoutService {
 
         @Override
         public Boolean call() throws Exception {
-
+            Log.d("Logout", "Enter");
             final AccountManager accountManagerWithContext = AccountManager.get(taskContext);
             if (accountManagerWithContext != null) {
                 final Account[] accounts = accountManagerWithContext
@@ -64,6 +65,7 @@ public class LogoutService {
         protected void onSuccess(final Boolean accountWasRemoved) throws Exception {
             super.onSuccess(accountWasRemoved);
 
+            Log.d("Logout", "Success");
             Ln.d("Logout succeeded: %s", accountWasRemoved);
             onSuccess.run();
 
@@ -72,7 +74,7 @@ public class LogoutService {
         @Override
         protected void onException(final Exception e) throws RuntimeException {
             super.onException(e);
-
+            Log.d("Logout", "Exception");
             Ln.e(e.getCause(), "Logout failed.");
         }
     }

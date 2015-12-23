@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.User;
+import hk.ust.gmission.models.dao.User;
 
 import static hk.ust.gmission.core.Constants.Extra.USER;
 

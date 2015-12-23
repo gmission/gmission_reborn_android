@@ -91,7 +91,7 @@ public final class Constants {
         public static final String PARAM_USER_ID = "userID";
         public static final String USERNAME = "username";
         public static final String PASSWORD = "password";
-        public static final String SESSION_TOKEN = "sessionToken";
+        public static String SESSION_TOKEN = "sessionToken";
 
 
     }

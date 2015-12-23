@@ -14,7 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.NewsItemClickEvent;
-import hk.ust.gmission.models.News;
+import hk.ust.gmission.models.dao.News;
 
 public class NewsListAdapter extends BaseRecyclerViewAdapter<NewsListAdapter.NewsViewHolder, News> {
 

@@ -1,4 +1,4 @@
-package hk.ust.gmission.models;
+package hk.ust.gmission.models.dao;
 
 import java.io.Serializable;
 

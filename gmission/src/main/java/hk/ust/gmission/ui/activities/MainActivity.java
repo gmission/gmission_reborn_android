@@ -3,6 +3,7 @@
 package hk.ust.gmission.ui.activities;
 
 import android.accounts.OperationCanceledException;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -23,7 +24,9 @@ import javax.inject.Inject;
 
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
+import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.LogoutService;
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
@@ -47,10 +50,10 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Inject protected BootstrapServiceProvider serviceProvider;
     @Inject protected Bus bus;
     @Inject protected LogoutService logoutService;
-
+    @Inject protected ApiKeyProvider keyProvider;
 
     private Fragment currentFragment = null;
-    private int currentNavItemPosition = -1;
+    private int currentNavItemPosition = 0;
 
     private boolean userHasAuthenticated = false;
 
@@ -63,14 +66,16 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Subscribe
     public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
 
-        if (currentNavItemPosition == event.getItemPosition()){
+        Log.d("NavItemSelectedEvent","EventId:" + event.getItemPosition());
+        Log.d("NavItemSelectedEvent","currentNavItemPosition:"+currentNavItemPosition);
+        if (currentNavItemPosition == event.getItemPosition() && currentNavItemPosition != 4){
             return;
         } else {
             currentNavItemPosition = event.getItemPosition();
             switch (currentNavItemPosition) {
-                case 0://home page
+                case 0: //home page
                     title = "home";
-                    replaceCurrentFragment(new UserListFragment());
+                    replaceCurrentFragment(new CampaignRecyclerViewFragment());
                     break;
                 case 1: //campaign
                     title = "campaign";
@@ -84,7 +89,7 @@ public class MainActivity extends BootstrapFragmentActivity {
                     title = "messages";
                     replaceCurrentFragment(new CheckInsListFragment());
                     break;
-                case 4://log out
+                case 4: //log out
                     Log.d("logout","log out");
                     logoutService.logout(new Runnable() {
                         @Override
@@ -92,7 +97,6 @@ public class MainActivity extends BootstrapFragmentActivity {
                             checkAuth();
                         }
                     });
-
                 break;
                 default:
                     return;
@@ -115,6 +119,10 @@ public class MainActivity extends BootstrapFragmentActivity {
 //        eventBus.unregister(this);
     }
 
+
+    protected Activity getActivity(){
+        return this;
+    }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -203,7 +211,7 @@ public class MainActivity extends BootstrapFragmentActivity {
 
     private void initScreen() {
         if (userHasAuthenticated) {
-            replaceCurrentFragment(new UserListFragment());
+            replaceCurrentFragment(new CampaignRecyclerViewFragment());
         }
 
     }
@@ -229,8 +237,11 @@ public class MainActivity extends BootstrapFragmentActivity {
 
             @Override
             public Boolean call() throws Exception {
-                final BootstrapService svc = serviceProvider.getService(MainActivity.this);
-                return svc != null;
+//                final BootstrapService svc = serviceProvider.getService(MainActivity.this);
+                String sessionToken = keyProvider.getAuthKey(MainActivity.this);
+                Constants.Http.SESSION_TOKEN = sessionToken;
+//                return svc != null;
+                return sessionToken == null;
             }
 
             @Override

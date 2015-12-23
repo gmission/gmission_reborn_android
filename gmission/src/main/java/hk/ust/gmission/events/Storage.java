@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import hk.ust.gmission.BootstrapApplication;
-import hk.ust.gmission.models.User;
+import hk.ust.gmission.models.dao.User;
 
 /**
  * Created by rui on 14-2-10.

@@ -1,7 +1,7 @@
 package hk.ust.gmission.services;
 
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.NewsWrapper;
+import hk.ust.gmission.models.wrapper.NewsWrapper;
 import retrofit.http.GET;
 import rx.Observable;
 

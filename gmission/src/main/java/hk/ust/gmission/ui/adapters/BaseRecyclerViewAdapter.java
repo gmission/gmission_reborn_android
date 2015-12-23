@@ -24,8 +24,8 @@ public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder,
 
 
 
-    public void setNewsList(List<I> newsList) {
-        items = newsList;
+    public void setItems(List<I> newList) {
+        items = newList;
     }
 
     @Override

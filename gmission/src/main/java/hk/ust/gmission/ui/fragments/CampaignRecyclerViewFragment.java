@@ -8,18 +8,21 @@ import android.view.View;
 import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import hk.ust.gmission.events.CampaignItemClickEvent;
 import hk.ust.gmission.events.NewsItemClickEvent;
-import hk.ust.gmission.models.News;
-import hk.ust.gmission.models.NewsWrapper;
+import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.models.dao.News;
+import hk.ust.gmission.models.wrapper.CampaignWrapper;
+import hk.ust.gmission.models.wrapper.NewsWrapper;
 import hk.ust.gmission.ui.activities.NewsActivity;
 import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
-import hk.ust.gmission.ui.adapters.NewsListAdapter;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
@@ -32,7 +35,7 @@ import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.NEWS_ITEM;
 
-public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<News, CampaignRecyclerViewAdapter> {
+public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campaign, CampaignRecyclerViewAdapter> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
     @Inject protected CampaignRecyclerViewAdapter campaignRecyclerViewAdapter;
@@ -61,20 +64,20 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<News,
     }
 
     private void loadData() throws IOException, AccountsException {
-        serviceProvider.getService(getActivity()).getNewsService().getNews()
+        serviceProvider.getService(getActivity()).getCampaignService().getCampaigns()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<NewsWrapper>() {
+                .doOnNext(new Action1<CampaignWrapper>() {
                     @Override
-                    public void call(NewsWrapper newsWrapper) {
+                    public void call(CampaignWrapper campaigns) {
                         if (!isLoaderInitialized){
-                            getAdapter().setNewsList(newsWrapper.getResults());
+                            getAdapter().setItems(campaigns.getObjects());
                         } else {
-                            News news = new News();
-                            news.setTitle("Test News");
-                            news.setContent("This is a test news");
-                            news.setObjectId("I1");
-                            getAdapter().addNewItem(news);
+                            Campaign campaign = new Campaign();
+                            campaign.setTitle("Test News");
+                            campaign.setBrief("This is a test news");
+                            campaign.setId(1);
+                            getAdapter().addNewItem(campaign);
                         }
                     }
                 })
@@ -105,26 +108,25 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<News,
 
     @Override
     public void onDestroyView() {
-        getAdapter().setNewsList(null);
+        getAdapter().setItems(null);
 
         super.onDestroyView();
     }
 
 
     @Subscribe
-    public void onListItemClick(NewsItemClickEvent event) {
+    public void onListItemClick(CampaignItemClickEvent event) {
         int position = mRecyclerView.indexOfChild(event.getView());
         CampaignRecyclerViewAdapter adapter = (CampaignRecyclerViewAdapter) mRecyclerView.getAdapter();
 
-        News news = adapter.getItem(position);
+        Campaign campaign = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), NewsActivity.class).putExtra(NEWS_ITEM, news));
+//        startActivity(new Intent(getActivity(), NewsActivity.class).putExtra(NEWS_ITEM, campaign));
     }
 
     protected int getErrorMessage(Exception exception) {
         return R.string.error_loading_news;
     }
-
 
     private void configPullToRefresh(final View view){
 
