@@ -65,9 +65,6 @@
     <string name="title_activity_hit_list">Hit List</string>
     <string name="title_activity_hit">HitActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_maps">Map</string>
 
 
 </resources>
