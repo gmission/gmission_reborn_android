@@ -20,10 +20,11 @@ import com.google.gson.Gson;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
-import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.dao.User;
 import hk.ust.gmission.util.Ln;
@@ -39,7 +40,6 @@ import rx.functions.Func1;
 import rx.functions.Func4;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
@@ -75,16 +75,18 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     String email;
     private String token = null;
 
-    private int accountid = -1;
+    private String accountId = null;
 
     private String authToken;
     private String authTokenType;
+
+    private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bootstrap_account_register);
+        setContentView(R.layout.account_register_activity);
         ButterKnife.bind(this);
 
         nameChangeObservable = RxTextView.textChanges(mEtUsername).skip(1);
@@ -111,6 +113,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
     private void subscribeRegisterButton(){
 
         Subscription buttonSubscription = RxView.clicks(mBSigninBtn)
+                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Object, Object>() {
                     @Override
@@ -132,12 +135,12 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
                         String message;
                         // A 404 is returned as an Exception with this message
-                        if ("Received authentication challenge is null".equals(cause
-                                .getMessage()))
-                            message = getResources().getString(
-                                    R.string.message_reg_error);
-                        else
+                        if ("Received authentication challenge is null".equals(cause.getMessage())){
+                            message = getResources().getString(R.string.message_reg_error);
+                        }
+                        else {
                             message = cause.getMessage();
+                        }
 
                         Toaster.showLong(BootstrapAccountRegisterActivity.this, message);
                         hideProgress();
@@ -150,7 +153,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                         final String query = String.format("{\"username\":\"%s\", \"password\":\"%s\", \"email\":\"%s\"}", username, passwd, email);
 
                         Log.i("PostContent", query);
-                        HttpRequest request = post(RESTClient.URL_REG).contentType("application/json").send(query);
+                        HttpRequest request = post(Constants.Http.URL_REG).contentType(Constants.Http.CONTENT_TYPE_JSON).send(query);
 
                         Log.i("REGISTER", "Authentication response=" + request.code());
 
@@ -161,10 +164,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
                             model.setEmail(email);
                             token = model.getToken();
-                            accountid = model.getId();
-//                            Storage.user = model;
-//                            Storage.writeUser();
-                            Ln.d("token = %s %d", token, accountid);
+                            accountId = String.valueOf(model.getId());
                         }
 
                         onAuthenticationResult(request.ok());
@@ -225,13 +225,13 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                 .subscribe(new Observer<Boolean>() {
                     @Override
                     public void onCompleted() {
-                        Timber.d("completed");
+                        Ln.d("completed");
 
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.e(e, "there was an error");
+                        Ln.e(e, "there was an error");
                     }
 
                     @Override
@@ -265,10 +265,10 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
         final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
 
         authToken = token;
-        Constants.Http.SESSION_TOKEN = authToken;
+        Constants.Http.PARAM_SESSION_TOKEN = authToken;
         accountManager.addAccountExplicitly(account, passwd, null);
         accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
-
+        accountManager.setUserData(account, Constants.Auth.USER_ID, accountId);
 
         final Intent intent = new Intent();
         intent.putExtra(KEY_ACCOUNT_NAME, username);
@@ -279,9 +279,9 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
             intent.putExtra(KEY_AUTHTOKEN, authToken);
         }
 
-        accountManager.setAuthToken(account, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE, authToken);
 
-        intent.putExtra( KEY_BOOLEAN_RESULT, accountid );
+
+        intent.putExtra( KEY_BOOLEAN_RESULT, accountId);
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);

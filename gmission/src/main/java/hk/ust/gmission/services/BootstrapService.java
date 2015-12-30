@@ -30,16 +30,15 @@ public class BootstrapService {
         this.restAdapter = restAdapter;
     }
 
-    public UserService getUserService() {
-        return getRestAdapter().create(UserService.class);
-    }
 
-    public NewsService getNewsService() {
-        return getRestAdapter().create(NewsService.class);
-    }
+
 
     public CampaignService getCampaignService() {
         return getRestAdapter().create(CampaignService.class);
+    }
+
+    public HitService getHitService() {
+        return getRestAdapter().create(HitService.class);
     }
 
     public CheckInService getCheckInService() {
@@ -58,7 +57,4 @@ public class BootstrapService {
         return getCheckInService().getCheckIns().getResults();
     }
 
-    public User authenticate(String username, String password) {
-        return getUserService().authenticate(username, password);
-    }
 }

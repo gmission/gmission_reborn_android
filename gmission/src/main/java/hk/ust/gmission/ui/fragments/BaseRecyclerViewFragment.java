@@ -1,6 +1,8 @@
 package hk.ust.gmission.ui.fragments;
 
+import android.accounts.AccountsException;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,11 +19,19 @@ import android.widget.TextView;
 
 import com.squareup.otto.Bus;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.PtrUIHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
+import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 /**
  * Created by bigstone on 21/12/2015.
@@ -54,6 +64,19 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
 
     private boolean CAN_LOAD_MORE = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
 
 
     @Override
@@ -108,6 +131,7 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Injector.inject(this);
         ButterKnife.bind(this, view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -160,4 +184,78 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
         return (A) mRecyclerView.getAdapter();
     }
 
+    protected void loadData()throws IOException, AccountsException {
+
+    }
+
+    protected void configPullToRefresh(final View view){
+
+        final StoreHouseHeader header = new StoreHouseHeader(this.getActivity().getApplicationContext());
+        header.setPadding(0, 15, 0, 0);
+        header.initWithString(getString(R.string.loading));
+        final PtrFrameLayout frame = (PtrFrameLayout) view.findViewById(R.id.ptr_frame);
+        frame.addPtrUIHandler(new PtrUIHandler() {
+
+            @Override
+            public void onUIReset(PtrFrameLayout frame) {
+                header.initWithString(getString(R.string.refreshing));
+            }
+
+            @Override
+            public void onUIRefreshPrepare(PtrFrameLayout frame) {
+            }
+
+            @Override
+            public void onUIRefreshBegin(PtrFrameLayout frame) {
+                try {
+                    loadData();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (AccountsException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onUIRefreshComplete(PtrFrameLayout frame) {
+
+            }
+
+            @Override
+            public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
+
+            }
+        });
+
+        frame.setDurationToCloseHeader(1000);
+        frame.setHeaderView(header);
+        frame.addPtrUIHandler(header);
+        frame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                frame.autoRefresh(false);
+            }
+        }, 200);
+
+        frame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                if (canScrollUp(mRecyclerView)){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.refreshComplete();
+                    }
+                }, 200);
+            }
+        });
+    }
 }

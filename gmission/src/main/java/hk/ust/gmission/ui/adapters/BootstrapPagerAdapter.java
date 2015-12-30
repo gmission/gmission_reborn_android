@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import hk.ust.gmission.R;
+import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
-import hk.ust.gmission.ui.fragments.NewsListFragment;
-import hk.ust.gmission.ui.fragments.UserListFragment;
+import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 
 /**
  * Pager adapter
@@ -41,10 +41,10 @@ public class BootstrapPagerAdapter extends FragmentPagerAdapter {
         final Fragment result;
         switch (position) {
             case 0:
-                result = new NewsListFragment();
+                result = new CampaignRecyclerViewFragment();
                 break;
             case 1:
-                result = new UserListFragment();
+                result = new HitRecyclerViewFragment();
                 break;
             case 2:
                 result = new CheckInsListFragment();

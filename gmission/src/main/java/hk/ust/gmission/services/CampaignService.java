@@ -1,9 +1,6 @@
 package hk.ust.gmission.services;
 
-import java.util.List;
-
-import hk.ust.gmission.RESTClient;
-import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.wrapper.CampaignWrapper;
 import retrofit.http.GET;
 import rx.Observable;
@@ -13,6 +10,6 @@ import rx.Observable;
  */
 public interface CampaignService {
 
-    @GET(RESTClient.URL_CAMPAIGNS_FRAG)
+    @GET(Constants.Http.URL_CAMPAIGNS_FRAG)
     Observable<CampaignWrapper> getCampaigns();
 }

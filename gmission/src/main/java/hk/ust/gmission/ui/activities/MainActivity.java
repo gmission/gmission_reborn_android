@@ -4,12 +4,18 @@ package hk.ust.gmission.ui.activities;
 
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.os.IBinder;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +25,6 @@ import android.widget.Toast;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-
 import javax.inject.Inject;
 
 import hk.ust.gmission.BootstrapServiceProvider;
@@ -27,16 +32,19 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.events.NavItemSelectedEvent;
+import hk.ust.gmission.events.NetworkErrorEvent;
+import hk.ust.gmission.events.RequestLocationEvent;
+import hk.ust.gmission.events.RestAdapterErrorEvent;
+import hk.ust.gmission.events.UnAuthorizedErrorEvent;
+import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CarouselFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
+import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
-import hk.ust.gmission.ui.fragments.NewsListFragment;
-import hk.ust.gmission.ui.fragments.UserListFragment;
+import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
-import hk.ust.gmission.util.UIUtils;
 
 
 /**
@@ -63,6 +71,15 @@ public class MainActivity extends BootstrapFragmentActivity {
     private CharSequence title;
     private NavigationDrawerFragment navigationDrawerFragment;
 
+    private Fragment homeFragment = new HitRecyclerViewFragment();
+    private Fragment campaignFragment = new CampaignRecyclerViewFragment();
+    private Fragment mapFragment = new CarouselFragment();
+    private Fragment messageFragment = new CheckInsListFragment();
+
+
+
+    private static Intent serviceIntent;
+
     @Subscribe
     public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
 
@@ -75,19 +92,21 @@ public class MainActivity extends BootstrapFragmentActivity {
             switch (currentNavItemPosition) {
                 case 0: //home page
                     title = "home";
-                    replaceCurrentFragment(new CampaignRecyclerViewFragment());
+                    replaceCurrentFragment(homeFragment);
                     break;
                 case 1: //campaign
                     title = "campaign";
-                    replaceCurrentFragment(new CampaignRecyclerViewFragment());
+                    bus.post(new RequestLocationEvent());
+                    replaceCurrentFragment(campaignFragment);
                     break;
                 case 2: //map
                     title = "map";
-                    replaceCurrentFragment(new CarouselFragment());
+                    startActivity(new Intent(getActivity(), MapsActivity.class));
+//                    replaceCurrentFragment(mapFragment);
                     break;
                 case 3: //messages
                     title = "messages";
-                    replaceCurrentFragment(new CheckInsListFragment());
+                    replaceCurrentFragment(messageFragment);
                     break;
                 case 4: //log out
                     Log.d("logout","log out");
@@ -106,6 +125,27 @@ public class MainActivity extends BootstrapFragmentActivity {
     }
 
 
+    @Subscribe
+    public void onUnAuthorizedErrorEvent(UnAuthorizedErrorEvent unAuthorizedErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.unauthorized_error_message), Toast.LENGTH_SHORT);
+        logoutService.logout(new Runnable() {
+            @Override
+            public void run() {
+                checkAuth();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onNetworkErrorEvent(NetworkErrorEvent networkErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+    }
+
+    @Subscribe
+    public void onRetrofitErrorEvent(RestAdapterErrorEvent restAdapterErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -116,7 +156,7 @@ public class MainActivity extends BootstrapFragmentActivity {
     protected void onPause() {
         super.onPause();
 
-//        eventBus.unregister(this);
+//        bus.unregister(this);
     }
 
 
@@ -130,88 +170,82 @@ public class MainActivity extends BootstrapFragmentActivity {
 
         super.onCreate(savedInstanceState);
 
-        if(isTablet()) {
-            setContentView(R.layout.main_activity_tablet);
-        } else {
-            setContentView(R.layout.main_activity);
-        }
 
-        // View injection with Butterknife
-//        Views.inject(this);
+
+        setContentView(R.layout.main_activity);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
 
         // Set up navigation drawer
-        title = drawerTitle = getTitle();
+        title = getString(R.string.title_home);
+        drawerTitle = getTitle();
 
-        if(!isTablet()) {
-            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawerToggle = new ActionBarDrawerToggle(
-                    this,                    /* Host activity */
-                    drawerLayout,           /* DrawerLayout object */
-                    R.drawable.ic_drawer,    /* nav drawer icon to replace 'Up' caret */
-                    R.string.navigation_drawer_open,    /* "open drawer" description */
-                    R.string.navigation_drawer_close) { /* "close drawer" description */
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(
+                this,                    /* Host activity */
+                drawerLayout,           /* DrawerLayout object */
+                toolbar,    /* nav drawer icon to replace 'Up' caret */
+                R.string.navigation_drawer_open,    /* "open drawer" description */
+                R.string.navigation_drawer_close) { /* "close drawer" description */
 
-                /** Called when a drawer has settled in a completely closed state. */
-                public void onDrawerClosed(View view) {
-                    getSupportActionBar().setTitle(title);
-                    supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                }
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(title);
+                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
 
-                /** Called when a drawer has settled in a completely open state. */
-                public void onDrawerOpened(View drawerView) {
-                    getSupportActionBar().setTitle(drawerTitle);
-                    supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                }
-            };
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(drawerTitle);
+                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
 
-            // Set the drawer toggle as the DrawerListener
-            drawerLayout.setDrawerListener(drawerToggle);
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(drawerToggle);
 
-            navigationDrawerFragment = (NavigationDrawerFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        navigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-            // Set up the drawer.
-            navigationDrawerFragment.setUp(
-                    R.id.navigation_drawer,
-                    (DrawerLayout) findViewById(R.id.drawer_layout));
-        }
+        // Set up the drawer.
+        navigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                drawerLayout);
 
-
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
         checkAuth();
 
-    }
+        startAndBindService();
 
-    private boolean isTablet() {
-        return UIUtils.isTablet(this);
     }
 
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if(!isTablet()) {
-            // Sync the toggle state after onRestoreInstanceState has occurred.
-            drawerToggle.syncState();
-        }
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+//        drawerToggle.syncState();
+
+
     }
+
 
 
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(!isTablet()) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
+        drawerToggle.onConfigurationChanged(newConfig);
+
     }
 
 
     private void initScreen() {
         if (userHasAuthenticated) {
-            replaceCurrentFragment(new CampaignRecyclerViewFragment());
+            replaceCurrentFragment(homeFragment);
         }
 
     }
@@ -237,10 +271,11 @@ public class MainActivity extends BootstrapFragmentActivity {
 
             @Override
             public Boolean call() throws Exception {
-//                final BootstrapService svc = serviceProvider.getService(MainActivity.this);
                 String sessionToken = keyProvider.getAuthKey(MainActivity.this);
-                Constants.Http.SESSION_TOKEN = sessionToken;
-//                return svc != null;
+                Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
+                Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
+                Constants.Http.PARAM_USER_ID = keyProvider.getUserId();
+
                 return sessionToken == null;
             }
 
@@ -266,18 +301,45 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if (!isTablet() && drawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
-//                menuDrawer.toggleMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    /**
+     * Provides a connection to the GPS Logging Service
+     */
+    private final ServiceConnection gpsServiceConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            Ln.d("Disconnected from GPSLoggingService from MainActivity");
+
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Ln.d("Connected to GPSLoggingService from MainActivity");
+        }
+    };
+
+
+    /**
+     * Starts the service and binds the activity to it.
+     */
+    private void startAndBindService() {
+        serviceIntent = new Intent(this, LocationTraceService.class);
+        // Start the service in case it isn't already running
+        startService(serviceIntent);
+        // Now bind to service
+        bindService(serviceIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
 }

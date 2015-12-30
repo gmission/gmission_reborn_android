@@ -58,10 +58,16 @@
     <string name="register_check_email">Invalid email address.</string>
     <string name="register_check_name">Invalid Name (at least 6 characters).</string>
     <string name="register_check_passwd">Invalid Password (at least 6 characters).</string>
-    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity
-    </string>
+    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity</string>
 
+    <string name="network_error_message">Network error, please try later.</string>
+    <string name="unauthorized_error_message">Fail to authorize, please login again.</string>
+    <string name="title_activity_hit_list">Hit List</string>
+    <string name="title_activity_hit">HitActivity</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

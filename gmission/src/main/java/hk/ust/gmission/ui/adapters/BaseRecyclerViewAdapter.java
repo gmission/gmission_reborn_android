@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hk.ust.gmission.Injector;
+
 /**
  * Created by bigstone on 21/12/2015.
  */
@@ -17,12 +19,13 @@ public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder,
     /**
      * List items provided
      */
-    protected List<I> items = new ArrayList<I>();
+    public List<I> items = new ArrayList<I>();
 
-    @Inject
-    protected Bus bus;
+    @Inject protected Bus bus;
 
-
+    public BaseRecyclerViewAdapter() {
+        Injector.inject(this);
+    }
 
     public void setItems(List<I> newList) {
         items = newList;
@@ -46,4 +49,6 @@ public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder,
     public void appendItem(I item){
         items.add(item);
     }
+
+
 }

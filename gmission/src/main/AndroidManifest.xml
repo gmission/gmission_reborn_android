@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hk.ust.gmission">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -18,6 +19,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Bootstrap.Dark">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -41,6 +48,10 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+        <service
+            android:name=".services.LocationTraceService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity
             android:name=".authenticator.BootstrapAuthenticatorActivity"
@@ -51,10 +62,6 @@
                 someone who explicitly knows the class name
             -->
         </activity>
-        <activity android:name=".ui.activities.NewsActivity" />
-        <activity
-            android:name=".ui.activities.UserActivity"
-            android:label="@string/app_name" />
         <activity
             android:name=".authenticator.BootstrapAccountRegisterActivity"
             android:label="@string/title_activity_bootstrap_account_register"
@@ -63,6 +70,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hk.ust.gmission.authenticator.ActionBarAccountAuthenticatorActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.HitListActivity"
+            android:label="@string/title_activity_hit_list" />
+        <activity
+            android:name=".ui.activities.HitActivity"
+            android:label="@string/title_activity_hit" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+
+
+        <activity
+            android:name=".ui.activities.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,5 @@
 package hk.ust.gmission.models.dao;
 
-import com.google.gson.annotations.Expose;
-
 import java.util.Date;
 
 /**
@@ -9,13 +7,12 @@ import java.util.Date;
  */
 public class Campaign {
 
-    @Expose Integer id;
-    @Expose String title;
-    @Expose String brief;
-    @Expose String status;
-    @Expose Integer icon_id;
-    @Expose Integer worker_id;
-    @Expose
+    Integer id;
+    String title;
+    String brief;
+    String status;
+    Integer icon_id;
+    Integer worker_id;
     Date created_on;
 
     public Integer getId() {

@@ -2,6 +2,7 @@
 
 package hk.ust.gmission.authenticator;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AccountsException;
@@ -10,11 +11,13 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.services.BootstrapService;
 
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static hk.ust.gmission.core.Constants.Auth.AUTHTOKEN_TYPE;
 import static hk.ust.gmission.core.Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE;
+import static hk.ust.gmission.core.Constants.Auth.USER_ID;
 
 /**
  * Bridge class that obtains a API key for the currently configured account
@@ -49,5 +52,23 @@ public class ApiKeyProvider {
                 AUTHTOKEN_TYPE, new String[0], activity, null, null, null, null);
 
         return accountManagerFuture.getResult().getString(KEY_AUTHTOKEN);
+    }
+
+    public String getUserName() throws AccountsException, IOException {
+        Account[] accounts = accountManager.getAccountsByType(BOOTSTRAP_ACCOUNT_TYPE);
+        if (accounts.length > 0){
+            return accounts[0].name;
+        }
+
+        return null;
+    }
+
+    public String getUserId() throws AccountsException, IOException {
+        Account[] accounts = accountManager.getAccountsByType(BOOTSTRAP_ACCOUNT_TYPE);
+        if (accounts.length > 0){
+            return accountManager.getUserData(accounts[0], USER_ID);
+        }
+
+        return null;
     }
 }

@@ -21,15 +21,13 @@ public final class Constants {
          */
         public static final String BOOTSTRAP_ACCOUNT_NAME = "gMission";
 
-        /**
-         * Provider id
-         */
-        public static final String BOOTSTRAP_PROVIDER_AUTHORITY = "hk.ust.gmission.sync";
+
 
         /**
          * Auth token type
          */
         public static final String AUTHTOKEN_TYPE = BOOTSTRAP_ACCOUNT_TYPE;
+        public static final String USER_ID = "USER_ID";
     }
 
     /**
@@ -39,59 +37,37 @@ public final class Constants {
     public static final class Http {
         private Http() {}
 
+        public static final String CONTENT_TYPE_JSON = "application/json";
+        public final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
+        private final static String URL_REST = "/rest";
+        private final static String URL_IMAGE = "/image";
+        private final static String URL_VIDEO = "/video";
+        private final static String URL_AUDIO = "/audio";
+        public  final static String URL_IMAGE_ORI = URL_BASE + URL_IMAGE + "/original";
+        public  final static String URL_VIDEO_ORI = URL_BASE + URL_VIDEO + "/original";
+        public  final static String URL_VIDEO_THUMB = URL_BASE + URL_VIDEO + "/thumb";
+        public  final static String URL_AUDIO_ORI = URL_BASE + URL_AUDIO + "/original";
 
-        /**
-         * Base URL for all requests
-         */
-        public static final String URL_BASE = "https://api.parse.com";
+        public  final static String URL_AUTH = URL_BASE + "/user/auth";
+        public  final static String URL_REG = URL_BASE + "/user/register";
 
+        public static final String URL_CAMPAIGNS_FRAG =  "/rest/campaign";
+        public static final String URL_CAMPAIGNS = URL_BASE + URL_CAMPAIGNS_FRAG;
 
-        /**
-         * Authentication URL
-         */
-        public static final String URL_AUTH_FRAG = "/1/login";
-        public static final String URL_AUTH = URL_BASE + URL_AUTH_FRAG;
+        public static final String URL_HITS_FRAG =  "/rest/hit";
+        public static final String URL_HITS = URL_BASE + URL_HITS_FRAG;
 
-        /**
-         * List Users URL
-         */
-        public static final String URL_USERS_FRAG =  "/1/users";
-        public static final String URL_USERS = URL_BASE + URL_USERS_FRAG;
+        public static final String URL_MESSAGES_FRAG =  "/rest/message";
+        public static final String URL_MESSAGES = URL_BASE + URL_MESSAGES_FRAG;
 
-
-        /**
-         * List News URL
-         */
-        public static final String URL_NEWS_FRAG = "/1/classes/News";
-        public static final String URL_NEWS = URL_BASE + URL_NEWS_FRAG;
-
-
-        /**
-         * List Checkin's URL
-         */
         public static final String URL_CHECKINS_FRAG = "/1/classes/Locations";
         public static final String URL_CHECKINS = URL_BASE + URL_CHECKINS_FRAG;
 
-        /**
-         * PARAMS for auth
-         */
-        public static final String PARAM_USERNAME = "username";
-        public static final String PARAM_PASSWORD = "password";
 
 
-
-
-
-        public static final String PARSE_APP_ID = "zHb2bVia6kgilYRWWdmTiEJooYA17NnkBSUVsr4H";
-        public static final String PARSE_REST_API_KEY = "N2kCY1T3t3Jfhf9zpJ5MCURn3b25UpACILhnf5u9";
-        public static final String HEADER_PARSE_REST_API_KEY = "X-Parse-REST-API-Key";
-        public static final String HEADER_PARSE_APP_ID = "X-Parse-Application-Id";
-        public static final String CONTENT_TYPE_JSON = "application/json";
-
-        public static final String PARAM_USER_ID = "userID";
-        public static final String USERNAME = "username";
-        public static final String PASSWORD = "password";
-        public static String SESSION_TOKEN = "sessionToken";
+        public static String PARAM_SESSION_TOKEN = "sessionToken";
+        public static String PARAM_USER_ID = "userID";
+        public static String PARAM_USERNAME = "username";
 
 
     }
@@ -100,9 +76,9 @@ public final class Constants {
     public static final class Extra {
         private Extra() {}
 
-        public static final String NEWS_ITEM = "news_item";
-
         public static final String USER = "user";
+
+        public static final String CAMPAIGN_ID = "campaign_id";
 
     }
 
@@ -122,6 +98,8 @@ public final class Constants {
 
 
     }
+
+
 
 }
 

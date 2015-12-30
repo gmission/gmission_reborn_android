@@ -11,6 +11,8 @@ import retrofit.RetrofitError;
 public class RestErrorHandler implements ErrorHandler {
 
     public static final int HTTP_NOT_FOUND = 404;
+    public static final int HTTP_BAD_REQUEST = 400;
+    public static final int HTTP_UNAUTHORIZED = 400;
     public static final int INVALID_LOGIN_PARAMETERS = 101;
 
     private Bus bus;
@@ -26,6 +28,7 @@ public class RestErrorHandler implements ErrorHandler {
                 bus.post(new NetworkErrorEvent(cause));
             } else if(isUnAuthorized(cause)) {
                 bus.post(new UnAuthorizedErrorEvent(cause));
+
             } else {
                 bus.post(new RestAdapterErrorEvent(cause));
             }
@@ -39,7 +42,10 @@ public class RestErrorHandler implements ErrorHandler {
         // You could also put some generic error handling in here so you can start
         // getting analytics on error rates/etc. Perhaps ship your logs off to
         // Splunk, Loggly, etc
+        //
 
+        //prevent error propagation
+        cause = null;
         return cause;
     }
 
@@ -69,6 +75,12 @@ public class RestErrorHandler implements ErrorHandler {
                 authFailed = true;
             }
         }
+        if(cause.getResponse().getStatus() == HTTP_BAD_REQUEST || cause.getResponse().getStatus() == HTTP_UNAUTHORIZED) {
+            authFailed = true;
+        }
+
+
+
 
         return authFailed;
     }

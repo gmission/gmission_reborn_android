@@ -14,39 +14,40 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.CampaignItemClickEvent;
-import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.models.dao.Hit;
 
-public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, Campaign> {
+
+public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerViewAdapter.HitViewHolder, Hit> {
 
     @Override
-    public CampaignViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HitViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.campaign_item, parent, false);
+                .inflate(R.layout.hit_item, parent, false);
 
-        return new CampaignViewHolder(itemView);
+        return new HitViewHolder(itemView);
     }
 
     @Inject
-    public CampaignRecyclerViewAdapter() {
+    public HitRecyclerViewAdapter() {
         items = new ArrayList<>();
     }
 
     @Override
-    public void onBindViewHolder(CampaignViewHolder holder, int position) {
-        Campaign campaign = items.get(position);
+    public void onBindViewHolder(HitViewHolder holder, int position) {
+        Hit campaign = items.get(position);
         holder.id.setText(String.format("%s %s",
                 campaign.getTitle(), campaign.getId()));
-        holder.content.setText(campaign.getBrief());
+        holder.content.setText(campaign.getDescription());
     }
 
 
-    class CampaignViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class HitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
         @Bind(R.id.id) TextView id;
         @Bind(R.id.content) TextView content;
 
-        public CampaignViewHolder(View itemView) {
+        public HitViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

@@ -37,7 +37,6 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.R.id;
 import hk.ust.gmission.R.layout;
 import hk.ust.gmission.R.string;
-import hk.ust.gmission.RESTClient;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.models.dao.User;
@@ -98,7 +97,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     private SafeAsyncTask<Boolean> authenticationTask;
     private String authToken;
     private String authTokenType;
-    private int accountid = -1;
+    private String accountId;
 
     /**
      * If set we are just checking that the user knows their credentials; this
@@ -138,7 +137,7 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
 
         requestNewAccount = username == null;
 
-        setContentView(layout.login_activity);
+        setContentView(layout.account_login_activity);
         ButterKnife.bind(this);
 
         usernameText.setAdapter(new ArrayAdapter<String>(this,
@@ -276,26 +275,18 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
 
                 final String query = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username, password);
                 Log.i("PostContent", query);
-                HttpRequest request = post(RESTClient.URL_AUTH).contentType("application/json").send(query);
+                HttpRequest request = post(Constants.Http.URL_AUTH).contentType(Constants.Http.CONTENT_TYPE_JSON).send(query);
 
 
                 Ln.d("Authentication response=%s", request.code());
 
                 if (request.ok()) {
-                    final User model = new Gson().fromJson(
-                            Strings.toString(request.buffer()),
-                            User.class
-                    );
+                    final User model = new Gson().fromJson(Strings.toString(request.buffer()), User.class);
 
                     if( model.getRes() == -1 ) return false;
 
-                    model.setEmail(username);
-//                    Storage.user = model;
-//                    Storage.writeUser();
                     token = model.getToken();
-                    accountid = model.getId();
-                    Ln.d("token = %s %d", token, accountid);
-
+                    accountId = String.valueOf(model.getId());
                 }
 
                 return request.ok();
@@ -354,13 +345,15 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
     protected void finishLogin() {
         final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
         authToken = token;
-        Constants.Http.SESSION_TOKEN = authToken;
+        Constants.Http.PARAM_SESSION_TOKEN = authToken;
         if (requestNewAccount) {
             accountManager.addAccountExplicitly(account, password, null);
         } else {
             accountManager.setPassword(account, password);
         }
         accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
+        accountManager.setUserData(account, Constants.Auth.USER_ID, accountId);
+
 
         final Intent intent = new Intent();
         intent.putExtra(KEY_ACCOUNT_NAME, username);

@@ -26,20 +26,23 @@ import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.BootstrapAccountRegisterActivity;
 import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
 import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.PostFromAnyThreadBus;
 import hk.ust.gmission.core.RestAdapterRequestInterceptor;
 import hk.ust.gmission.core.RestErrorHandler;
+import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.models.UserAgentProvider;
+import hk.ust.gmission.services.BootstrapService;
+import hk.ust.gmission.services.LocationTraceService;
+import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.activities.MainActivity;
-import hk.ust.gmission.ui.activities.NewsActivity;
-import hk.ust.gmission.ui.activities.UserActivity;
+import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
+import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
+import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
-import hk.ust.gmission.ui.fragments.NewsListFragment;
-import hk.ust.gmission.ui.fragments.UserListFragment;
+import hk.ust.gmission.util.GsonUtil;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -57,11 +60,14 @@ import retrofit.converter.GsonConverter;
                 MainActivity.class,
                 CheckInsListFragment.class,
                 NavigationDrawerFragment.class,
-                NewsActivity.class,
-                NewsListFragment.class,
-                UserActivity.class,
-                UserListFragment.class,
-                CampaignRecyclerViewFragment.class
+                CampaignRecyclerViewFragment.class,
+                HitRecyclerViewFragment.class,
+                HitListActivity.class,
+                HitRecyclerViewAdapter.class,
+                CampaignRecyclerViewAdapter.class,
+                QueryObject.class,
+                GsonUtil.class,
+                LocationTraceService.class
         }
 )
 public class BootstrapModule {
@@ -148,7 +154,7 @@ public class BootstrapModule {
     RestAdapter provideRestAdapter(RestErrorHandler restErrorHandler, RestAdapterRequestInterceptor restRequestInterceptor, Gson gson) {
         Gson GSON;
         return new RestAdapter.Builder()
-                .setEndpoint(RESTClient.URL_BASE)
+                .setEndpoint(Constants.Http.URL_BASE)
                 .setErrorHandler(restErrorHandler)
                 .setRequestInterceptor(restRequestInterceptor)
                 .setLogLevel(RestAdapter.LogLevel.FULL)

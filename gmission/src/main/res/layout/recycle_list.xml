@@ -24,7 +24,7 @@
             android:orientation="vertical"
             android:background="@color/pager_background"
             android:clickable="true"
-            android:padding="10dp">
+            android:padding="5dp">
 
 
             <android.support.v7.widget.RecyclerView
