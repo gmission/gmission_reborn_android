@@ -101,7 +101,7 @@ public class MainActivity extends BootstrapFragmentActivity {
                     break;
                 case 2: //map
                     title = "map";
-                    startActivity(new Intent(getActivity(), MapsActivity.class));
+                    startActivity(new Intent(getActivity(), NavDrawerActivity.class));
 //                    replaceCurrentFragment(mapFragment);
                     break;
                 case 3: //messages
