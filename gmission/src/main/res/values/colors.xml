@@ -46,4 +46,8 @@
     <color name="navigation_drawer_item_separator">#c2c2c2</color>
 
     <color name="cube_mints_333333">#333333</color>
+
+    <color name="color_primary_dark">#1fb6ed</color>
+    <color name="color_primary">#1c9ac8</color>
+    <color name="accent_color">#FF4081</color>
 </resources>

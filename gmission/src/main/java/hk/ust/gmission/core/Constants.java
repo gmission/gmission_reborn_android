@@ -60,6 +60,12 @@ public final class Constants {
         public static final String URL_MESSAGES_FRAG =  "/rest/message";
         public static final String URL_MESSAGES = URL_BASE + URL_MESSAGES_FRAG;
 
+        public static final String URL_SELECTIONS_FRAG =  "/rest/selection";
+        public static final String URL_SELECTIONS = URL_BASE + URL_SELECTIONS_FRAG;
+
+        public static final String URL_ANSWERS_FRAG =  "/rest/answer";
+        public static final String URL_ANSWERS = URL_BASE + URL_ANSWERS_FRAG;
+
         public static final String URL_CHECKINS_FRAG = "/1/classes/Locations";
         public static final String URL_CHECKINS = URL_BASE + URL_CHECKINS_FRAG;
 
@@ -77,8 +83,12 @@ public final class Constants {
         private Extra() {}
 
         public static final String USER = "user";
+        public static final String HIT = "hit";
+
 
         public static final String CAMPAIGN_ID = "campaign_id";
+        public static final String MESSAGE_ID = "message_id";
+
 
     }
 

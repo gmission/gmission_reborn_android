@@ -34,14 +34,19 @@ import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.models.UserAgentProvider;
 import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.services.LocationTraceService;
+import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.activities.MainActivity;
+import hk.ust.gmission.ui.adapters.BaseRecyclerViewAdapter;
 import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
 import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
+import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
+import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
+import hk.ust.gmission.ui.fragments.SelectionHitFragment;
 import hk.ust.gmission.util.GsonUtil;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
@@ -58,12 +63,16 @@ import retrofit.converter.GsonConverter;
                 BootstrapAuthenticatorActivity.class,
                 BootstrapAccountRegisterActivity.class,
                 MainActivity.class,
+                HitActivity.class,
                 CheckInsListFragment.class,
                 NavigationDrawerFragment.class,
                 CampaignRecyclerViewFragment.class,
+                MessageRecyclerViewFragment.class,
                 HitRecyclerViewFragment.class,
                 HitListActivity.class,
+                SelectionHitFragment.class,
                 HitRecyclerViewAdapter.class,
+                MessageRecyclerViewAdapter.class,
                 CampaignRecyclerViewAdapter.class,
                 QueryObject.class,
                 GsonUtil.class,

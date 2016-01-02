@@ -11,14 +11,12 @@ import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -40,8 +38,8 @@ import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CarouselFragment;
-import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
+import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
@@ -53,10 +51,9 @@ import hk.ust.gmission.util.SafeAsyncTask;
  * If you need to remove the authentication from the application please see
  * {@link hk.ust.gmission.authenticator.ApiKeyProvider#getAuthKey(android.app.Activity)}
  */
-public class MainActivity extends BootstrapFragmentActivity {
+public class MainActivity extends BootstrapFragmentActivity{
 
     @Inject protected BootstrapServiceProvider serviceProvider;
-    @Inject protected Bus bus;
     @Inject protected LogoutService logoutService;
     @Inject protected ApiKeyProvider keyProvider;
 
@@ -67,14 +64,13 @@ public class MainActivity extends BootstrapFragmentActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private CharSequence drawerTitle;
     private CharSequence title;
     private NavigationDrawerFragment navigationDrawerFragment;
 
     private Fragment homeFragment = new HitRecyclerViewFragment();
     private Fragment campaignFragment = new CampaignRecyclerViewFragment();
     private Fragment mapFragment = new CarouselFragment();
-    private Fragment messageFragment = new CheckInsListFragment();
+    private Fragment messageFragment = new MessageRecyclerViewFragment();
 
 
 
@@ -83,29 +79,27 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Subscribe
     public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
 
-        Log.d("NavItemSelectedEvent","EventId:" + event.getItemPosition());
-        Log.d("NavItemSelectedEvent","currentNavItemPosition:"+currentNavItemPosition);
         if (currentNavItemPosition == event.getItemPosition() && currentNavItemPosition != 4){
             return;
         } else {
             currentNavItemPosition = event.getItemPosition();
             switch (currentNavItemPosition) {
                 case 0: //home page
-                    title = "home";
+                    title = getString(R.string.title_home);
                     replaceCurrentFragment(homeFragment);
                     break;
                 case 1: //campaign
-                    title = "campaign";
+                    title = getString(R.string.title_campaign);
                     bus.post(new RequestLocationEvent());
                     replaceCurrentFragment(campaignFragment);
                     break;
                 case 2: //map
-                    title = "map";
-                    startActivity(new Intent(getActivity(), NavDrawerActivity.class));
+                    title = getString(R.string.title_map);
+//                    startActivity(new Intent(getActivity(), NavDrawerActivity.class));
 //                    replaceCurrentFragment(mapFragment);
                     break;
                 case 3: //messages
-                    title = "messages";
+                    title = getString(R.string.title_message);
                     replaceCurrentFragment(messageFragment);
                     break;
                 case 4: //log out
@@ -120,6 +114,8 @@ public class MainActivity extends BootstrapFragmentActivity {
                 default:
                     return;
             }
+
+            getSupportActionBar().setTitle(title);
         }
 
     }
@@ -173,46 +169,33 @@ public class MainActivity extends BootstrapFragmentActivity {
 
 
         setContentView(R.layout.main_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
 
 
         // Set up navigation drawer
         title = getString(R.string.title_home);
-        drawerTitle = getTitle();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(
                 this,                    /* Host activity */
                 drawerLayout,           /* DrawerLayout object */
-                toolbar,    /* nav drawer icon to replace 'Up' caret */
+                R.drawable.ic_drawer_full,    /* nav drawer icon to replace 'Up' caret */
                 R.string.navigation_drawer_open,    /* "open drawer" description */
-                R.string.navigation_drawer_close) { /* "close drawer" description */
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(title);
-                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(drawerTitle);
-                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
+                R.string.navigation_drawer_close);
 
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
 
+
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-
         // Set up the drawer.
         navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 drawerLayout);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_full);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -226,11 +209,8 @@ public class MainActivity extends BootstrapFragmentActivity {
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
         // Sync the toggle state after onRestoreInstanceState has occurred.
-//        drawerToggle.syncState();
-
-
+        drawerToggle.syncState();
     }
 
 
@@ -245,6 +225,8 @@ public class MainActivity extends BootstrapFragmentActivity {
 
     private void initScreen() {
         if (userHasAuthenticated) {
+            title = getString(R.string.title_home);
+            getSupportActionBar().setTitle(title);
             replaceCurrentFragment(homeFragment);
         }
 
@@ -312,6 +294,7 @@ public class MainActivity extends BootstrapFragmentActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
 
 

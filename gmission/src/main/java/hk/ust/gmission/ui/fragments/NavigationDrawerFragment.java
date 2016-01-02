@@ -144,7 +144,7 @@ public class NavigationDrawerFragment extends Fragment {
         drawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 NavigationDrawerFragment.this.drawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.ic_drawer_full,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -217,17 +217,10 @@ public class NavigationDrawerFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(!isTablet()) {
-            // Forward the new configuration the drawer toggle component.
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
 
-    private boolean isTablet() {
-        if(getActivity() != null) {
-            return UIUtils.isTablet(getActivity());
-        }
-        return false;
+        // Forward the new configuration the drawer toggle component.
+        drawerToggle.onConfigurationChanged(newConfig);
+
     }
 
     @Override
@@ -258,7 +251,6 @@ public class NavigationDrawerFragment extends Fragment {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
     }
 
     private ActionBar getActionBar() {

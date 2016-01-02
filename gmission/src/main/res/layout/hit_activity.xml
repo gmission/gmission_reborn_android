@@ -9,4 +9,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hk.ust.gmission.ui.activities.HitActivity">
 
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/hit_content_scroll_view"
+        android:layout_above="@+id/container"
+        tools:context="hk.ust.gmission.ui.fragments.SelectionHitFragment"
+        tools:showIn="@layout/hit_activity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textColor="@color/text_shadow"
+            android:text="@string/large_text"
+            android:id="@+id/hit_content"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/footer_layout">
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/footer_layout"
+        android:layout_alignParentBottom="true">
+
+
+        <Button
+            android:id="@+id/submit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_background_states"
+            android:padding="10dp"
+            android:text="@string/label_submit"
+            android:textColor="@color/text"
+            android:textSize="20sp"
+            android:enabled="false"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 </RelativeLayout>

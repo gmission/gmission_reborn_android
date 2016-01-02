@@ -26,7 +26,6 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
         return new CampaignViewHolder(itemView);
     }
 
-    @Inject
     public CampaignRecyclerViewAdapter() {
         items = new ArrayList<>();
     }
@@ -34,8 +33,8 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
     @Override
     public void onBindViewHolder(CampaignViewHolder holder, int position) {
         Campaign campaign = items.get(position);
-        holder.id.setText(String.format("%s %s",
-                campaign.getTitle(), campaign.getId()));
+        holder.title.setText(String.format("%s",
+                campaign.getTitle()));
         holder.content.setText(campaign.getBrief());
     }
 
@@ -43,7 +42,7 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
     class CampaignViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
-        @Bind(R.id.id) TextView id;
+        @Bind(R.id.title) TextView title;
         @Bind(R.id.content) TextView content;
 
         public CampaignViewHolder(View itemView) {

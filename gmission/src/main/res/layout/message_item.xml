@@ -16,27 +16,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="5dp">
 
         <ImageView
-            android:id="@+id/iv_campaign_icon"
+            android:id="@+id/iv_message_icon"
             style="@style/AvatarLarge"
             android:layout_width="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_campaign"
-            android:contentDescription="@string/avatar"
+            android:src="@drawable/ic_message"
             />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:textColor="@color/dark_grey"
-            android:layout_toLeftOf="@id/iv_campaign_icon"
-            android:layout_alignParentLeft="true"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/content"
@@ -44,11 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textColor="@color/dark_grey"
-            android:layout_toLeftOf="@id/iv_campaign_icon"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentLeft="true"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_toLeftOf="@id/iv_message_icon"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
 
     </RelativeLayout>
 

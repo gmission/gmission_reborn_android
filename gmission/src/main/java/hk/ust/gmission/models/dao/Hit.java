@@ -1,17 +1,18 @@
 package hk.ust.gmission.models.dao;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by bigstone on 23/12/2015.
  */
-public class Hit {
-    int id;
+public class Hit implements Serializable{
+    String id;
     String type;
     String title;
     String description;
-    int attachment_id;
-    int campaign_id;
+    String attachment_id;
+    String campaign_id;
     int credit;
     String status;
     int required_answer_count;
@@ -20,8 +21,8 @@ public class Hit {
     Date begin_time;
     Date end_time;
     Date created_on;
-    int location_id;
-    int requester_id;
+    String location_id;
+    String requester_id;
 
     public int getId() {
         return id;

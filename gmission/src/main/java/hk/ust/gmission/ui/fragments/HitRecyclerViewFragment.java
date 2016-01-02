@@ -1,6 +1,7 @@
 package hk.ust.gmission.ui.fragments;
 
 import android.accounts.AccountsException;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
@@ -10,18 +11,20 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import hk.ust.gmission.BootstrapServiceProvider;
-import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
-import hk.ust.gmission.events.CampaignItemClickEvent;
+import hk.ust.gmission.events.HitItemClickEvent;
 import hk.ust.gmission.models.dao.Hit;
-import hk.ust.gmission.models.wrapper.HitWrapper;
+import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import static hk.ust.gmission.core.Constants.Extra.HIT;
+
 
 public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRecyclerViewAdapter> {
 
@@ -59,7 +62,7 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
     @Override
     protected void loadData() throws IOException, AccountsException {
-        Observable<HitWrapper> observable;
+        Observable<ModelWrapper<Hit>> observable;
         if (campaignId != null){
             QueryObject queryObject = new QueryObject();
             queryObject.push("campaign_id", "eq", campaignId);
@@ -71,9 +74,9 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
         observable.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<HitWrapper>() {
+                .doOnNext(new Action1<ModelWrapper<Hit>>() {
                     @Override
-                    public void call(HitWrapper campaigns) {
+                    public void call(ModelWrapper<Hit> campaigns) {
                         if (!isLoaderInitialized){
                             getAdapter().setItems(campaigns.getObjects());
                         } else {
@@ -118,17 +121,13 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
 
     @Subscribe
-    public void onListItemClick(CampaignItemClickEvent event) {
+    public void onListItemClick(HitItemClickEvent event) {
         int position = mRecyclerView.indexOfChild(event.getView());
         HitRecyclerViewAdapter adapter = (HitRecyclerViewAdapter) mRecyclerView.getAdapter();
 
-        Hit campaign = adapter.getItem(position);
+        Hit hit = adapter.getItem(position);
 
-//        startActivity(new Intent(getActivity(), NewsActivity.class).putExtra(NEWS_ITEM, campaign));
-    }
-
-    protected int getErrorMessage(Exception exception) {
-        return R.string.error_loading_news;
+        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
     }
 
 

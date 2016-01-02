@@ -12,29 +12,31 @@ import javax.inject.Inject;
 
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
-import hk.ust.gmission.events.CampaignItemClickEvent;
-import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.events.MessageItemClickEvent;
+import hk.ust.gmission.models.dao.Message;
 import hk.ust.gmission.models.wrapper.ModelWrapper;
 import hk.ust.gmission.ui.activities.HitListActivity;
-import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
+import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.CAMPAIGN_ID;
+import static hk.ust.gmission.core.Constants.Extra.MESSAGE_ID;
 
-public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campaign, CampaignRecyclerViewAdapter> {
+public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Message, MessageRecyclerViewAdapter> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
-    protected CampaignRecyclerViewAdapter campaignRecyclerViewAdapter = new CampaignRecyclerViewAdapter();
+    protected MessageRecyclerViewAdapter messageRecyclerViewAdapter = new MessageRecyclerViewAdapter();
 
     private boolean isLoaderInitialized = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Injector.inject(this);
     }
 
 
@@ -43,9 +45,9 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setEmptyText(getString(R.string.no_campaign));
+        setEmptyText(getString(R.string.no_message));
 
-        mRecyclerView.setAdapter(campaignRecyclerViewAdapter);
+        mRecyclerView.setAdapter(messageRecyclerViewAdapter);
 
 
         configPullToRefresh(getView());
@@ -55,21 +57,16 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     @Override
     protected void loadData() throws IOException, AccountsException {
         QueryObject queryObject = new QueryObject();
-        queryObject.push("status", "eq", "open");
-        serviceProvider.getService(getActivity()).getCampaignService().getCampaigns(queryObject.toString())
+        queryObject.push("status", "eq", "new");
+        queryObject.push("receiver_id", "eq", Constants.Http.PARAM_USER_ID);
+        serviceProvider.getService(getActivity()).getMessageService().getMessages(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<ModelWrapper<Campaign>>() {
+                .doOnNext(new Action1<ModelWrapper<Message>>() {
                     @Override
-                    public void call(ModelWrapper<Campaign> campaigns) {
+                    public void call(ModelWrapper<Message> messages) {
                         if (!isLoaderInitialized){
-                            getAdapter().setItems(campaigns.getObjects());
-                        } else {
-                            Campaign campaign = new Campaign();
-                            campaign.setTitle("Test News");
-                            campaign.setBrief("This is a test news");
-                            campaign.setId(1);
-                            getAdapter().addNewItem(campaign);
+                            getAdapter().setItems(messages.getObjects());
                         }
                     }
                 })
@@ -106,14 +103,15 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
 
 
     @Subscribe
-    public void onListItemClick(CampaignItemClickEvent event) {
+    public void onListItemClick(MessageItemClickEvent event) {
         int position = mRecyclerView.indexOfChild(event.getView());
-        CampaignRecyclerViewAdapter adapter = (CampaignRecyclerViewAdapter) mRecyclerView.getAdapter();
+        MessageRecyclerViewAdapter adapter = (MessageRecyclerViewAdapter) mRecyclerView.getAdapter();
 
-        Campaign campaign = adapter.getItem(position);
+        Message message = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), HitListActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(campaign.getId())));
+        startActivity(new Intent(getActivity(), HitListActivity.class).putExtra(MESSAGE_ID, String.valueOf(message.getId())));
     }
+
 
 
 }

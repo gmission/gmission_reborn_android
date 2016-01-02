@@ -1,6 +1,7 @@
 package hk.ust.gmission.services;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.wrapper.HitWrapper;
+import hk.ust.gmission.models.dao.Hit;
+import hk.ust.gmission.models.wrapper.ModelWrapper;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;
@@ -10,8 +11,10 @@ import rx.Observable;
  */
 public interface HitService {
     @GET(Constants.Http.URL_HITS_FRAG)
-    Observable<HitWrapper> getHits();
+    Observable<ModelWrapper<Hit>> getHits();
 
     @GET(Constants.Http.URL_HITS_FRAG)
-    Observable<HitWrapper> getHits(@Query("q") String query);
+    Observable<ModelWrapper<Hit>> getHits(@Query("q") String query);
+
+
 }

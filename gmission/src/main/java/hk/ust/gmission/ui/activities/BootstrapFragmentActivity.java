@@ -2,7 +2,6 @@ package hk.ust.gmission.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 
 import com.squareup.otto.Bus;
 
@@ -16,8 +15,7 @@ import hk.ust.gmission.Injector;
  */
 public class BootstrapFragmentActivity extends ActionBarActivity {
 
-    @Inject
-    protected Bus eventBus;
+    @Inject protected Bus bus;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,12 +34,12 @@ public class BootstrapFragmentActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        eventBus.register(this);
+        bus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        eventBus.unregister(this);
+        bus.unregister(this);
     }
 }

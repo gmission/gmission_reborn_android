@@ -8,12 +8,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
-import hk.ust.gmission.events.CampaignItemClickEvent;
+import hk.ust.gmission.events.HitItemClickEvent;
 import hk.ust.gmission.models.dao.Hit;
 
 
@@ -27,7 +25,6 @@ public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerV
         return new HitViewHolder(itemView);
     }
 
-    @Inject
     public HitRecyclerViewAdapter() {
         items = new ArrayList<>();
     }
@@ -35,7 +32,7 @@ public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerV
     @Override
     public void onBindViewHolder(HitViewHolder holder, int position) {
         Hit campaign = items.get(position);
-        holder.id.setText(String.format("%s %s",
+        holder.title.setText(String.format("%s %s",
                 campaign.getTitle(), campaign.getId()));
         holder.content.setText(campaign.getDescription());
     }
@@ -44,7 +41,7 @@ public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerV
     class HitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
-        @Bind(R.id.id) TextView id;
+        @Bind(R.id.title) TextView title;
         @Bind(R.id.content) TextView content;
 
         public HitViewHolder(View itemView) {
@@ -55,7 +52,7 @@ public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerV
 
         @Override
         public void onClick(View view) {
-            bus.post(new CampaignItemClickEvent(view));
+            bus.post(new HitItemClickEvent(view));
         }
     }
 }
