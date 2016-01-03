@@ -3,24 +3,14 @@
 <resources>
 
     <string name="app_name">gMission</string>
-    <string name="content_column">Content</string>
-    <string name="page_referrers">Referrers</string>
-    <string name="refresh_action">Refresh</string>
     <string name="logout_action">Logout</string>
-    <string name="page_news">News</string>
-    <string name="page_users">Users</string>
-    <string name="page_checkins">Check In\'s</string>
-    <string name="title_column">Title</string>
-    <string name="location_column">Location</string>
-    <string name="user_column">User</string>
-    <string name="date_column">Date</string>
+
     <string name="error_loading_user_profile">Loading User Profile failed</string>
     <string name="no_users">No Users</string>
     <string name="no_news">No News</string>
     <string name="no_campaign">No Campaign</string>
     <string name="no_message">No Message</string>
-    <string name="avatar">Avatar</string>
-    <string name="choose">Choose</string>
+
 
     <string name="label_user_name">User Name</string>
     <string name="label_email_address">Email Address</string>
@@ -60,12 +50,13 @@
     <string name="title_map">Map</string>
     <string name="title_activity_hit_list">Question List</string>
     <string name="title_activity_hit">Answer Question</string>
+    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity</string>
+
 
     <string name="register_check_password_same">You\'ll need to type in your password a second time to confirm it.</string>
     <string name="register_check_email">Invalid email address.</string>
     <string name="register_check_name">Invalid Name (at least 6 characters).</string>
     <string name="register_check_passwd">Invalid Password (at least 6 characters).</string>
-    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity</string>
 
     <string name="network_error_message">Network error, please try later.</string>
     <string name="unauthorized_error_message">Fail to authorize, please login again.</string>
