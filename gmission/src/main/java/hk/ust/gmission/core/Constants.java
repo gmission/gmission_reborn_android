@@ -39,10 +39,10 @@ public final class Constants {
 
         public static final String CONTENT_TYPE_JSON = "application/json";
         public final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
-        private final static String URL_REST = "/rest";
-        private final static String URL_IMAGE = "/image";
-        private final static String URL_VIDEO = "/video";
-        private final static String URL_AUDIO = "/audio";
+        public final static String URL_REST = "/rest";
+        public final static String URL_IMAGE = "/image";
+        public final static String URL_VIDEO = "/video";
+        public final static String URL_AUDIO = "/audio";
         public  final static String URL_IMAGE_ORI = URL_BASE + URL_IMAGE + "/original";
         public  final static String URL_VIDEO_ORI = URL_BASE + URL_VIDEO + "/original";
         public  final static String URL_VIDEO_THUMB = URL_BASE + URL_VIDEO + "/thumb";
@@ -52,19 +52,17 @@ public final class Constants {
         public  final static String URL_REG = URL_BASE + "/user/register";
 
         public static final String URL_CAMPAIGNS_FRAG =  "/rest/campaign";
-        public static final String URL_CAMPAIGNS = URL_BASE + URL_CAMPAIGNS_FRAG;
 
         public static final String URL_HITS_FRAG =  "/rest/hit";
-        public static final String URL_HITS = URL_BASE + URL_HITS_FRAG;
 
         public static final String URL_MESSAGES_FRAG =  "/rest/message";
-        public static final String URL_MESSAGES = URL_BASE + URL_MESSAGES_FRAG;
 
         public static final String URL_SELECTIONS_FRAG =  "/rest/selection";
-        public static final String URL_SELECTIONS = URL_BASE + URL_SELECTIONS_FRAG;
 
         public static final String URL_ANSWERS_FRAG =  "/rest/answer";
-        public static final String URL_ANSWERS = URL_BASE + URL_ANSWERS_FRAG;
+
+        public static final String URL_ATTACHMENTS_FRAG =  "/rest/attachment";
+
 
         public static final String URL_CHECKINS_FRAG = "/1/classes/Locations";
         public static final String URL_CHECKINS = URL_BASE + URL_CHECKINS_FRAG;

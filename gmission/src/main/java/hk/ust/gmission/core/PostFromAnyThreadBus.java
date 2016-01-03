@@ -50,7 +50,6 @@ public class PostFromAnyThreadBus extends Bus
         }
         catch (IllegalArgumentException e)
         {
-            // TODO: use Crashlytics unhandled exception logging
             Ln.e(e);
         }
     }

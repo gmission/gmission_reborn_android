@@ -1,6 +1,8 @@
 package hk.ust.gmission.util;
 
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,13 +10,19 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.widget.ImageView;
 
-import hk.ust.gmission.util.Ln;
+import hk.ust.gmission.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 import static android.graphics.Color.WHITE;
@@ -201,6 +209,67 @@ public final class ImageUtils {
         clipped.recycle();
 
         return rounded;
+    }
+
+    public static File getTempFile(Context context) {
+        String state = Environment.getExternalStorageState();
+        File path = null;
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            path = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.app_pic_folder));
+        } else {
+            path = new File(Environment.getDataDirectory(), context.getString(R.string.app_pic_folder));
+        }
+
+
+        if (!path.exists()) {
+            path.mkdir();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
+        String fileName = sdf.format(cal.getTime());
+
+        return new File(path, "task_image_"+fileName+".jpg");
+    }
+
+
+    private static String getRealPathFromURI(Context context, String contentURI) {
+        Uri contentUri = Uri.parse(contentURI);
+        Cursor cursor = context.getContentResolver().query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            return contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    public static void compressImage(Context context, String imageUri) {
+
+        String filePath = getRealPathFromURI(context, imageUri);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath,options);
+
+        FileOutputStream out = null;
+
+        try {
+            out = new FileOutputStream(imageUri);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
 

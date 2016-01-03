@@ -9,6 +9,7 @@
 
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="margin">16dp</dimen>
 
     <dimen name="text_headline">24sp</dimen>
     <dimen name="text_large_title">22sp</dimen>

@@ -4,16 +4,12 @@ package hk.ust.gmission.ui.fragments;
 import android.accounts.AccountsException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 
@@ -87,10 +83,6 @@ public class SelectionHitFragment extends BaseAnswerFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Injector.inject(this);
-        ButterKnife.bind(this, view);
-
-
 
         try {
             loadHitSelection();
@@ -104,12 +96,14 @@ public class SelectionHitFragment extends BaseAnswerFragment {
     }
 
     public void subcribeRadioGroup(){
-        RxRadioGroup.checkedChanges(selectionRadioGroup).doOnNext(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                bus.post(new HitSubmitEnableEvent());
-            }
-        }).subscribe();
+        RxRadioGroup.checkedChanges(selectionRadioGroup)
+                .doOnNext(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        bus.post(new HitSubmitEnableEvent());
+                    }
+                })
+                .subscribe();
     }
 
 
@@ -124,12 +118,14 @@ public class SelectionHitFragment extends BaseAnswerFragment {
 
     @Override
     public String getAnswer(){
-        return "1";
+        int index = selectionRadioGroup.getCheckedRadioButtonId() - R.id.selection_radio - 1;
+        Selection selection = selections.get(index);
+        return selection.getId();
     }
 
     public void loadHitSelection() throws IOException, AccountsException {
         QueryObject queryObject = new QueryObject();
-        queryObject.push("hit_id", "eq", String.valueOf(mHit.getId()));
+        queryObject.push("hit_id", "eq", mHit.getId());
         serviceProvider.getService(getActivity()).getSelectionService().getSelections(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())

@@ -5,18 +5,22 @@ import java.util.Date;
 /**
  * Created by bigstone on 2/1/2016.
  */
-public class Answer {
+public class Answer extends BaseModel{
+    String id;
+    String hit_id;
+    String brief;
+    String attachment_id;
+    String type;
+    Date created_on;
+    String location_id;
+    String worker_id;
 
-    public String hit_id;
-    public String brief;
-    public String attachment_id;
-    public String type;
-    public Date created_on;
-    public String location_id;//default location
-    public String worker_id;
-
-
-
+    public String getId(){
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getBrief() {
         return brief;

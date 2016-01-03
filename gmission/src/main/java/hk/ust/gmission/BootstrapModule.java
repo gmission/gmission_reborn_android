@@ -9,6 +9,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
 
 import java.lang.reflect.Type;
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -44,11 +46,14 @@ import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
+import hk.ust.gmission.ui.fragments.ImageHitFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.SelectionHitFragment;
+import hk.ust.gmission.ui.fragments.TextHitFragment;
 import hk.ust.gmission.util.GsonUtil;
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -71,6 +76,8 @@ import retrofit.converter.GsonConverter;
                 HitRecyclerViewFragment.class,
                 HitListActivity.class,
                 SelectionHitFragment.class,
+                TextHitFragment.class,
+                ImageHitFragment.class,
                 HitRecyclerViewAdapter.class,
                 MessageRecyclerViewAdapter.class,
                 CampaignRecyclerViewAdapter.class,
@@ -160,14 +167,23 @@ public class BootstrapModule {
     }
 
     @Provides
-    RestAdapter provideRestAdapter(RestErrorHandler restErrorHandler, RestAdapterRequestInterceptor restRequestInterceptor, Gson gson) {
-        Gson GSON;
+    OkClient provideOkClient(){
+        final OkHttpClient okHttpClient = new OkHttpClient();
+//        okHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
+//        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
+        return new OkClient(okHttpClient);
+    }
+
+    @Provides
+    RestAdapter provideRestAdapter(RestErrorHandler restErrorHandler, RestAdapterRequestInterceptor restRequestInterceptor, Gson gson, OkClient okClient) {
+
         return new RestAdapter.Builder()
                 .setEndpoint(Constants.Http.URL_BASE)
                 .setErrorHandler(restErrorHandler)
                 .setRequestInterceptor(restRequestInterceptor)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .setConverter(new GsonConverter(gson))
+                .setClient(okClient)
                 .build();
     }
 

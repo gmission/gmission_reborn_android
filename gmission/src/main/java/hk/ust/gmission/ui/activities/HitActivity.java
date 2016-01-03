@@ -4,6 +4,7 @@ import android.accounts.AccountsException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.github.kevinsawicki.wishlist.Toaster;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.otto.Subscribe;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -20,15 +22,27 @@ import butterknife.Bind;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.HitSubmitEnableEvent;
 import hk.ust.gmission.models.dao.Answer;
+import hk.ust.gmission.models.dao.Attachment;
 import hk.ust.gmission.models.dao.Hit;
+import hk.ust.gmission.models.dao.ImageVideoResult;
 import hk.ust.gmission.ui.fragments.BaseAnswerFragment;
+import hk.ust.gmission.ui.fragments.ImageHitFragment;
 import hk.ust.gmission.ui.fragments.SelectionHitFragment;
+import hk.ust.gmission.ui.fragments.TextHitFragment;
+import hk.ust.gmission.util.Ln;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedFile;
+import retrofit.mime.TypedString;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.HIT;
@@ -41,8 +55,9 @@ public class HitActivity extends BootstrapFragmentActivity {
 
     @Bind(R.id.submit_btn) Button submitButton;
     @Bind(R.id.hit_content) TextView hitContent;
-    @Inject
-    protected BootstrapServiceProvider serviceProvider;
+    @Bind(R.id.bad_hid_notification) TextView badHitNotificationText;
+
+    @Inject protected BootstrapServiceProvider serviceProvider;
 
     private BaseAnswerFragment answerFragment = null;
     private Subscription buttonSubscription = null;
@@ -53,7 +68,15 @@ public class HitActivity extends BootstrapFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hit_activity);
+        mActivity = this;
 
+        initializeAnswerArea();
+
+        subscribeSubmitButton();
+    }
+
+
+    public void initializeAnswerArea(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             mHit = (Hit) getIntent().getExtras().get(HIT);
             hitContent.setText(mHit.getDescription());
@@ -61,13 +84,22 @@ public class HitActivity extends BootstrapFragmentActivity {
 
         if (mHit.getType().equals("selection")) {
             answerFragment = SelectionHitFragment.newInstance(mHit);
-
         }
 
-        mActivity = this;
-        replaceContainerFragment(answerFragment);
-        subscribeSubmitButton();
 
+        if (mHit.getType().equals("text")) {
+            answerFragment = TextHitFragment.newInstance();
+        }
+
+
+        if (mHit.getType().equals("image")) {
+            answerFragment = ImageHitFragment.newInstance();
+        }
+
+        if (answerFragment != null){
+            badHitNotificationText.setVisibility(View.GONE);
+            replaceContainerFragment(answerFragment);
+        }
     }
 
     @Subscribe
@@ -89,9 +121,96 @@ public class HitActivity extends BootstrapFragmentActivity {
         buttonSubscription = RxView.clicks(submitButton)
                 .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted(new Action0() {
+                .map(new Func1<Object, Object>() {
                     @Override
-                    public void call() {
+                    public Object call(Object o) {
+                        mActivity.showProgress();
+                        return o;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .flatMap(new Func1<Object, Observable<ImageVideoResult>>() {
+                    @Override
+                    public Observable<ImageVideoResult> call(Object stringObservable) {
+
+                        File imageFile = answerFragment.getImageFile();
+                        if (imageFile == null){
+                            return null;
+                        }
+                        TypedFile typedFile = new TypedFile("image/jpeg", imageFile);
+                        TypedString typedString = new TypedString("file");
+
+                        Observable<ImageVideoResult> observable = null;
+                        try {
+//                            System.setProperty("http.keepAlive", "false");
+                            observable = serviceProvider.getService(mActivity).getAttachmentService().createImage(typedFile, typedString);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (AccountsException e) {
+                            e.printStackTrace();
+                        }
+                        return observable;
+                    }
+                })
+                .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
+                    @Override
+                    public Observable<Attachment> call(ImageVideoResult imageVideoResult) {
+                        if (imageVideoResult == null){
+                            return null;
+                        }
+                        File imageFile = answerFragment.getImageFile();
+                        Attachment attachment = new Attachment();
+                        attachment.setType("image");
+                        attachment.setName(imageFile.getName());
+                        attachment.setValue(imageVideoResult.getFilename());
+
+                        Observable<Attachment> observable = null;
+
+                        try {
+                            observable = serviceProvider.getService(mActivity).getAttachmentService().createAttachment(attachment);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (AccountsException e) {
+                            e.printStackTrace();
+                        }
+
+                        return observable;
+                    }
+                })
+                .flatMap(new Func1<Attachment, Observable<Answer>>() {
+                    @Override
+                    public Observable<Answer> call(Attachment attachment) {
+                        String answerBrief = answerFragment.getAnswer();
+                        Answer answer = new Answer();
+                        answer.setBrief(answerBrief);
+                        answer.setHit_id(mHit.getId());
+                        answer.setType(mHit.getType());
+                        answer.setWorker_id(Constants.Http.PARAM_USER_ID);
+                        if (attachment != null){
+                            answer.setAttachment_id(attachment.getId());
+                        }
+
+
+                        Observable<Answer> observable = null;
+
+                        try {
+                            observable =  serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (AccountsException e) {
+                            e.printStackTrace();
+                        }
+
+                        return observable;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Answer>() {
+                    @Override
+                    public void call(Answer answer) {
+                        bus.post(new HitAnswerSuccessEvent(answer.getHit_id()));
+                        Toaster.showShort(mActivity, mActivity.getString(R.string.message_answer_success));
+                        mActivity.hideProgress();
                         finish();
                     }
                 })
@@ -110,43 +229,6 @@ public class HitActivity extends BootstrapFragmentActivity {
 
                         Toaster.showLong(HitActivity.this, message);
 
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .doOnNext(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        String answerBrief = answerFragment.getAnswer();
-                        Answer answer = new Answer();
-                        answer.setBrief(answerBrief);
-                        answer.setHit_id(mHit.getId());
-                        answer.setType("selection");
-                        answer.setWorker_id(Integer.valueOf(Constants.Http.PARAM_USER_ID));
-                        answer.setAttachment_id(1);
-//                        answer.setLocation_id(2);
-
-                        try {
-                            serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(Schedulers.io())
-                                    .doOnNext(new Action1<Answer>() {
-                                        @Override
-                                        public void call(Answer answer) {
-
-                                        }
-                                    })
-                                    .doOnError(new Action1<Throwable>() {
-                                        @Override
-                                        public void call(Throwable e) {
-                                            e.printStackTrace();
-                                        }
-                                    })
-                                    .subscribe();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AccountsException e) {
-                            e.printStackTrace();
-                        }
                     }
                 })
                 .subscribe();

@@ -104,7 +104,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
 
     @Subscribe
     public void onListItemClick(MessageItemClickEvent event) {
-        int position = mRecyclerView.indexOfChild(event.getView());
+        int position = mRecyclerView.getChildLayoutPosition(event.getView());
         MessageRecyclerViewAdapter adapter = (MessageRecyclerViewAdapter) mRecyclerView.getAdapter();
 
         Message message = adapter.getItem(position);

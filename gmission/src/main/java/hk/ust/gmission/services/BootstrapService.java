@@ -4,8 +4,6 @@ package hk.ust.gmission.services;
 import java.util.List;
 
 import hk.ust.gmission.models.dao.CheckIn;
-import hk.ust.gmission.models.dao.Message;
-import hk.ust.gmission.models.dao.User;
 import retrofit.RestAdapter;
 
 /**
@@ -32,8 +30,6 @@ public class BootstrapService {
     }
 
 
-
-
     public CampaignService getCampaignService() {
         return getRestAdapter().create(CampaignService.class);
     }
@@ -48,6 +44,10 @@ public class BootstrapService {
 
     public SelectionService getSelectionService() {
         return getRestAdapter().create(SelectionService.class);
+    }
+
+    public AttachmentService getAttachmentService() {
+        return getRestAdapter().create(AttachmentService.class);
     }
 
     public AnswerService getAnswerService() {

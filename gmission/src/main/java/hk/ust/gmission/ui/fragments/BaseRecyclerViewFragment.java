@@ -108,7 +108,6 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        bus.unregister(this);
     }
 
     @Override
@@ -117,6 +116,12 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
         mActivity = (FragmentActivity) activity;
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
+    }
 
     @Override
     public void onDestroyView() {

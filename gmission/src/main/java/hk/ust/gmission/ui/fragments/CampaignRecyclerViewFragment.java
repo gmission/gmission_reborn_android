@@ -68,7 +68,6 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
                             Campaign campaign = new Campaign();
                             campaign.setTitle("Test News");
                             campaign.setBrief("This is a test news");
-                            campaign.setId(1);
                             getAdapter().addNewItem(campaign);
                         }
                     }
@@ -107,7 +106,7 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
 
     @Subscribe
     public void onListItemClick(CampaignItemClickEvent event) {
-        int position = mRecyclerView.indexOfChild(event.getView());
+        int position = mRecyclerView.getChildLayoutPosition(event.getView());
         CampaignRecyclerViewAdapter adapter = (CampaignRecyclerViewAdapter) mRecyclerView.getAdapter();
 
         Campaign campaign = adapter.getItem(position);

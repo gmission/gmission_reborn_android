@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hk.ust.gmission.ui.fragments.ImageHitFragment">
+
+    <ImageButton
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image_capture_btn"
+        android:src="@drawable/ic_action_answer_image"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image_photopreview_iv"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

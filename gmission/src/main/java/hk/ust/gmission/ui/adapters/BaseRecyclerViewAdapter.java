@@ -10,16 +10,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hk.ust.gmission.Injector;
+import hk.ust.gmission.models.dao.BaseModel;
 
 /**
  * Created by bigstone on 21/12/2015.
  */
-public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder, I> extends RecyclerView.Adapter<E> {
+public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder, I extends BaseModel> extends RecyclerView.Adapter<E> {
 
     /**
      * List items provided
      */
-    public List<I> items = new ArrayList<I>();
+    public List<I> items = new ArrayList<>();
 
     @Inject protected Bus bus;
 
@@ -44,6 +45,15 @@ public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder,
 
         items.add(0,item);
 
+    }
+
+    public void removeItem(String itemId){
+        for (I item: items) {
+            if (item.getId().equals(itemId)){
+                items.remove(item);
+                break;
+            }
+        }
     }
 
     public void appendItem(I item){

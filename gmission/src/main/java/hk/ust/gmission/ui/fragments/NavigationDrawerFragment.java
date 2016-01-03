@@ -18,13 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import hk.ust.gmission.Injector;
-import hk.ust.gmission.R;
-import hk.ust.gmission.events.NavItemSelectedEvent;
-import hk.ust.gmission.util.UIUtils;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
+
+import hk.ust.gmission.Injector;
+import hk.ust.gmission.R;
+import hk.ust.gmission.events.NavItemSelectedEvent;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

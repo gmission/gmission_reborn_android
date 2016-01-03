@@ -1,0 +1,26 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/edit_text_scroll_view"
+    tools:context="hk.ust.gmission.ui.fragments.TextHitFragment"
+    tools:showIn="@layout/hit_activity">
+
+    <EditText
+        android:id="@+id/hit_edit_text"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:minLines="8"
+        android:gravity="top|left"
+        android:maxLines="10"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:scrollbars="vertical"
+        android:hint="@string/label_text_answer_hint"
+        android:textColorHint="@color/text_light"
+        android:textColor="@color/dark_grey"
+    />
+
+
+
+</android.support.v4.widget.NestedScrollView>

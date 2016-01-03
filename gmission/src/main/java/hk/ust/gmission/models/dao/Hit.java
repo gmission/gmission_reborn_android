@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by bigstone on 23/12/2015.
  */
-public class Hit implements Serializable{
+public class Hit extends BaseModel implements Serializable{
     String id;
     String type;
     String title;
@@ -24,11 +24,10 @@ public class Hit implements Serializable{
     String location_id;
     String requester_id;
 
-    public int getId() {
+    public String getId(){
         return id;
     }
-
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,21 +55,7 @@ public class Hit implements Serializable{
         this.description = description;
     }
 
-    public int getAttachment_id() {
-        return attachment_id;
-    }
 
-    public void setAttachment_id(int attachment_id) {
-        this.attachment_id = attachment_id;
-    }
-
-    public int getCampaign_id() {
-        return campaign_id;
-    }
-
-    public void setCampaign_id(int campaign_id) {
-        this.campaign_id = campaign_id;
-    }
 
     public int getCredit() {
         return credit;
@@ -136,19 +121,35 @@ public class Hit implements Serializable{
         this.created_on = created_on;
     }
 
-    public int getLocation_id() {
+    public String getAttachment_id() {
+        return attachment_id;
+    }
+
+    public void setAttachment_id(String attachment_id) {
+        this.attachment_id = attachment_id;
+    }
+
+    public String getCampaign_id() {
+        return campaign_id;
+    }
+
+    public void setCampaign_id(String campaign_id) {
+        this.campaign_id = campaign_id;
+    }
+
+    public String getLocation_id() {
         return location_id;
     }
 
-    public void setLocation_id(int location_id) {
+    public void setLocation_id(String location_id) {
         this.location_id = location_id;
     }
 
-    public int getRequester_id() {
+    public String getRequester_id() {
         return requester_id;
     }
 
-    public void setRequester_id(int requester_id) {
+    public void setRequester_id(String requester_id) {
         this.requester_id = requester_id;
     }
 }

@@ -1,5 +1,7 @@
 package hk.ust.gmission.ui.activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import hk.ust.gmission.Injector;
+import hk.ust.gmission.R;
 
 /**
  * Base class for all Bootstrap Activities that need fragments.
@@ -16,6 +19,8 @@ import hk.ust.gmission.Injector;
 public class BootstrapFragmentActivity extends ActionBarActivity {
 
     @Inject protected Bus bus;
+
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -29,7 +34,18 @@ public class BootstrapFragmentActivity extends ActionBarActivity {
         super.setContentView(layoutResId);
 
         ButterKnife.bind(this);
+
+        dialog = new ProgressDialog(BootstrapFragmentActivity.this);
+        dialog.setMessage(getText(R.string.message_uploading));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(true);
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(final DialogInterface dialog) {
+            }
+        });
     }
+
+
 
     @Override
     protected void onResume() {
@@ -40,6 +56,25 @@ public class BootstrapFragmentActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         bus.unregister(this);
+    }
+
+    /**
+     * Hide progress dialog
+     */
+    public void hideProgress() {
+        dialog.dismiss();
+    }
+
+    /**
+     * Show progress dialog
+     */
+    public void showProgress() {
+        dialog.show();
     }
 }

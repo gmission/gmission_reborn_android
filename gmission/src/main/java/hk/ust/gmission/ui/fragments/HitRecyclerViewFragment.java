@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
+import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.HitItemClickEvent;
 import hk.ust.gmission.models.dao.Hit;
 import hk.ust.gmission.models.wrapper.ModelWrapper;
@@ -83,7 +84,6 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
                             Hit hit = new Hit();
                             hit.setTitle("Test News");
                             hit.setDescription("This is a test news");
-                            hit.setId(1);
                             getAdapter().addNewItem(hit);
                         }
                     }
@@ -110,6 +110,11 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
     }
 
 
+    @Subscribe
+    public void onHitAnswerSuccess(HitAnswerSuccessEvent event){
+        getAdapter().removeItem(event.getHit_id());
+        getAdapter().notifyDataSetChanged();
+    }
 
 
 
@@ -122,7 +127,7 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
     @Subscribe
     public void onListItemClick(HitItemClickEvent event) {
-        int position = mRecyclerView.indexOfChild(event.getView());
+        int position = mRecyclerView.getChildLayoutPosition(event.getView());
         HitRecyclerViewAdapter adapter = (HitRecyclerViewAdapter) mRecyclerView.getAdapter();
 
         Hit hit = adapter.getItem(position);
