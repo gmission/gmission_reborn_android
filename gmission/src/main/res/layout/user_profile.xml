@@ -203,7 +203,7 @@
             style="@style/ListSubtitleText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="获取失败~"
+            android:text="@string/error_loading_user_profile"
             android:gravity="center"
             android:visibility="gone" />
 

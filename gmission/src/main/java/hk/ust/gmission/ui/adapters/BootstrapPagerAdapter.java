@@ -10,8 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
+import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 
 /**
  * Pager adapter
@@ -47,7 +47,7 @@ public class BootstrapPagerAdapter extends FragmentPagerAdapter {
                 result = new HitRecyclerViewFragment();
                 break;
             case 2:
-                result = new CheckInsListFragment();
+                result = new MessageRecyclerViewFragment();
                 break;
             default:
                 result = null;

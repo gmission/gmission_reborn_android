@@ -20,7 +20,7 @@
 
         <ImageView
             android:id="@+id/hit_ic"
-            style="@style/AvatarLarge"
+            style="@style/IconLarge"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"

@@ -14,9 +14,7 @@
     <string name="location_column">Location</string>
     <string name="user_column">User</string>
     <string name="date_column">Date</string>
-    <string name="error_loading_users">Loading users failed</string>
-    <string name="error_loading_news">Loading news failed</string>
-    <string name="error_loading_checkins">Loading check-ins failed</string>
+    <string name="error_loading_user_profile">Loading User Profile failed</string>
     <string name="no_users">No Users</string>
     <string name="no_news">No News</string>
     <string name="no_campaign">No Campaign</string>

@@ -63,11 +63,4 @@ public class BootstrapService {
     }
 
 
-    /**
-     * Get all bootstrap Checkins that exists on Parse.com
-     */
-    public List<CheckIn> getCheckIns() {
-        return getCheckInService().getCheckIns().getResults();
-    }
-
 }

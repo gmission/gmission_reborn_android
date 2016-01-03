@@ -20,7 +20,7 @@
 
         <ImageView
             android:id="@+id/iv_campaign_icon"
-            style="@style/AvatarLarge"
+            style="@style/IconLarge"
             android:layout_width="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"

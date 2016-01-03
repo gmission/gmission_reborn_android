@@ -28,7 +28,6 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.dao.User;
 import hk.ust.gmission.util.Ln;
-import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.Strings;
 import rx.Observable;
 import rx.Observer;
@@ -60,7 +59,6 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
     private CompositeSubscription subcriptions = new CompositeSubscription();
 
-    private SafeAsyncTask<Boolean> authenticationTask;
 
     private Observable<CharSequence> nameChangeObservable;
     private Observable<CharSequence> emailChangeObservable;
@@ -307,9 +305,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
         dialog.setCancelable(true);
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(final DialogInterface dialog) {
-                if (authenticationTask != null) {
-                    authenticationTask.cancel(true);
-                }
+
             }
         });
         return dialog;

@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -39,12 +38,10 @@ import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.activities.MainActivity;
-import hk.ust.gmission.ui.adapters.BaseRecyclerViewAdapter;
 import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
 import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.CheckInsListFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.ImageHitFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
@@ -69,7 +66,6 @@ import retrofit.converter.GsonConverter;
                 BootstrapAccountRegisterActivity.class,
                 MainActivity.class,
                 HitActivity.class,
-                CheckInsListFragment.class,
                 NavigationDrawerFragment.class,
                 CampaignRecyclerViewFragment.class,
                 MessageRecyclerViewFragment.class,
