@@ -8,13 +8,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.CampaignItemClickEvent;
-import hk.ust.gmission.models.dao.Campaign;
+import hk.ust.gmission.models.Campaign;
 
 public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, Campaign> {
 

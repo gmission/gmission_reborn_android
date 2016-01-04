@@ -8,13 +8,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.MessageItemClickEvent;
-import hk.ust.gmission.models.dao.Message;
+import hk.ust.gmission.models.Message;
 
 public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageRecyclerViewAdapter.MessageViewHolder, Message> {
 

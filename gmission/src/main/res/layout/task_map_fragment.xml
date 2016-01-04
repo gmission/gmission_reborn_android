@@ -1,13 +1,32 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="hk.ust.gmission.ui.fragments.TaskMapFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<RelativeLayout android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/app_name" />
+        android:layout_height="match_parent" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_location"
+        android:background="@null"
+        android:src="@drawable/button_mylocation"
+        android:layout_above="@+id/bt_addnew"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-</FrameLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:id="@+id/bt_addnew"
+        android:src="@drawable/button_addnew"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/bt_location"
+        android:layout_alignStart="@+id/bt_location"
+        android:layout_marginBottom="43dp" />
+
+
+    </RelativeLayout>

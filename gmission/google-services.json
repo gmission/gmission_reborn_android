@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_id": "gmission-reborn",
+    "project_number": "524966851802",
+    "name": "gMission Reborn"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524966851802:android:aac5e0679c4035e1",
+        "client_id": "android:hk.ust.gmission",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "hk.ust.gmission"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

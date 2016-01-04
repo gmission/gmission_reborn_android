@@ -10,7 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hk.ust.gmission.Injector;
-import hk.ust.gmission.models.dao.BaseModel;
+import hk.ust.gmission.models.BaseModel;
 
 /**
  * Created by bigstone on 21/12/2015.

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,9 +25,6 @@ import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -39,7 +35,7 @@ import hk.ust.gmission.R.layout;
 import hk.ust.gmission.R.string;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
-import hk.ust.gmission.models.dao.User;
+import hk.ust.gmission.models.User;
 import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.ui.adapters.TextWatcherAdapter;
 import hk.ust.gmission.util.Ln;
@@ -47,7 +43,6 @@ import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.Strings;
 import retrofit.RetrofitError;
 
-import static android.R.layout.simple_dropdown_item_1line;
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
@@ -140,8 +135,8 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         setContentView(layout.account_login_activity);
         ButterKnife.bind(this);
 
-        usernameText.setAdapter(new ArrayAdapter<String>(this,
-                simple_dropdown_item_1line, userEmailAccounts()));
+//        usernameText.setAdapter(new ArrayAdapter<String>(this,
+//                simple_dropdown_item_1line, userEmailAccounts()));
 
         passwordText.setOnKeyListener(new OnKeyListener() {
 
@@ -172,14 +167,14 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
 
     }
 
-    private List<String> userEmailAccounts() {
-        final Account[] accounts = accountManager.getAccountsByType("com.google");
-        final List<String> emailAddresses = new ArrayList<String>(accounts.length);
-        for (final Account account : accounts) {
-            emailAddresses.add(account.name);
-        }
-        return emailAddresses;
-    }
+//    private List<String> userEmailAccounts() {
+//        final Account[] accounts = accountManager.getAccountsByType("com.google");
+//        final List<String> emailAddresses = new ArrayList<String>(accounts.length);
+//        for (final Account account : accounts) {
+//            emailAddresses.add(account.name);
+//        }
+//        return emailAddresses;
+//    }
 
     private TextWatcher validationTextWatcher() {
         return new TextWatcherAdapter() {
@@ -281,9 +276,10 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
                 Ln.d("Authentication response=%s", request.code());
 
                 if (request.ok()) {
-                    final User model = new Gson().fromJson(Strings.toString(request.buffer()), User.class);
+                    String buffer = Strings.toString(request.buffer());
+                    final User model = new Gson().fromJson(buffer, User.class);
 
-                    if( model.getRes() == -1 ) return false;
+//                    if(!model.isActive()) return false;
 
                     token = model.getToken();
                     accountId = String.valueOf(model.getId());

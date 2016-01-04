@@ -14,8 +14,8 @@ import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.CampaignItemClickEvent;
-import hk.ust.gmission.models.dao.Campaign;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Campaign;
+import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
 import rx.android.schedulers.AndroidSchedulers;
@@ -65,10 +65,7 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
                         if (!isLoaderInitialized){
                             getAdapter().setItems(campaigns.getObjects());
                         } else {
-                            Campaign campaign = new Campaign();
-                            campaign.setTitle("Test News");
-                            campaign.setBrief("This is a test news");
-                            getAdapter().addNewItem(campaign);
+                            getAdapter().setItems(campaigns.getObjects());
                         }
                     }
                 })

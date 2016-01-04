@@ -1,4 +1,4 @@
-package hk.ust.gmission.models.dao;
+package hk.ust.gmission.models;
 
 /**
  * Created by bigstone on 2/1/2016.

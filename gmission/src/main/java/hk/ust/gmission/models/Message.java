@@ -1,4 +1,4 @@
-package hk.ust.gmission.models.dao;
+package hk.ust.gmission.models;
 
 import java.util.Date;
 

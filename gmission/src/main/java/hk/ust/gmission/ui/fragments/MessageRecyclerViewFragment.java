@@ -15,8 +15,8 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.MessageItemClickEvent;
-import hk.ust.gmission.models.dao.Message;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Message;
+import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import rx.android.schedulers.AndroidSchedulers;
@@ -66,6 +66,8 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                     @Override
                     public void call(ModelWrapper<Message> messages) {
                         if (!isLoaderInitialized){
+                            getAdapter().setItems(messages.getObjects());
+                        } else {
                             getAdapter().setItems(messages.getObjects());
                         }
                     }

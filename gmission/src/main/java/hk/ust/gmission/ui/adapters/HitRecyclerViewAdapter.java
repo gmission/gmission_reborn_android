@@ -12,7 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.HitItemClickEvent;
-import hk.ust.gmission.models.dao.Hit;
+import hk.ust.gmission.models.Hit;
 
 
 public class HitRecyclerViewAdapter extends BaseRecyclerViewAdapter<HitRecyclerViewAdapter.HitViewHolder, Hit> {

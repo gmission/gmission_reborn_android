@@ -25,7 +25,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_campaign"
-            android:contentDescription="@string/avatar"
             />
 
         <TextView

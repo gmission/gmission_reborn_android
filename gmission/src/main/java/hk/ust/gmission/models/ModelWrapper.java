@@ -1,4 +1,4 @@
-package hk.ust.gmission.models.wrapper;
+package hk.ust.gmission.models;
 
 import java.util.List;
 

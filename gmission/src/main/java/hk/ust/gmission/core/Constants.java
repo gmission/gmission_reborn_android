@@ -62,7 +62,7 @@ public final class Constants {
         public static final String URL_ANSWERS_FRAG =  "/rest/answer";
 
         public static final String URL_ATTACHMENTS_FRAG =  "/rest/attachment";
-
+        public static final String URL_USERS_FRAG =  "/rest/user";
 
         public static final String URL_CHECKINS_FRAG = "/1/classes/Locations";
         public static final String URL_CHECKINS = URL_BASE + URL_CHECKINS_FRAG;

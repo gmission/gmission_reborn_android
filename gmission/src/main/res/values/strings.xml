@@ -44,7 +44,7 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
     <string name="title_campaign">Campaign</string>
-    <string name="title_home">Home Page</string>
+    <string name="title_home">Home</string>
     <string name="title_logout">Log Out</string>
     <string name="title_message">Messages</string>
     <string name="title_map">Map</string>
@@ -68,4 +68,12 @@
     <string name="profile_requests">Sent Requests</string>
     <string name="profile_answers">Sent Answers</string>
     <string name="profile_checkins">Sent Checkins</string>
+
+    <string name="just_now">just now</string>
+    <string name="before">before</string>
+    <string name="years_before">year(s) before</string>
+    <string name="month_before">month(s) before</string>
+    <string name="days_before">day(s) before</string>
+    <string name="hours_before">hour(s) before</string>
+    <string name="min_before">minute(s) before</string>
 </resources>

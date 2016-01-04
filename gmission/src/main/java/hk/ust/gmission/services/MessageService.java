@@ -1,8 +1,8 @@
 package hk.ust.gmission.services;
 
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.dao.Message;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Message;
+import hk.ust.gmission.models.ModelWrapper;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;

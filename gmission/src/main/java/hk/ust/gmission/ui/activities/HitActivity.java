@@ -24,18 +24,14 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.HitSubmitEnableEvent;
-import hk.ust.gmission.models.dao.Answer;
-import hk.ust.gmission.models.dao.Attachment;
-import hk.ust.gmission.models.dao.Hit;
-import hk.ust.gmission.models.dao.ImageVideoResult;
+import hk.ust.gmission.models.Answer;
+import hk.ust.gmission.models.Attachment;
+import hk.ust.gmission.models.Hit;
+import hk.ust.gmission.models.ImageVideoResult;
 import hk.ust.gmission.ui.fragments.BaseAnswerFragment;
 import hk.ust.gmission.ui.fragments.ImageHitFragment;
 import hk.ust.gmission.ui.fragments.SelectionHitFragment;
 import hk.ust.gmission.ui.fragments.TextHitFragment;
-import hk.ust.gmission.util.Ln;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import rx.Observable;
@@ -135,7 +131,9 @@ public class HitActivity extends BootstrapFragmentActivity {
 
                         File imageFile = answerFragment.getImageFile();
                         if (imageFile == null){
-                            return null;
+                            ImageVideoResult imageVideoResult = new ImageVideoResult();
+                            imageVideoResult.setFilename(null);
+                            return Observable.just(imageVideoResult);
                         }
                         TypedFile typedFile = new TypedFile("image/jpeg", imageFile);
                         TypedString typedString = new TypedString("file");
@@ -155,8 +153,10 @@ public class HitActivity extends BootstrapFragmentActivity {
                 .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
                     @Override
                     public Observable<Attachment> call(ImageVideoResult imageVideoResult) {
-                        if (imageVideoResult == null){
-                            return null;
+                        if (imageVideoResult.getFilename() == null){
+                            Attachment attachment = new Attachment();
+                            attachment.setId(null);
+                            return Observable.just(attachment);
                         }
                         File imageFile = answerFragment.getImageFile();
                         Attachment attachment = new Attachment();
@@ -186,7 +186,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         answer.setHit_id(mHit.getId());
                         answer.setType(mHit.getType());
                         answer.setWorker_id(Constants.Http.PARAM_USER_ID);
-                        if (attachment != null){
+                        if (attachment.getId() != null){
                             answer.setAttachment_id(attachment.getId());
                         }
 

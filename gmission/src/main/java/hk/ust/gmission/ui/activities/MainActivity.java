@@ -41,6 +41,8 @@ import hk.ust.gmission.ui.fragments.CarouselFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
+import hk.ust.gmission.ui.fragments.TaskMapFragment;
+import hk.ust.gmission.ui.fragments.UserProfilePFragment;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
 
@@ -67,11 +69,11 @@ public class MainActivity extends BootstrapFragmentActivity{
     private CharSequence title;
     private NavigationDrawerFragment navigationDrawerFragment;
 
-    private Fragment homeFragment = new HitRecyclerViewFragment();
+    private Fragment homeFragment = new UserProfilePFragment();
     private Fragment campaignFragment = new CampaignRecyclerViewFragment();
-    private Fragment mapFragment = new CarouselFragment();
+    private Fragment mapFragment = new TaskMapFragment();
     private Fragment messageFragment = new MessageRecyclerViewFragment();
-
+    private Fragment initFragment = campaignFragment;
 
 
     private static Intent serviceIntent;
@@ -84,23 +86,23 @@ public class MainActivity extends BootstrapFragmentActivity{
         } else {
             currentNavItemPosition = event.getItemPosition();
             switch (currentNavItemPosition) {
-                case 0: //home page
-                    title = getString(R.string.title_home);
-                    replaceCurrentFragment(homeFragment);
-                    break;
-                case 1: //campaign
+                case 0: //campaign
                     title = getString(R.string.title_campaign);
                     bus.post(new RequestLocationEvent());
                     replaceCurrentFragment(campaignFragment);
                     break;
-                case 2: //map
+                case 1: //map
                     title = getString(R.string.title_map);
-//                    startActivity(new Intent(getActivity(), NavDrawerActivity.class));
-//                    replaceCurrentFragment(mapFragment);
+//                    startActivity(new Intent(getActivity(), MapsActivity.class));
+                    replaceCurrentFragment(mapFragment);
                     break;
-                case 3: //messages
+                case 2: //messages
                     title = getString(R.string.title_message);
                     replaceCurrentFragment(messageFragment);
+                    break;
+                case 3: //home page
+                    title = getString(R.string.title_home);
+                    replaceCurrentFragment(homeFragment);
                     break;
                 case 4: //log out
                     Log.d("logout","log out");
@@ -227,7 +229,7 @@ public class MainActivity extends BootstrapFragmentActivity{
         if (userHasAuthenticated) {
             title = getString(R.string.title_home);
             getSupportActionBar().setTitle(title);
-            replaceCurrentFragment(homeFragment);
+            replaceCurrentFragment(initFragment);
         }
 
     }

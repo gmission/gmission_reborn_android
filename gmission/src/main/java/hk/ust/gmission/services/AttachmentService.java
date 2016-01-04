@@ -1,9 +1,9 @@
 package hk.ust.gmission.services;
 
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.dao.Attachment;
-import hk.ust.gmission.models.dao.ImageVideoResult;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Attachment;
+import hk.ust.gmission.models.ImageVideoResult;
+import hk.ust.gmission.models.ModelWrapper;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;

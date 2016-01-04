@@ -144,38 +144,6 @@
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:background="#22AF95"
-                        android:id="@+id/ll_checkincnt"
-                        android:layout_weight="1"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_profile_checkin"
-                            android:text="100"
-                            android:id="@+id/tv_checkinnum"
-                            android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:drawablePadding="6dp"
-                            android:layout_marginTop="20dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/profile_checkins"
-                            android:id="@+id/textView3"
-                            android:textColor="#ffffff"
-                            android:layout_below="@+id/tv_checkinnum"
-                            android:layout_centerHorizontal="true" />
-
-                    </RelativeLayout>
-
 
                 </LinearLayout>
 

@@ -1,4 +1,4 @@
-package hk.ust.gmission.models.dao;
+package hk.ust.gmission.models;
 
 public class ImageVideoResult {
     private String filename;

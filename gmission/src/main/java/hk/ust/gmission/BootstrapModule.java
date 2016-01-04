@@ -44,10 +44,12 @@ import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.ImageHitFragment;
+import hk.ust.gmission.ui.fragments.TaskMapFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.SelectionHitFragment;
 import hk.ust.gmission.ui.fragments.TextHitFragment;
+import hk.ust.gmission.ui.fragments.UserProfilePFragment;
 import hk.ust.gmission.util.GsonUtil;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -74,6 +76,8 @@ import retrofit.converter.GsonConverter;
                 SelectionHitFragment.class,
                 TextHitFragment.class,
                 ImageHitFragment.class,
+                UserProfilePFragment.class,
+                TaskMapFragment.class,
                 HitRecyclerViewAdapter.class,
                 MessageRecyclerViewAdapter.class,
                 CampaignRecyclerViewAdapter.class,
@@ -177,7 +181,7 @@ public class BootstrapModule {
                 .setEndpoint(Constants.Http.URL_BASE)
                 .setErrorHandler(restErrorHandler)
                 .setRequestInterceptor(restRequestInterceptor)
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new GsonConverter(gson))
                 .setClient(okClient)
                 .build();

@@ -25,7 +25,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
             android:src="@mipmap/ic_hit"
-            android:contentDescription="@string/avatar"
             />
         <TextView
             android:id="@+id/title"

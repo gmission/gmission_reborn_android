@@ -19,15 +19,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import hk.ust.gmission.BootstrapServiceProvider;
-import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.HitSubmitEnableEvent;
-import hk.ust.gmission.models.dao.Hit;
-import hk.ust.gmission.models.dao.Selection;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Hit;
+import hk.ust.gmission.models.Selection;
+import hk.ust.gmission.models.ModelWrapper;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;

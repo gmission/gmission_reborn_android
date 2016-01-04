@@ -1,12 +1,15 @@
 package hk.ust.gmission.services;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,8 +26,9 @@ import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.util.Ln;
 
-public class LocationTraceService extends Service implements GoogleApiClient.OnConnectionFailedListener{
-    @Inject protected Bus bus;
+public class LocationTraceService extends Service implements GoogleApiClient.OnConnectionFailedListener {
+    @Inject
+    protected Bus bus;
 
     private final IBinder binder = new LocationTraceBinder();
 
@@ -34,19 +38,19 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     private boolean isGpsEnabled = false;
 
 
-    private static final int GPS_SCAN_SPAN = 10*1000;
+    private static final int GPS_SCAN_SPAN = 10 * 1000;
 
     private LocationRequest mLocationRequest;
     private static final long POLLING_FREQ = 1000 * 5;
     private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
 
 
-    private GoogleApiClient client=null;
+    private GoogleApiClient client = null;
 
     private static final int CHECKSTATUS_TIME_SPAN = 1000;
 
     private void CheckTowerAndGpsStatus() {
-        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         isTowerEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
@@ -85,20 +89,19 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     }
 
 
-
     @Subscribe
-    public void onLocationRequest(RequestLocationEvent event){
+    public void onLocationRequest(RequestLocationEvent event) {
         Ln.d("Start Locating");
         startLocating();
     }
 
-    public void initGPSLocalization(){
+    public void initGPSLocalization() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_FREQ);
 
 
-        client=new GoogleApiClient.Builder(this)
+        client = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addOnConnectionFailedListener(this)
                 .build();
@@ -107,12 +110,23 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     }
 
     public void startLocating() {
-        if (!client.isConnected()){
+        if (!client.isConnected()) {
             client.connect();
         }
 
-        if (client.isConnected()){
-            LocationServices.FusedLocationApi.requestLocationUpdates(client,mLocationRequest,new LocationListener() {
+        if (client.isConnected()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(client, mLocationRequest, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     Ln.d(location.toString());

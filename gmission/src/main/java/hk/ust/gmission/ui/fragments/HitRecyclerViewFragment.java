@@ -15,8 +15,8 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.HitItemClickEvent;
-import hk.ust.gmission.models.dao.Hit;
-import hk.ust.gmission.models.wrapper.ModelWrapper;
+import hk.ust.gmission.models.Hit;
+import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import rx.Observable;
@@ -81,10 +81,7 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
                         if (!isLoaderInitialized){
                             getAdapter().setItems(campaigns.getObjects());
                         } else {
-                            Hit hit = new Hit();
-                            hit.setTitle("Test News");
-                            hit.setDescription("This is a test news");
-                            getAdapter().addNewItem(hit);
+                            getAdapter().setItems(campaigns.getObjects());
                         }
                     }
                 })

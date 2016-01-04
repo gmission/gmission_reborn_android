@@ -78,10 +78,6 @@
             android:name=".ui.activities.HitActivity"
             android:label="@string/title_activity_hit" />
 
-        <activity
-            android:name=".ui.activities.MapsActivity"
-            android:label="@string/app_name" />
-
     </application>
 
 </manifest>

@@ -1,9 +1,6 @@
 
 package hk.ust.gmission.services;
 
-import java.util.List;
-
-import hk.ust.gmission.models.dao.CheckIn;
 import retrofit.RestAdapter;
 
 /**
@@ -54,9 +51,11 @@ public class BootstrapService {
         return getRestAdapter().create(AnswerService.class);
     }
 
-    public CheckInService getCheckInService() {
-        return getRestAdapter().create(CheckInService.class);
+    public UserService getUserService() {
+        return getRestAdapter().create(UserService.class);
     }
+
+
 
     private RestAdapter getRestAdapter() {
         return restAdapter;

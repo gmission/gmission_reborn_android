@@ -26,7 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.dao.User;
+import hk.ust.gmission.models.User;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.Strings;
 import rx.Observable;
@@ -158,7 +158,7 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
                         if (request.ok()) {
                             final User model = new Gson().fromJson(Strings.toString(request.buffer()), User.class);
 
-                            if( model.getRes() == -1 ) return;
+//                            if(!model.isActive()) return;
 
                             model.setEmail(email);
                             token = model.getToken();

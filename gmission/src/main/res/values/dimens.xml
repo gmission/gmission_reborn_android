@@ -19,6 +19,6 @@
     <dimen name="text_small_body">14sp</dimen>
     <dimen name="text_margin">8dp</dimen>
 
-    <dimen name="actionBarSize">40dp</dimen>
+    <dimen name="actionBarSize">50dp</dimen>
 
 </resources>
