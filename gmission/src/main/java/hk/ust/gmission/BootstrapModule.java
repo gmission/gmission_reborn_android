@@ -35,21 +35,9 @@ import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.models.UserAgentProvider;
 import hk.ust.gmission.services.BootstrapService;
 import hk.ust.gmission.services.LocationTraceService;
-import hk.ust.gmission.ui.activities.HitActivity;
-import hk.ust.gmission.ui.activities.HitListActivity;
-import hk.ust.gmission.ui.activities.MainActivity;
-import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
-import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
-import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
-import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.ImageHitFragment;
-import hk.ust.gmission.ui.fragments.TaskMapFragment;
-import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
-import hk.ust.gmission.ui.fragments.SelectionHitFragment;
-import hk.ust.gmission.ui.fragments.TextHitFragment;
-import hk.ust.gmission.ui.fragments.UserProfilePFragment;
+import hk.ust.gmission.ui.activities.*;
+import hk.ust.gmission.ui.adapters.*;
+import hk.ust.gmission.ui.fragments.*;
 import hk.ust.gmission.util.GsonUtil;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -68,6 +56,8 @@ import retrofit.converter.GsonConverter;
                 BootstrapAccountRegisterActivity.class,
                 MainActivity.class,
                 HitActivity.class,
+                WorkingAreaSetupActivity.class,
+                AskSpatialTaskActivity.class,
                 NavigationDrawerFragment.class,
                 CampaignRecyclerViewFragment.class,
                 MessageRecyclerViewFragment.class,

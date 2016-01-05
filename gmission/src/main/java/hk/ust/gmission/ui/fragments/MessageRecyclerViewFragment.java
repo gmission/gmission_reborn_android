@@ -1,12 +1,10 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.accounts.AccountsException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -16,32 +14,38 @@ import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.MessageItemClickEvent;
+import hk.ust.gmission.models.Answer;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.Message;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.services.AnswerService;
+import hk.ust.gmission.services.MessageService;
 import hk.ust.gmission.ui.activities.HitActivity;
-import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
+import hk.ust.gmission.util.Ln;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.HIT;
-import static hk.ust.gmission.core.Constants.Extra.MESSAGE_ID;
 
 public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Message, MessageRecyclerViewAdapter> {
 
     @Inject protected BootstrapServiceProvider serviceProvider;
     protected MessageRecyclerViewAdapter messageRecyclerViewAdapter = new MessageRecyclerViewAdapter();
 
+    private MessageRecyclerViewFragment mFragment = null;
+
     private boolean isLoaderInitialized = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Injector.inject(this);
+        mFragment = this;
     }
 
 
@@ -60,7 +64,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
     }
 
     @Override
-    protected void loadData() throws IOException, AccountsException {
+    protected void loadData(){
         QueryObject queryObject = new QueryObject();
         queryObject.push("status", "neq", "deleted");
         queryObject.push("receiver_id", "eq", Constants.Http.PARAM_USER_ID);
@@ -112,34 +116,77 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
     @Subscribe
     public void onListItemClick(MessageItemClickEvent event) {
         int position = mRecyclerView.getChildLayoutPosition(event.getView());
-        MessageRecyclerViewAdapter adapter = (MessageRecyclerViewAdapter) mRecyclerView.getAdapter();
+        final MessageRecyclerViewAdapter adapter = (MessageRecyclerViewAdapter) mRecyclerView.getAdapter();
 
         final Message message = adapter.getItem(position);
+        message.setStatus("read");
 
-        Observable<Hit> hitObservable = null;
+        final MessageService messageService = serviceProvider.getService(this.getActivity()).getMessageService();
+        final AnswerService answerService = serviceProvider.getService(this.getActivity()).getAnswerService();
 
-        try {
-            hitObservable = serviceProvider.getService(this.getActivity()).getHitService().getHit(message.getAttachment());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AccountsException e) {
-            e.printStackTrace();
-        }
+        serviceProvider.getService(this.getActivity()).getHitService().getHit(message.getAttachment())
+                .observeOn(Schedulers.io())
+                .map(new Func1<Hit, Hit>() {
 
-        if (hitObservable != null){
-            hitObservable
-                    .doOnNext(new Action1<Hit>() {
-                        @Override
-                        public void call(Hit hit) {
-                            hit.setMessage_id(message.getId());
-                            message.setStatus("read");
+                    @Override
+                    public Hit call(Hit hit) {
+                        messageService.updateMessage(message.getId(), message)
+                        .doOnNext(new Action1<Message>() {
+                            @Override
+                            public void call(Message message) {
+                                Ln.d("Read Message:"+message.getId()+"|status:"+message.getStatus());
+                            }
+                        }).subscribe();
+                        return hit;
+                    }
+                })
+                .flatMap(new Func1<Hit, Observable<Hit>>() {
+                    @Override
+                    public Observable<Hit> call(Hit hit) {
+                        QueryObject queryObject = new QueryObject();
+                        queryObject.push("worker_id", "eq", Constants.Http.PARAM_USER_ID);
+                        queryObject.push("hit_id", "eq", hit.getId());
+                        return Observable.combineLatest(Observable.just(hit), answerService.getAnswers(queryObject.toString()),
+                                new Func2<Hit, ModelWrapper<Answer>, Hit>() {
+                            @Override
+                            public Hit call(Hit hit, ModelWrapper<Answer> answerModelWrapper) {
+                                if (answerModelWrapper.getNum_results() == 0){
+                                    hit.setStatus("open");
+                                } else {
+                                    hit.setStatus("answered");
+                                }
+                                return hit;
+                            }
+                        });
 
-                            getAdapter().notifyDataSetChanged();
-                            startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Hit, Observable<Hit>>() {//to switch to mainThread
+                    @Override
+                    public Observable<Hit> call(Hit hit) {
+                        if (hit.getStatus().equals("answered")){
+                            Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.message_answered), Toast.LENGTH_SHORT).show();
+                            return null;
+                        } else {
+                            return Observable.just(hit);
                         }
-                    }).subscribe();
-        }
-
+                    }
+                })
+                .doOnNext(new Action1<Hit>() {
+                    @Override
+                    public void call(Hit hit) {
+                        hit.setMessage_id(message.getId());
+                        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        getAdapter().notifyDataSetChanged();
+                    }
+                })
+                .subscribe();
     }
 
     @Subscribe

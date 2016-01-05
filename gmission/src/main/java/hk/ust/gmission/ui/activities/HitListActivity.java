@@ -3,6 +3,7 @@ package hk.ust.gmission.ui.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
@@ -24,6 +25,8 @@ public class HitListActivity extends BootstrapFragmentActivity {
         HitRecyclerViewFragment hitListFragment = new HitRecyclerViewFragment();
         hitListFragment.setCampaignId(campaignId);
         replaceCurrentFragment(hitListFragment);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -33,6 +36,13 @@ public class HitListActivity extends BootstrapFragmentActivity {
         fragmentManager.beginTransaction()
             .replace(R.id.container, newFragment)
             .commitAllowingStateLoss();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
 
     }
 }

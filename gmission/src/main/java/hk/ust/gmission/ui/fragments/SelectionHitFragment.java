@@ -1,7 +1,6 @@
 package hk.ust.gmission.ui.fragments;
 
 
-import android.accounts.AccountsException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +12,6 @@ import android.widget.RadioGroup;
 
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,20 +22,22 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.HitSubmitEnableEvent;
 import hk.ust.gmission.models.Hit;
-import hk.ust.gmission.models.Selection;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.models.Selection;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import static hk.ust.gmission.core.Constants.Extra.HIT;
+import static hk.ust.gmission.core.Constants.Extra.ANSWRE_BRIEF;
 
 
 public class SelectionHitFragment extends BaseAnswerFragment {
 
-    private static final String ARG_HIT = "hit";
 
     private Hit mHit;
+    private String answerBrief = null;
 
 
     @Bind(R.id.selection_radio) RadioGroup selectionRadioGroup;
@@ -54,10 +54,11 @@ public class SelectionHitFragment extends BaseAnswerFragment {
         // Required empty public constructor
     }
 
-    public static SelectionHitFragment newInstance(Hit hit) {
+    public static SelectionHitFragment newInstance(Hit hit, String answerBrief) {
         SelectionHitFragment fragment = new SelectionHitFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_HIT, hit);
+        args.putSerializable(HIT, hit);
+        args.putString(ANSWRE_BRIEF, answerBrief);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +67,8 @@ public class SelectionHitFragment extends BaseAnswerFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mHit = (Hit)getArguments().get(ARG_HIT);
+            mHit = (Hit)getArguments().get(HIT);
+            this.answerBrief = getArguments().getString(ANSWRE_BRIEF);
         }
 
     }
@@ -82,13 +84,7 @@ public class SelectionHitFragment extends BaseAnswerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        try {
-            loadHitSelection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AccountsException e) {
-            e.printStackTrace();
-        }
+        loadHitSelection();
 
         subcribeRadioGroup();
     }
@@ -121,7 +117,7 @@ public class SelectionHitFragment extends BaseAnswerFragment {
         return selection.getId();
     }
 
-    public void loadHitSelection() throws IOException, AccountsException {
+    public void loadHitSelection(){
         QueryObject queryObject = new QueryObject();
         queryObject.push("hit_id", "eq", mHit.getId());
         serviceProvider.getService(getActivity()).getSelectionService().getSelections(queryObject.toString())

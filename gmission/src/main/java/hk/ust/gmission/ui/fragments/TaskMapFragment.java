@@ -1,8 +1,10 @@
 package hk.ust.gmission.ui.fragments;
 
 import android.Manifest;
-import android.accounts.AccountsException;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -38,22 +41,25 @@ import butterknife.ButterKnife;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
-import hk.ust.gmission.models.Coordinate;
-import hk.ust.gmission.models.GeoLocation;
-import hk.ust.gmission.models.MapObject;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
+import hk.ust.gmission.models.Coordinate;
+import hk.ust.gmission.models.GeoLocation;
 import hk.ust.gmission.models.Hit;
+import hk.ust.gmission.models.MapObject;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.services.GeoService;
 import hk.ust.gmission.services.HitService;
+import hk.ust.gmission.ui.activities.HitActivity;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
+
+import static hk.ust.gmission.core.Constants.Extra.HIT;
 
 /**
  * Created by bigstone on 3/1/2016.
@@ -70,6 +76,7 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
     private Fragment mFragment;
 
     private GoogleMap mMap;
+    private Geocoder geocoder;
     private Location currentLocation;
 
     private Marker askHereMarker;
@@ -98,6 +105,7 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         ButterKnife.bind(this, view);
 
         mMapView.onCreate(savedInstanceState);
+        geocoder = new Geocoder(this.getContext(), Locale.getDefault());
 
         initialMap();
 
@@ -116,9 +124,37 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
             public boolean onMarkerClick(Marker marker) {
                 if (askHereMarker!= null && marker.getId().equals(askHereMarker.getId())) {
                     Toast.makeText(getContext(), "Ask Here!", Toast.LENGTH_SHORT).show();
+
+
+//                    LatLng markerPosition = marker.getPosition();
+//                    List<Address> list = null;
+//                    try {
+//                        list = geocoder.getFromLocation(markerPosition.latitude, markerPosition.longitude, 1);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if (list != null & list.size() > 0) {
+//                        Address address = list.get(0);
+//                        clocation = new CurrentLocation(markerPosition, address.getLocality() + " " + address.getFeatureName(), null, 0f);
+//                        Intent intent = new Intent(TaskMapFragment.this, PostNewObjectActivity.class);
+//                        intent.putExtra("location", clocation);
+//                        startActivity(intent);
+//
+//                    }
+
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {//answer spatial task
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                MapObject mapObject = mMarkerMapObjectHashMap.get(marker);
+                startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, mapObject.getHit()));
+
+
             }
         });
 
@@ -173,19 +209,13 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        try {
-                            refreshSpaitalTasks();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AccountsException e) {
-                            e.printStackTrace();
-                        }
+                        refreshSpaitalTasks();
                     }
                 })
                 .subscribe();
     }
 
-    private void refreshSpaitalTasks() throws IOException, AccountsException {
+    private void refreshSpaitalTasks(){
         mSpatialTasks.clear();
 
         QueryObject queryObject = new QueryObject();
@@ -255,9 +285,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         for (MapObject mapObject : mSpatialTasks) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(mapObject.getCoordinate().getLatitude(), mapObject.getCoordinate().getLongitude()));
-            markerOptions.title(mapObject.getHit().getTitle());
-            markerOptions.snippet(mapObject.getLocation().getName());
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             mMarkerMapObjectHashMap.put(mMap.addMarker(markerOptions), mapObject);
         }
 
@@ -278,12 +305,11 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
             TextView content = (TextView) infoWindow.findViewById(R.id.tv_content);
             TextView location = (TextView) infoWindow.findViewById(R.id.tv_locaton);
-//            TextView time = (TextView) infoWindow.findViewById(R.id.tv_countdown);
+            TextView time = (TextView) infoWindow.findViewById(R.id.tv_deadline);
             content.setText(mapObject.getHit().getDescription());
             location.setText(mapObject.getLocation().getName());
 
-
-//            time.setText(mapObject.getCountdown());
+            time.setText("Deadline: " + mapObject.getHit().getEnd_time().toLocaleString());
 
 
             return infoWindow;

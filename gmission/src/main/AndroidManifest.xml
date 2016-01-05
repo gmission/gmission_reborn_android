@@ -77,7 +77,12 @@
         <activity
             android:name=".ui.activities.HitActivity"
             android:label="@string/title_activity_hit" />
-
+        <activity
+            android:name=".ui.activities.AskSpatialTaskActivity"
+            android:label="@string/title_activity_ask_spatial_task"></activity>
+        <activity
+            android:name=".ui.activities.WorkingAreaSetupActivity"
+            android:label="@string/title_activity_working_area"></activity>
     </application>
 
 </manifest>

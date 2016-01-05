@@ -35,6 +35,7 @@
     <string name="message_signing_up">Signing up…</string>
     <string name="message_uploading">Uploading…</string>
     <string name="message_still_locating">Waiting for GPS Results …</string>
+    <string name="message_answered">You have already answered this question.</string>
 
     <string name="stop">Stop</string>
     <string name="start">Start</string>
@@ -53,8 +54,9 @@
     <string name="title_map">Map</string>
     <string name="title_activity_hit_list">Question List</string>
     <string name="title_activity_hit">Answer Question</string>
-    <string name="title_activity_bootstrap_account_register">BootstrapAccountRegisterActivity</string>
-
+    <string name="title_activity_bootstrap_account_register">Register Account</string>
+    <string name="title_activity_ask_spatial_task">Ask Question</string>
+    <string name="title_activity_working_area">Working Area</string>
 
     <string name="register_check_password_same">You\'ll need to type in your password a second time to confirm it.</string>
     <string name="register_check_email">Invalid email address.</string>
@@ -64,7 +66,7 @@
     <string name="network_error_message">Network error, please try later.</string>
     <string name="unauthorized_error_message">Fail to authorize, please login again.</string>
 
-    <string name="bad_hid_notification">Bad Question! Please ignore this question.</string>
+    <string name="bad_hid_notification">Broken Question! Please ignore this question.</string>
 
     <string name="app_pic_folder">gmission_data/pic</string>
 
@@ -79,4 +81,5 @@
     <string name="days_before">day(s) before</string>
     <string name="hours_before">hour(s) before</string>
     <string name="min_before">minute(s) before</string>
+
 </resources>

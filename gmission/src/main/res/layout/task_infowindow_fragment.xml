@@ -46,18 +46,18 @@
                 android:textColor="@color/dark_grey"
                 android:textSize="12sp"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="New Text"-->
-                <!--android:id="@+id/tv_countdown"-->
-                <!--android:drawableLeft="@drawable/v3_ic_action_sliding_content_countdown"-->
-                <!--android:drawablePadding="4dip"-->
-                <!--android:textSize="12sp"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:paddingRight="10dp"-->
-                <!--android:layout_alignParentEnd="true" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/tv_deadline"
+                android:drawablePadding="4dip"
+                android:textSize="12sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:textColor="@color/accent_color"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
     </RelativeLayout>

@@ -4,11 +4,9 @@ package hk.ust.gmission;
 import android.accounts.AccountsException;
 import android.app.Activity;
 
-import hk.ust.gmission.authenticator.ApiKeyProvider;
-import hk.ust.gmission.services.BootstrapService;
-
 import java.io.IOException;
 
+import hk.ust.gmission.services.BootstrapService;
 import retrofit.RestAdapter;
 
 /**
@@ -31,10 +29,7 @@ public class BootstrapServiceProvider {
      * @throws IOException
      * @throws AccountsException
      */
-    public BootstrapService getService(final Activity activity)
-            throws IOException, AccountsException {
-        // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
-
+    public BootstrapService getService(final Activity activity){
 
         // TODO: See how that affects the bootstrap service.
         return new BootstrapService(restAdapter);

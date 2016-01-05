@@ -1,6 +1,5 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.accounts.AccountsException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -24,8 +21,8 @@ import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.models.Answer;
 import hk.ust.gmission.models.Hit;
-import hk.ust.gmission.models.User;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.models.User;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -69,17 +66,11 @@ public class UserProfilePFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Injector.inject(this);
         ButterKnife.bind(this, view);
-        try {
-            loadUserProfile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AccountsException e) {
-            e.printStackTrace();
-        }
+        loadUserProfile();
     }
 
 
-    private void loadUserProfile() throws IOException, AccountsException {
+    private void loadUserProfile(){
 
         Observable<User> userObservable = serviceProvider.getService(this.getActivity()).getUserService().getUser(Constants.Http.PARAM_USER_ID);
 

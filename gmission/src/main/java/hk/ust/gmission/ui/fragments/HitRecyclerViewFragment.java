@@ -1,12 +1,9 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.accounts.AccountsException;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -24,6 +21,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
 import static hk.ust.gmission.core.Constants.Extra.HIT;
 
 
@@ -62,7 +60,7 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
     }
 
     @Override
-    protected void loadData() throws IOException, AccountsException {
+    protected void loadData() {
         Observable<ModelWrapper<Hit>> observable;
         if (campaignId != null){
             QueryObject queryObject = new QueryObject();

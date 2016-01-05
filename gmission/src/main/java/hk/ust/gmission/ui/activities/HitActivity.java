@@ -1,9 +1,9 @@
 package hk.ust.gmission.ui.activities;
 
-import android.accounts.AccountsException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,7 +13,6 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -69,6 +68,8 @@ public class HitActivity extends BootstrapFragmentActivity {
         initializeAnswerArea();
 
         subscribeSubmitButton();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -79,7 +80,7 @@ public class HitActivity extends BootstrapFragmentActivity {
         }
 
         if (mHit.getType().equals("selection")) {
-            answerFragment = SelectionHitFragment.newInstance(mHit);
+            answerFragment = SelectionHitFragment.newInstance(mHit, null);
         }
 
 
@@ -138,16 +139,8 @@ public class HitActivity extends BootstrapFragmentActivity {
                         TypedFile typedFile = new TypedFile("image/jpeg", imageFile);
                         TypedString typedString = new TypedString("file");
 
-                        Observable<ImageVideoResult> observable = null;
-                        try {
-//                            System.setProperty("http.keepAlive", "false");
-                            observable = serviceProvider.getService(mActivity).getAttachmentService().createImage(typedFile, typedString);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AccountsException e) {
-                            e.printStackTrace();
-                        }
-                        return observable;
+
+                        return serviceProvider.getService(mActivity).getAttachmentService().createImage(typedFile, typedString);
                     }
                 })
                 .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
@@ -164,17 +157,8 @@ public class HitActivity extends BootstrapFragmentActivity {
                         attachment.setName(imageFile.getName());
                         attachment.setValue(imageVideoResult.getFilename());
 
-                        Observable<Attachment> observable = null;
 
-                        try {
-                            observable = serviceProvider.getService(mActivity).getAttachmentService().createAttachment(attachment);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AccountsException e) {
-                            e.printStackTrace();
-                        }
-
-                        return observable;
+                        return serviceProvider.getService(mActivity).getAttachmentService().createAttachment(attachment);
                     }
                 })
                 .flatMap(new Func1<Attachment, Observable<Answer>>() {
@@ -191,17 +175,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         }
 
 
-                        Observable<Answer> observable = null;
-
-                        try {
-                            observable =  serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AccountsException e) {
-                            e.printStackTrace();
-                        }
-
-                        return observable;
+                        return serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -239,5 +213,10 @@ public class HitActivity extends BootstrapFragmentActivity {
                 .subscribe();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
 
+    }
 }

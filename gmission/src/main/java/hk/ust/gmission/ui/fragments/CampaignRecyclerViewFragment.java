@@ -1,12 +1,9 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.accounts.AccountsException;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -53,7 +50,7 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     }
 
     @Override
-    protected void loadData() throws IOException, AccountsException {
+    protected void loadData(){
         QueryObject queryObject = new QueryObject();
         queryObject.push("status", "eq", "open");
         serviceProvider.getService(getActivity()).getCampaignService().getCampaigns(queryObject.toString())

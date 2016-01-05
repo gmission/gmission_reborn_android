@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class ="com.google.android.gms.maps.MapFragment"/>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center_vertical">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/bt_confirm"
+                android:background="@null"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/button_confirm" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="245dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_title"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:text="Edit Working Area"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:maxLength="50"
+            android:textColor="@color/text" />
+        <!--android:background="@drawable/v3_ic_action_header_title_bg"/>-->
+
+
+
+
+    </FrameLayout>
+    <!-- A set of test checkboxes. -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/map"
+        android:padding="6dp" >
+
+        <!--<Button-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:id="@+id/buttonTaskInquiry"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="55dp"-->
+            <!--android:background="@drawable/button"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:text="Update Working Area"-->
+            <!--android:visibility="gone" >-->
+        <!--</Button>-->
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fan-shapred Area"
+            android:id="@+id/fanshapecheckBox"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:onClick="onCheckFanShape"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

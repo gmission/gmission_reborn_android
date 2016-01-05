@@ -86,6 +86,8 @@ public final class Constants {
         public static final String USER = "user";
         public static final String HIT = "hit";
 
+        public static final String ANSWRE_BRIEF = "answer_brief";
+
 
         public static final String CAMPAIGN_ID = "campaign_id";
         public static final String MESSAGE_ID = "message_id";

@@ -101,7 +101,8 @@ public class MainActivity extends BootstrapFragmentActivity{
                     break;
                 case 3: //home page
                     title = getString(R.string.title_home);
-                    replaceCurrentFragment(homeFragment);
+                    startActivity(new Intent(this.getActivity(), WorkingAreaSetupActivity.class));
+//                    replaceCurrentFragment(homeFragment);
                     break;
                 case 4: //log out
                     Log.d("logout","log out");
@@ -256,7 +257,10 @@ public class MainActivity extends BootstrapFragmentActivity{
 
             @Override
             public Boolean call() throws Exception {
+
+                // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
                 String sessionToken = keyProvider.getAuthKey(MainActivity.this);
+
                 Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
                 Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
                 Constants.Http.PARAM_USER_ID = keyProvider.getUserId();

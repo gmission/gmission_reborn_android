@@ -1,6 +1,5 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.accounts.AccountsException;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -18,8 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.otto.Bus;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -189,7 +186,7 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
         return (A) mRecyclerView.getAdapter();
     }
 
-    protected void loadData()throws IOException, AccountsException {
+    protected void loadData(){
 
     }
 
@@ -212,13 +209,9 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
 
             @Override
             public void onUIRefreshBegin(PtrFrameLayout frame) {
-                try {
-                    loadData();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (AccountsException e) {
-                    e.printStackTrace();
-                }
+
+                loadData();
+
             }
 
             @Override
