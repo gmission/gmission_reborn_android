@@ -51,25 +51,11 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/footer_layout"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        layout="@layout/footer_submit_fragment"
+        android:id="@+id/footer_layout"/>
 
-
-        <Button
-            android:id="@+id/submit_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_background_states"
-            android:padding="10dp"
-            android:text="@string/label_submit"
-            android:textColor="@color/text"
-            android:textSize="20sp"
-            android:enabled="false"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
 </RelativeLayout>

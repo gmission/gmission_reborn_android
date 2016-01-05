@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="240dp">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/rounded_text">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_content"
+            android:hint="@string/label_text_question_hint"
+            android:inputType="textMultiLine"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/text_small_body"
+            android:textColorHint="@color/text_light"
+            android:maxLines="5"
+            android:gravity="top"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                android:text="@string/label_location"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_location_name"
+                android:inputType="textMultiLine"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_small_body"
+                />
+        </LinearLayout>
+
+
+        <!--<ImageButton-->
+            <!--android:layout_width="72dip"-->
+            <!--android:layout_height="72dip"-->
+            <!--android:layout_marginRight="8dip"-->
+            <!--android:id="@+id/bt_photo"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:background="@null"-->
+            <!--android:src="@drawable/v3_ic_action_select_photo"/>-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="72dip"-->
+            <!--android:layout_height="72dip"-->
+            <!--android:layout_marginLeft="8dip"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:id="@+id/iv_attchment"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_margin="8dip" />-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="72dip"-->
+            <!--android:layout_height="72dip"-->
+            <!--android:id="@+id/bt_voiceinput"-->
+            <!--android:background="@null"-->
+            <!--android:src="@drawable/v3_ic_action_voice_input_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_toLeftOf="@+id/bt_photo"-->
+            <!--android:layout_toStartOf="@+id/bt_photo" />-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="72dip"-->
+            <!--android:layout_height="72dip"-->
+            <!--android:id="@+id/bt_audioinput"-->
+            <!--android:background="@null"-->
+            <!--android:src="@drawable/v3_audio_btn"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_toLeftOf="@+id/bt_voiceinput"-->
+            <!--android:layout_toStartOf="@+id/bt_voiceinput" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/tv_audiotask_info"-->
+            <!--android:layout_alignLeft="@+id/bt_audioinput"-->
+            <!--android:layout_alignStart="@+id/bt_audioinput"-->
+            <!--android:layout_alignRight="@+id/bt_photo"-->
+            <!--android:layout_alignEnd="@+id/bt_photo"-->
+            <!--android:layout_above="@+id/iv_attchment" />-->
+
+
+    </RelativeLayout>
+
+</LinearLayout>

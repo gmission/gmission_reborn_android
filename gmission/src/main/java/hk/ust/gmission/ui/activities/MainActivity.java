@@ -101,7 +101,7 @@ public class MainActivity extends BootstrapFragmentActivity{
                     break;
                 case 3: //home page
                     title = getString(R.string.title_home);
-                    startActivity(new Intent(this.getActivity(), WorkingAreaSetupActivity.class));
+                    startActivity(new Intent(this.getActivity(), AskSpatialTaskActivity.class));
 //                    replaceCurrentFragment(homeFragment);
                     break;
                 case 4: //log out

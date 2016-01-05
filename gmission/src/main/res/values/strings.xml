@@ -16,6 +16,7 @@
     <string name="label_email_address">Email Address</string>
     <string name="label_password">Password (min: 6 characters)</string>
     <string name="label_text_answer_hint">Input Answer Here:</string>
+    <string name="label_text_question_hint">Input Question Here (at least 5 characters):</string>
     <string name="label_sign_in">Sign In</string>
     <string name="label_sign_up">Register</string>
     <string name="label_sign_out">Logout</string>
@@ -23,6 +24,11 @@
     <string name="label_reject">Reject</string>
     <string name="label_submit">Submit</string>
     <string name="label_ask_here">Ask Here!</string>
+
+    <string name="label_location">Location:</string>
+    <string name="label_credit">Credits:</string>
+    <string name="label_answer_count">Answers:</string>
+    <string name="label_time">Time:</string>
 
 
     <string name="message_signing_in">Signing in…</string>
