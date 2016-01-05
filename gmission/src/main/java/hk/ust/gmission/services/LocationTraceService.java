@@ -26,7 +26,7 @@ import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.util.Ln;
 
-public class LocationTraceService extends Service implements GoogleApiClient.OnConnectionFailedListener {
+public class LocationTraceService extends Service implements GoogleApiClient.OnConnectionFailedListener, LocationListener{
     @Inject
     protected Bus bus;
 
@@ -36,18 +36,14 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     LocationManager locationManager;
     private boolean isTowerEnabled = false;
     private boolean isGpsEnabled = false;
-
-
-    private static final int GPS_SCAN_SPAN = 10 * 1000;
+    private boolean isLocating = false;
 
     private LocationRequest mLocationRequest;
-    private static final long POLLING_FREQ = 1000 * 5;
-    private static final long FASTEST_UPDATE_FREQ = 1000 * 5;
+    private static final long POLLING_FREQ = 1000 * 2;
+    private static final long FASTEST_UPDATE_FREQ = 1000;
 
 
     private GoogleApiClient client = null;
-
-    private static final int CHECKSTATUS_TIME_SPAN = 1000;
 
     private void CheckTowerAndGpsStatus() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -67,8 +63,6 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
 //        CheckTowerAndGpsStatus();
 
         initGPSLocalization();
-        startLocating();
-
         bus.register(this);
 
     }
@@ -92,11 +86,17 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     @Subscribe
     public void onLocationRequest(RequestLocationEvent event) {
         Ln.d("Start Locating");
-        startLocating();
+        if (event.isStartLocating()){
+            startLocating();
+        } else {
+            stopLocating();
+        }
+
     }
 
     public void initGPSLocalization() {
         mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(POLLING_FREQ);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_FREQ);
 
@@ -110,32 +110,20 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     }
 
     public void startLocating() {
-        if (!client.isConnected()) {
-            client.connect();
-        }
-
-        if (client.isConnected()) {
+        if (!isLocating) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+                Ln.d("Permissions for locating are not enabled!");
                 return;
             }
-            LocationServices.FusedLocationApi.requestLocationUpdates(client, mLocationRequest, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    Ln.d(location.toString());
-                    bus.post(new LocationUpdateEvent(location));
-                    stopLocating();
-                }
-            });
+
+            isLocating = true;
+            LocationServices.FusedLocationApi.requestLocationUpdates(client, mLocationRequest, this);
         }
+
     }
+
+
 
     /**
      * Stops locating, removes notification, stops GPS manager
@@ -143,20 +131,27 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     public void stopLocating() {
         Ln.d("GpsLoggingService.StopLocating");
         stopForeground(true);
-        if (client.isConnected()){
-            client.disconnect();
-        }
+        isLocating = false;
+        LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
     }
 
     void RestartGpsManagers() {
         Ln.d("GpsLoggingService.RestartGpsManagers");
         stopLocating();
+        client.disconnect();
+        client.connect();
         startLocating();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        Ln.d(connectionResult.getErrorMessage());
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        Ln.d(location.toString());
+        bus.post(new LocationUpdateEvent(location));
     }
 
     public class LocationTraceBinder extends Binder {

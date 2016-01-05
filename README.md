@@ -19,6 +19,7 @@ Some used techniques:
     * A [tutorial](https://newcircle.com/s/post/1744/2015/06/29/learning-rxjava-for-android-by-example) of RxJava by Kaushik Gopal with 5 interesting examples.
     * An [example project](https://github.com/kaushikgopal/RxJava-Android-Samples) of RxAndroid by Kaushik Gopal.
     * [One nice Blog](http://huxian99.github.io) that translates good technical articles to Chinese.
+    * An [article](http://joluet.github.io/blog/2014/07/07/rxjava-retrofit/) about using Retrofit with RxJava.
 
 2. Otto (event bus)
 

@@ -55,6 +55,10 @@ public class BootstrapService {
         return getRestAdapter().create(UserService.class);
     }
 
+    public GeoService getGeoService() {
+        return getRestAdapter().create(GeoService.class);
+    }
+
 
 
     private RestAdapter getRestAdapter() {

@@ -208,7 +208,12 @@ public class HitActivity extends BootstrapFragmentActivity {
                 .doOnNext(new Action1<Answer>() {
                     @Override
                     public void call(Answer answer) {
-                        bus.post(new HitAnswerSuccessEvent(answer.getHit_id()));
+                        if (mHit.getMessage_id() != null){
+                            bus.post(new HitAnswerSuccessEvent(null, mHit.getMessage_id(), HitAnswerSuccessEvent.MESSAGE_TYPE));
+                        } else {
+                            bus.post(new HitAnswerSuccessEvent(answer.getHit_id(), null, HitAnswerSuccessEvent.CAMPAIGN_TYPE));
+                        }
+
                         Toaster.showShort(mActivity, mActivity.getString(R.string.message_answer_success));
                         mActivity.hideProgress();
                         finish();

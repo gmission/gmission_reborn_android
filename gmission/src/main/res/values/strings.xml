@@ -22,6 +22,7 @@
     <string name="label_register">Register</string>
     <string name="label_reject">Reject</string>
     <string name="label_submit">Submit</string>
+    <string name="label_ask_here">Ask Here!</string>
 
 
     <string name="message_signing_in">Signing in…</string>
@@ -33,6 +34,7 @@
     <string name="message_reg_error">Register failed, please try again.</string>
     <string name="message_signing_up">Signing up…</string>
     <string name="message_uploading">Uploading…</string>
+    <string name="message_still_locating">Waiting for GPS Results …</string>
 
     <string name="stop">Stop</string>
     <string name="start">Start</string>
@@ -43,6 +45,7 @@
     <string name="refreshing">Refreshing...</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
+
     <string name="title_campaign">Campaign</string>
     <string name="title_home">Home</string>
     <string name="title_logout">Log Out</string>

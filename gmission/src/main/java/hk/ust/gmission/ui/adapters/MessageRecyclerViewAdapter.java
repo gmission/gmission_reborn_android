@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +34,12 @@ public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageR
         Message message = items.get(position);
 
         holder.content.setText(message.getContent());
+        if (message.getStatus().equals("new")){
+            holder.icon.setImageResource(R.drawable.ic_message);
+        } else if (message.getStatus().equals("read")){
+            holder.icon.setImageResource(R.drawable.ic_message_read);
+        }
+
     }
 
 
@@ -40,6 +47,7 @@ public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageR
 
 
         @Bind(R.id.content) TextView content;
+        @Bind(R.id.iv_message_icon) ImageView icon;
 
         public MessageViewHolder(View itemView) {
             super(itemView);

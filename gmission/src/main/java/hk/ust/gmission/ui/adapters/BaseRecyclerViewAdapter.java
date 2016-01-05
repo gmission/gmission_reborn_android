@@ -41,6 +41,16 @@ public abstract class BaseRecyclerViewAdapter<E extends RecyclerView.ViewHolder,
         return items.get(position);
     }
 
+    public I getItemById(String itemId) {
+        for (I item: items) {
+            if (item.getId().equals(itemId)){
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public void addNewItem(I item){
 
         items.add(0,item);

@@ -24,6 +24,8 @@ public class Hit extends BaseModel implements Serializable{
     String location_id;
     String requester_id;
 
+    String message_id;//for call back use;
+
     public String getId(){
         return id;
     }
@@ -151,5 +153,13 @@ public class Hit extends BaseModel implements Serializable{
 
     public void setRequester_id(String requester_id) {
         this.requester_id = requester_id;
+    }
+
+    public String getMessage_id() {
+        return message_id;
+    }
+
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
     }
 }

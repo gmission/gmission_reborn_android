@@ -35,10 +35,9 @@
 
 
                         <de.hdodenhof.circleimageview.CircleImageView
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/profile_image"
-                            android:layout_width="100dip"
-                            android:layout_height="100dip"
+                            android:layout_width="60dip"
+                            android:layout_height="60dip"
                             android:src="@drawable/menu_background"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
@@ -58,6 +57,7 @@
                                 android:textStyle="italic"
                                 android:textSize="26sp"
                                 android:layout_marginLeft="20dp"
+                                android:textColor="@color/text_shadow"
                                 android:layout_centerInParent="true"
                                 />
 

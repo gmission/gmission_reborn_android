@@ -14,16 +14,21 @@ import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
+import hk.ust.gmission.events.HitAnswerSuccessEvent;
 import hk.ust.gmission.events.MessageItemClickEvent;
+import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.Message;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static hk.ust.gmission.core.Constants.Extra.HIT;
 import static hk.ust.gmission.core.Constants.Extra.MESSAGE_ID;
 
 public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Message, MessageRecyclerViewAdapter> {
@@ -57,7 +62,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
     @Override
     protected void loadData() throws IOException, AccountsException {
         QueryObject queryObject = new QueryObject();
-        queryObject.push("status", "eq", "new");
+        queryObject.push("status", "neq", "deleted");
         queryObject.push("receiver_id", "eq", Constants.Http.PARAM_USER_ID);
         serviceProvider.getService(getActivity()).getMessageService().getMessages(queryObject.toString())
                 .subscribeOn(Schedulers.io())
@@ -109,11 +114,39 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
         int position = mRecyclerView.getChildLayoutPosition(event.getView());
         MessageRecyclerViewAdapter adapter = (MessageRecyclerViewAdapter) mRecyclerView.getAdapter();
 
-        Message message = adapter.getItem(position);
+        final Message message = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), HitListActivity.class).putExtra(MESSAGE_ID, String.valueOf(message.getId())));
+        Observable<Hit> hitObservable = null;
+
+        try {
+            hitObservable = serviceProvider.getService(this.getActivity()).getHitService().getHit(message.getAttachment());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (AccountsException e) {
+            e.printStackTrace();
+        }
+
+        if (hitObservable != null){
+            hitObservable
+                    .doOnNext(new Action1<Hit>() {
+                        @Override
+                        public void call(Hit hit) {
+                            hit.setMessage_id(message.getId());
+                            message.setStatus("read");
+
+                            getAdapter().notifyDataSetChanged();
+                            startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
+                        }
+                    }).subscribe();
+        }
+
     }
 
+    @Subscribe
+    public void onHitAnswerSuccess(HitAnswerSuccessEvent event){
+        if (event.getType() == HitAnswerSuccessEvent.MESSAGE_TYPE){
 
+        }
+    }
 
 }

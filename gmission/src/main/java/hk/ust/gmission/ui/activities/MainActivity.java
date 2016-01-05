@@ -30,6 +30,7 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
@@ -88,12 +89,10 @@ public class MainActivity extends BootstrapFragmentActivity{
             switch (currentNavItemPosition) {
                 case 0: //campaign
                     title = getString(R.string.title_campaign);
-                    bus.post(new RequestLocationEvent());
                     replaceCurrentFragment(campaignFragment);
                     break;
                 case 1: //map
                     title = getString(R.string.title_map);
-//                    startActivity(new Intent(getActivity(), MapsActivity.class));
                     replaceCurrentFragment(mapFragment);
                     break;
                 case 2: //messages
@@ -121,6 +120,8 @@ public class MainActivity extends BootstrapFragmentActivity{
         }
 
     }
+
+
 
 
     @Subscribe
@@ -227,7 +228,7 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     private void initScreen() {
         if (userHasAuthenticated) {
-            title = getString(R.string.title_home);
+            title = getString(R.string.title_campaign);
             getSupportActionBar().setTitle(title);
             replaceCurrentFragment(initFragment);
         }

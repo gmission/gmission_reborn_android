@@ -109,8 +109,10 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
     @Subscribe
     public void onHitAnswerSuccess(HitAnswerSuccessEvent event){
-        getAdapter().removeItem(event.getHit_id());
-        getAdapter().notifyDataSetChanged();
+        if (event.getType() == HitAnswerSuccessEvent.CAMPAIGN_TYPE){
+            getAdapter().removeItem(event.getHit_id());
+            getAdapter().notifyDataSetChanged();
+        }
     }
 
 

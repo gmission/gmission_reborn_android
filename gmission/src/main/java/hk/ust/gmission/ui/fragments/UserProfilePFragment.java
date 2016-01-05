@@ -92,8 +92,7 @@ public class UserProfilePFragment extends Fragment {
         queryObject.push("worker_id", "eq", Constants.Http.PARAM_USER_ID);
         Observable<ModelWrapper<Answer>> answerObservable = serviceProvider.getService(this.getActivity()).getAnswerService().getAnswers(queryObject.toString());
 
-        Observable.combineLatest(serviceProvider.getService(this.getActivity()).getUserService().getUser(Constants.Http.PARAM_USER_ID),
-                hitObservable, answerObservable,
+        Observable.combineLatest(userObservable, hitObservable, answerObservable,
                 new Func3<User, ModelWrapper<Hit>, ModelWrapper<Answer>, Boolean>() {
                     @Override
                     public Boolean call(User user, ModelWrapper<Hit> hitModelWrapper, ModelWrapper<Answer> answerModelWrapper) {
