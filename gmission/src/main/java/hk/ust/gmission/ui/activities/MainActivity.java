@@ -44,6 +44,7 @@ import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.TaskMapFragment;
+import hk.ust.gmission.ui.fragments.TaskRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.UserProfilePFragment;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
@@ -74,6 +75,7 @@ public class MainActivity extends BootstrapFragmentActivity{
     private Fragment campaignFragment = new CampaignRecyclerViewFragment();
     private Fragment mapFragment = new TaskMapFragment();
     private Fragment messageFragment = new MessageRecyclerViewFragment();
+    private Fragment questionFragment = new TaskRecyclerViewFragment();
     private Fragment initFragment = campaignFragment;
 
 
@@ -99,11 +101,15 @@ public class MainActivity extends BootstrapFragmentActivity{
                     title = getString(R.string.title_message);
                     replaceCurrentFragment(messageFragment);
                     break;
-                case 3: //home page
-                    title = getString(R.string.title_home);
+                case 3: //messages
+                    title = getString(R.string.title_message);
+                    replaceCurrentFragment(questionFragment);
+                    break;
+                case 4: //my posted questions page
+                    title = getString(R.string.title_question);
                     replaceCurrentFragment(homeFragment);
                     break;
-                case 4: //log out
+                case 5: //log out
                     Log.d("logout","log out");
                     logoutService.logout(new Runnable() {
                         @Override
@@ -205,13 +211,20 @@ public class MainActivity extends BootstrapFragmentActivity{
 
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_full);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
         checkAuth();
 
         startAndBindService();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        startService(serviceIntent);
 
     }
 

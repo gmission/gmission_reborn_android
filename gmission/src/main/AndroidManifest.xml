@@ -79,10 +79,13 @@
             android:label="@string/title_activity_hit" />
         <activity
             android:name=".ui.activities.AskSpatialTaskActivity"
-            android:label="@string/title_activity_ask_spatial_task"></activity>
+            android:label="@string/title_activity_ask_spatial_task" />
         <activity
             android:name=".ui.activities.WorkingAreaSetupActivity"
-            android:label="@string/title_activity_working_area"></activity>
+            android:label="@string/title_activity_working_area" />
+        <activity
+            android:name=".ui.activities.AnswerListActivity"
+            android:label="@string/title_activity_answer_list"></activity>
     </application>
 
 </manifest>

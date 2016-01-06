@@ -66,7 +66,6 @@ public class HitActivity extends BootstrapFragmentActivity {
 
         subscribeSubmitButton();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 

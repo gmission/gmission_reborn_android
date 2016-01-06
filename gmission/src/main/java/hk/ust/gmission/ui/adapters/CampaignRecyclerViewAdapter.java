@@ -14,14 +14,14 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.events.CampaignItemClickEvent;
 import hk.ust.gmission.models.Campaign;
 
-public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.CampaignViewHolder, Campaign> {
+public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<CampaignRecyclerViewAdapter.ViewHolder, Campaign> {
 
     @Override
-    public CampaignViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.campaign_item, parent, false);
 
-        return new CampaignViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     public CampaignRecyclerViewAdapter() {
@@ -29,7 +29,7 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
     }
 
     @Override
-    public void onBindViewHolder(CampaignViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Campaign campaign = items.get(position);
         holder.title.setText(String.format("%s",
                 campaign.getTitle()));
@@ -37,13 +37,13 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
     }
 
 
-    class CampaignViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
         @Bind(R.id.title) TextView title;
         @Bind(R.id.content) TextView content;
 
-        public CampaignViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

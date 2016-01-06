@@ -120,7 +120,7 @@ public class SelectionHitFragment extends BaseAnswerFragment {
     public void loadHitSelection(){
         QueryObject queryObject = new QueryObject();
         queryObject.push("hit_id", "eq", mHit.getId());
-        serviceProvider.getService(getActivity()).getSelectionService().getSelections(queryObject.toString())
+        serviceProvider.getService(getActivity()).getHitService().getSelections(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnNext(new Action1<ModelWrapper<Selection>>() {

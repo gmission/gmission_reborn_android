@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
                 android:textColor="@color/text_shadow"
-                android:text="@string/bad_hid_notification"
+                android:text="@string/bad_hit_notification"
                 android:id="@+id/bad_hid_notification"/>
         </FrameLayout>
 

@@ -1,0 +1,186 @@
+package hk.ust.gmission.ui.adapters;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.jakewharton.rxbinding.widget.RxCompoundButton;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import hk.ust.gmission.Injector;
+import hk.ust.gmission.R;
+import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.models.Answer;
+import hk.ust.gmission.models.Attachment;
+import hk.ust.gmission.models.Selection;
+import hk.ust.gmission.services.AnswerService;
+import hk.ust.gmission.services.AttachmentService;
+import hk.ust.gmission.services.HitService;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
+/**
+ * Created by bigstone on 6/1/2016.
+ */
+public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRecyclerViewAdapter.ViewHolder, Answer>{
+
+    private HitService hitService;
+    private AttachmentService attachmentService;
+    private AnswerService answerService;
+
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.answer_item, parent, false);
+
+        return new ViewHolder(itemView);
+    }
+
+    public AnswerRecyclerViewAdapter(HitService hitService, AttachmentService attachmentService, AnswerService answerService) {
+        items = new ArrayList<>();
+        Injector.inject(this);
+
+        this.hitService = hitService;
+        this.attachmentService = attachmentService;
+        this.answerService = answerService;
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Answer answer = items.get(position);
+
+        holder.answeredTime.setText(answer.getCreated_on().toLocaleString());
+
+
+        if (answer.getType().equals(Constants.Extra.IMAGE_TYPE)){
+            holder.frameLayout.getLayoutParams().height = 500;
+            holder.textAnswer.setVisibility(View.GONE);
+            holder.imageAnswer.setVisibility(View.VISIBLE);
+
+            attachmentService.getAttachment(answer.getAttachment_id())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<Attachment>() {
+                        @Override
+                        public void call(Attachment attachment) {
+                            Picasso.with(holder.imageAnswer.getContext())
+                                    .load(Constants.Http.URL_IMAGE_ORI + "/" + attachment.getValue())
+                                    .rotate(90)
+                                    .resize(400, 600)
+                                    .into(holder.imageAnswer);
+                        }
+                    }).subscribe();
+
+
+        } else {
+            holder.frameLayout.getLayoutParams().height = 200;//pixels
+            holder.textAnswer.setVisibility(View.VISIBLE);
+            holder.imageAnswer.setVisibility(View.GONE);
+        }
+
+        if (answer.getType().equals(Constants.Extra.TEXT_TYPE)){
+            holder.textAnswer.setText(String.format("%s", answer.getBrief()));
+        }
+
+        if (answer.getType().equals(Constants.Extra.CHOICE_TYPE)){
+            hitService.getSelection(answer.getBrief())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<Selection>() {
+                        @Override
+                        public void call(Selection selection) {
+                            holder.textAnswer.setText(String.format("%s", selection.getBrief()));
+                        }
+                    }).subscribe();
+        }
+
+        if (answer.isAccepted() == false) {
+            holder.approvedIcon.setVisibility(View.INVISIBLE);
+        }
+
+        if (answer.isAccepted() == true) {
+            holder.approvedIcon.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @Bind(R.id.frame_layout) FrameLayout frameLayout;
+        @Bind(R.id.approved_ic) ImageView approvedIcon;
+        @Bind(R.id.text_answer) TextView textAnswer;
+        @Bind(R.id.image_answer) ImageView imageAnswer;
+        @Bind(R.id.answered_time) TextView answeredTime;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            final Answer answer = getItem(getAdapterPosition());
+            Boolean hasApproved = false;
+
+            if (approvedIcon.getVisibility() == View.VISIBLE) {
+                hasApproved = true;
+            }
+
+            if (approvedIcon.getVisibility() == View.INVISIBLE || approvedIcon.getVisibility() == View.GONE){
+                hasApproved = false;
+            }
+
+            Observable.just(hasApproved)
+                    .observeOn(Schedulers.io())
+                    .map(new Func1<Boolean, Boolean>() {
+
+                        @Override
+                        public Boolean call(Boolean hasApproved) {
+
+                            if (hasApproved == false) {
+                                answer.setAccepted(true);
+                            }
+
+                            if (!hasApproved) {
+                                answer.setAccepted(false);
+                            }
+
+                            answerService.updateAnswer(answer.getId(), answer)
+                                    .observeOn(Schedulers.io())
+                                    .subscribe();
+
+                            hasApproved = !hasApproved;
+                            return hasApproved;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<Boolean>() {
+                        @Override
+                        public void call(Boolean hasApproved) {
+                            if (hasApproved) {
+                                approvedIcon.setVisibility(View.VISIBLE);
+                            } else {
+                                approvedIcon.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    }).subscribe();
+
+
+        }
+    }
+}

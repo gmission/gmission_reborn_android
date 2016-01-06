@@ -22,8 +22,10 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
@@ -46,11 +48,6 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
     @Bind(android.R.id.empty) TextView emptyView;
 
     /**
-     * Progress bar
-     */
-    @Bind(R.id.pb_loading) ProgressBar progressBar;
-
-    /**
      * Is the list currently shown?
      */
     protected boolean listShown;
@@ -58,6 +55,7 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
     protected LinearLayoutManager mLayoutManager;
 
     @Inject protected Bus bus;
+    @Inject protected BootstrapServiceProvider serviceProvider;
 
     private boolean CAN_LOAD_MORE = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -124,7 +122,6 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
     public void onDestroyView() {
         listShown = false;
         emptyView = null;
-        progressBar = null;
         mRecyclerView = null;
 
         super.onDestroyView();

@@ -1,34 +1,35 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.squareup.otto.Subscribe;
-
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.api.QueryObject;
-import hk.ust.gmission.events.CampaignItemClickEvent;
-import hk.ust.gmission.models.Campaign;
+import hk.ust.gmission.models.Answer;
 import hk.ust.gmission.models.ModelWrapper;
-import hk.ust.gmission.ui.activities.HitListActivity;
-import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
+import hk.ust.gmission.ui.adapters.AnswerRecyclerViewAdapter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.CAMPAIGN_ID;
+/**
+ * Created by bigstone on 6/1/2016.
+ */
+public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer, AnswerRecyclerViewAdapter> {
 
-public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campaign, CampaignRecyclerViewAdapter> {
+    protected AnswerRecyclerViewAdapter mAdapter;
 
-    protected CampaignRecyclerViewAdapter adapter = new CampaignRecyclerViewAdapter();
+    private String hitId = null;
 
-    private boolean isLoaderInitialized = false;
+    public void setHitId(String hitId) {
+        this.hitId = hitId;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
 
@@ -37,25 +38,31 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setEmptyText(getString(R.string.no_campaign));
+        setEmptyText(getString(R.string.no_answer));
+        mAdapter = new AnswerRecyclerViewAdapter(serviceProvider.getService(this.getActivity()).getHitService()
+                ,serviceProvider.getService(this.getActivity()).getAttachmentService()
+                ,serviceProvider.getService(this.getActivity()).getAnswerService());
 
-        mRecyclerView.setAdapter(adapter);
-
+        mRecyclerView.setAdapter(mAdapter);
 
         configPullToRefresh(getView());
+
+
 
     }
 
     @Override
-    protected void loadData(){
+    protected void loadData() {
+
         QueryObject queryObject = new QueryObject();
-        queryObject.push("status", "eq", "open");
-        serviceProvider.getService(getActivity()).getCampaignService().getCampaigns(queryObject.toString())
+        queryObject.push("hit_id", "eq", hitId);
+
+        serviceProvider.getService(getActivity()).getAnswerService().getAnswers(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<ModelWrapper<Campaign>>() {
+                .doOnNext(new Action1<ModelWrapper<Answer>>() {
                     @Override
-                    public void call(ModelWrapper<Campaign> campaigns) {
+                    public void call(ModelWrapper<Answer> campaigns) {
                         getAdapter().setItems(campaigns.getObjects());
                     }
                 })
@@ -83,24 +90,10 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     }
 
 
-
-
-
     @Override
     public void onDestroyView() {
 
         super.onDestroyView();
-    }
-
-
-    @Subscribe
-    public void onListItemClick(CampaignItemClickEvent event) {
-        int position = mRecyclerView.getChildLayoutPosition(event.getView());
-        CampaignRecyclerViewAdapter adapter = (CampaignRecyclerViewAdapter) mRecyclerView.getAdapter();
-
-        Campaign campaign = adapter.getItem(position);
-
-        startActivity(new Intent(getActivity(), HitListActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(campaign.getId())));
     }
 
 

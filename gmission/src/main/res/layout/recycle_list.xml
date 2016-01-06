@@ -36,23 +36,17 @@
                 android:paddingTop="6dp"
                 android:scrollbars="vertical" />
 
-            <TextView
-                android:id="@android:id/empty"
-                style="@style/ListSubtitleText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/pb_loading"
-                style="@style/ListSpinner"
-                android:layout_centerInParent="true" />
-
         </LinearLayout>
 
     </android:in.srain.cube.views.ptr.PtrFrameLayout>
 
-
+    <TextView
+        android:id="@android:id/empty"
+        style="@style/ListSubtitleText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/dark_grey"
+        android:visibility="gone" />
 
 </RelativeLayout>

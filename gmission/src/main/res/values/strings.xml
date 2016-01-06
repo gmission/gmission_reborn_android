@@ -3,13 +3,12 @@
 <resources>
 
     <string name="app_name">gMission</string>
-    <string name="logout_action">Logout</string>
 
     <string name="error_loading_user_profile">Loading User Profile failed</string>
-    <string name="no_users">No Users</string>
-    <string name="no_news">No News</string>
-    <string name="no_campaign">No Campaign</string>
-    <string name="no_message">No Message</string>
+    <string name="no_campaign">No Campaigns</string>
+    <string name="no_hit">No Questions</string>
+    <string name="no_answer">No Answers</string>
+    <string name="no_message">No Messages</string>
 
 
     <string name="label_user_name">User Name</string>
@@ -31,6 +30,7 @@
     <string name="label_credit">Credits:</string>
     <string name="label_answer_count">Answers:</string>
     <string name="label_time">Time:</string>
+    <string name="label_answer_time">At:</string>
 
     <string name="label_title">Title:</string>
     <string name="label_content">Content:</string>
@@ -38,10 +38,10 @@
     <string name="label_text_type">Text</string>
     <string name="label_selection_type">Choice</string>
     <string name="label_image_type">Image</string>
-
+    <string name="label_received_answer_count">Answers:</string>
+    <string name="label_approve_answer">Approve</string>
 
     <string name="message_signing_in">Signing in…</string>
-    <string name="blank_field_warning">Please populate this field</string>
     <string name="message_bad_credentials">Email Address or Password is incorrect</string>
     <string name="message_auth_failed">Please enter a valid password</string>
     <string name="message_auth_failed_new_account">Please enter a valid email address &amp; password</string>
@@ -53,11 +53,7 @@
     <string name="message_still_locating">Waiting for GPS Results …</string>
     <string name="message_answered">You have already answered this question.</string>
 
-    <string name="stop">Stop</string>
-    <string name="start">Start</string>
-    <string name="pause">Pause</string>
-    <string name="resume">Resume</string>
-    <string name="home">Home</string>
+
     <string name="loading">Loading...</string>
     <string name="refreshing">Refreshing...</string>
     <string name="navigation_drawer_open">Drawer Open</string>
@@ -67,6 +63,7 @@
     <string name="title_home">Home</string>
     <string name="title_logout">Log Out</string>
     <string name="title_message">Messages</string>
+    <string name="title_question">My Questions</string>
     <string name="title_map">Map</string>
     <string name="title_activity_hit_list">Question List</string>
     <string name="title_activity_hit">Answer Question</string>
@@ -82,13 +79,12 @@
     <string name="network_error_message">Network error, please try later.</string>
     <string name="unauthorized_error_message">Fail to authorize, please login again.</string>
 
-    <string name="bad_hid_notification">Broken Question! Please ignore this question.</string>
+    <string name="bad_hit_notification">Broken Question! Please ignore this question.</string>
 
     <string name="app_pic_folder">gmission_data/pic</string>
 
     <string name="profile_requests">Sent Requests</string>
     <string name="profile_answers">Sent Answers</string>
-    <string name="profile_checkins">Sent Checkins</string>
 
     <string name="just_now">just now</string>
     <string name="before">before</string>
@@ -97,5 +93,6 @@
     <string name="days_before">day(s) before</string>
     <string name="hours_before">hour(s) before</string>
     <string name="min_before">minute(s) before</string>
+    <string name="title_activity_answer_list">AnswerListActivity</string>
 
 </resources>

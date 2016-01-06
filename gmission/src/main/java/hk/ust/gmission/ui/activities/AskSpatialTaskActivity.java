@@ -36,7 +36,7 @@ import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
 
 
 public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
-    private static int TEXT_CHECK__DELAY_MILLIS = 2000;
+    private static int TEXT_CHECK__DELAY_MILLIS = 1000;
     private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
 
     @Bind(R.id.et_location_name) TextView mEtLocation;

@@ -114,9 +114,6 @@ public class WorkingAreaSetupActivity extends BootstrapFragmentActivity implemen
 
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
 

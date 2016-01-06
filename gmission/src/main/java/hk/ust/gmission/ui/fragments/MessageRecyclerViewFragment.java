@@ -2,13 +2,11 @@ package hk.ust.gmission.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
-import javax.inject.Inject;
-
-import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
@@ -35,8 +33,7 @@ import static hk.ust.gmission.core.Constants.Extra.HIT;
 
 public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Message, MessageRecyclerViewAdapter> {
 
-    @Inject protected BootstrapServiceProvider serviceProvider;
-    protected MessageRecyclerViewAdapter messageRecyclerViewAdapter = new MessageRecyclerViewAdapter();
+    protected MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter();
 
     private MessageRecyclerViewFragment mFragment = null;
 
@@ -56,7 +53,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
 
         setEmptyText(getString(R.string.no_message));
 
-        mRecyclerView.setAdapter(messageRecyclerViewAdapter);
+        mRecyclerView.setAdapter(adapter);
 
 
         configPullToRefresh(getView());
@@ -74,11 +71,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                 .doOnNext(new Action1<ModelWrapper<Message>>() {
                     @Override
                     public void call(ModelWrapper<Message> messages) {
-                        if (!isLoaderInitialized){
-                            getAdapter().setItems(messages.getObjects());
-                        } else {
-                            getAdapter().setItems(messages.getObjects());
-                        }
+                        getAdapter().setItems(messages.getObjects());
                     }
                 })
                 .doOnError(new Action1<Throwable>() {
@@ -91,10 +84,6 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        if (!isLoaderInitialized){
-                            isLoaderInitialized = true;
-                        }
-
                         getAdapter().notifyDataSetChanged();
 
                     }
@@ -183,6 +172,11 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
+                        if (getAdapter().getItemCount() == 0){
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
                         getAdapter().notifyDataSetChanged();
                     }
                 })

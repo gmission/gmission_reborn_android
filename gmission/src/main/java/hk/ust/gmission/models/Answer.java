@@ -11,6 +11,7 @@ public class Answer extends BaseModel{
     String brief;
     String attachment_id;
     String type;
+    boolean accepted;
     Date created_on;
     String location_id;
     String worker_id;
@@ -77,5 +78,13 @@ public class Answer extends BaseModel{
 
     public void setWorker_id(String worker_id) {
         this.worker_id = worker_id;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

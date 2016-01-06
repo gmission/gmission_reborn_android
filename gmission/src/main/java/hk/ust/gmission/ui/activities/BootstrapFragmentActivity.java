@@ -29,6 +29,7 @@ public class BootstrapFragmentActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         Injector.inject(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

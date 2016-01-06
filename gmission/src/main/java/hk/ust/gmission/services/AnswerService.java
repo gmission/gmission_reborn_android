@@ -2,10 +2,13 @@ package hk.ust.gmission.services;
 
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.Answer;
+import hk.ust.gmission.models.Message;
 import hk.ust.gmission.models.ModelWrapper;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -22,4 +25,7 @@ public interface AnswerService {
 
     @GET(Constants.Http.URL_ANSWERS_FRAG)
     Observable<ModelWrapper<Answer>> getAnswers(@Query("q") String query);
+
+    @PUT(Constants.Http.URL_ANSWERS_FRAG + "/{id}")
+    Observable<Answer> updateAnswer(@Path("id") String id, @Body Answer message);
 }

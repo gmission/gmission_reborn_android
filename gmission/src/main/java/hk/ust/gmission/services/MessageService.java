@@ -20,6 +20,6 @@ public interface MessageService {
     @GET(Constants.Http.URL_MESSAGES_FRAG)
     Observable<ModelWrapper<Message>> getMessages(@Query("q") String query);
 
-    @PUT(Constants.Http.URL_MESSAGES_FRAG + "/{messageId}")
-    Observable<Message> updateMessage(@Path("messageId") String messageId, @Body Message message);
+    @PUT(Constants.Http.URL_MESSAGES_FRAG + "/{id}")
+    Observable<Message> updateMessage(@Path("id") String messageId, @Body Message message);
 }

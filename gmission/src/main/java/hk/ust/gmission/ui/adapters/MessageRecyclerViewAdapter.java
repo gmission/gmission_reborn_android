@@ -15,14 +15,14 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.events.MessageItemClickEvent;
 import hk.ust.gmission.models.Message;
 
-public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageRecyclerViewAdapter.MessageViewHolder, Message> {
+public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageRecyclerViewAdapter.ViewHolder, Message> {
 
     @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.message_item, parent, false);
 
-        return new MessageViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     public MessageRecyclerViewAdapter() {
@@ -30,7 +30,7 @@ public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageR
     }
 
     @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Message message = items.get(position);
 
         holder.content.setText(message.getContent());
@@ -43,13 +43,13 @@ public class MessageRecyclerViewAdapter extends BaseRecyclerViewAdapter<MessageR
     }
 
 
-    class MessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
         @Bind(R.id.content) TextView content;
         @Bind(R.id.iv_message_icon) ImageView icon;
 
-        public MessageViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

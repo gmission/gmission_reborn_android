@@ -39,9 +39,7 @@ public class BootstrapService {
         return getRestAdapter().create(HitService.class);
     }
 
-    public SelectionService getSelectionService() {
-        return getRestAdapter().create(SelectionService.class);
-    }
+
 
     public AttachmentService getAttachmentService() {
         return getRestAdapter().create(AttachmentService.class);

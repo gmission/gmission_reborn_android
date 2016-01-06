@@ -23,16 +23,8 @@ public interface AttachmentService {
     @POST(Constants.Http.URL_IMAGE + "/upload")
     Observable<ImageVideoResult> createImage(@Part("file") TypedFile photo, @Part("description") TypedString description);
 
-    @Multipart
-    @POST(Constants.Http.URL_IMAGE + "/upload")
-    void createImage(@Part("file") TypedFile photo, @Part("description") TypedString description,
-                Callback<ImageVideoResult> cb);
-
-    @GET(Constants.Http.URL_ATTACHMENTS_FRAG)
-    Observable<ModelWrapper<Attachment>> getAttachmentList();
-
     @GET(Constants.Http.URL_ATTACHMENTS_FRAG + "/{aId}")
-    Observable<Attachment> getAttachment(@Path("aId") int aId);
+    Observable<Attachment> getAttachment(@Path("aId") String aId);
     @POST(Constants.Http.URL_ATTACHMENTS_FRAG)
     Observable<Attachment> createAttachment(@Body Attachment attachment);
 }

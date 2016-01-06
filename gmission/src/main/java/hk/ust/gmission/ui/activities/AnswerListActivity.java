@@ -6,26 +6,26 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import hk.ust.gmission.R;
-import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
+import hk.ust.gmission.ui.fragments.AnswerRecyclerViewFragment;
 
-import static hk.ust.gmission.core.Constants.Extra.CAMPAIGN_ID;
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+
+public class AnswerListActivity extends BootstrapFragmentActivity {
 
 
-public class HitListActivity extends BootstrapFragmentActivity {
-
-    private String campaignId = null;
+    private String mHitId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hit_list_activity);
+        setContentView(R.layout.answer_list_activity);
         if (getIntent() != null && getIntent().getExtras() != null) {
-            campaignId =  getIntent().getExtras().getString(CAMPAIGN_ID);
+            mHitId =  getIntent().getExtras().getString(HIT_ID);
         }
 
-        HitRecyclerViewFragment hitListFragment = new HitRecyclerViewFragment();
-        hitListFragment.setCampaignId(campaignId);
-        replaceCurrentFragment(hitListFragment);
+        AnswerRecyclerViewFragment answerListFragment = new AnswerRecyclerViewFragment();
+        answerListFragment.setHitId(mHitId);
+        replaceCurrentFragment(answerListFragment);
     }
 
 
@@ -33,8 +33,8 @@ public class HitListActivity extends BootstrapFragmentActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .commitAllowingStateLoss();
+                .replace(R.id.container, newFragment)
+                .commitAllowingStateLoss();
 
     }
 
@@ -44,4 +44,5 @@ public class HitListActivity extends BootstrapFragmentActivity {
         return true;
 
     }
+
 }

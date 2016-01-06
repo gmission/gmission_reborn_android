@@ -130,6 +130,8 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
         mMap.setOnMapLoadedCallback(this);
         mMap.setOnMapLongClickListener(this);
+        mMap.setIndoorEnabled(true);
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -298,13 +300,17 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                         @Override
                         public void call(MapObject mapObject) {
                             mSpatialTasks.add(mapObject);
-                            refreshSpatialTaskMarkers();
+                            refreshMarkers();
                         }
                     })
                     .doOnCompleted(new Action0() {
                         @Override
                         public void call() {
-                            updateCamera();
+                            if (!isInitialized){
+                                updateCamera();
+                                isInitialized = true;
+                            }
+
                         }
                     })
                     .subscribe();
@@ -312,7 +318,7 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
     }
 
-    private void refreshSpatialTaskMarkers(){
+    private void refreshMarkers(){
         mMap.clear();
         mMap.setInfoWindowAdapter(new TaskAdapter());
         mMarkerMapObjectHashMap = new HashMap<>();

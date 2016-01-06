@@ -3,6 +3,7 @@ import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.Coordinate;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.models.Selection;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -25,4 +26,11 @@ public interface HitService {
 
     @POST(Constants.Http.URL_HITS_FRAG)
     Observable<Hit> createHit(@Body Hit hit);
+
+    @GET(Constants.Http.URL_SELECTIONS_FRAG)
+    Observable<ModelWrapper<Selection>> getSelections(@Query("q") String query);
+
+    @GET(Constants.Http.URL_SELECTIONS_FRAG + "/{id}")
+    Observable<Selection> getSelection(@Path("id") String id);
+
 }
