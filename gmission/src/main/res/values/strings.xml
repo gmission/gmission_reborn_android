@@ -16,7 +16,9 @@
     <string name="label_email_address">Email Address</string>
     <string name="label_password">Password (min: 6 characters)</string>
     <string name="label_text_answer_hint">Input Answer Here:</string>
-    <string name="label_text_question_hint">Input Question Here (at least 5 characters):</string>
+    <string name="label_text_question_title_hint">Input Here (at least 5 characters):</string>
+    <string name="label_text_question_content_hint">Input Here (at least 5 characters):</string>
+    <string name="label_location_name_hint">Input Location Name Here:</string>
     <string name="label_sign_in">Sign In</string>
     <string name="label_sign_up">Register</string>
     <string name="label_sign_out">Logout</string>
@@ -30,6 +32,13 @@
     <string name="label_answer_count">Answers:</string>
     <string name="label_time">Time:</string>
 
+    <string name="label_title">Title:</string>
+    <string name="label_content">Content:</string>
+    <string name="label_answer_type">Answer Type:</string>
+    <string name="label_text_type">Text</string>
+    <string name="label_selection_type">Choice</string>
+    <string name="label_image_type">Image</string>
+
 
     <string name="message_signing_in">Signing in…</string>
     <string name="blank_field_warning">Please populate this field</string>
@@ -37,6 +46,7 @@
     <string name="message_auth_failed">Please enter a valid password</string>
     <string name="message_auth_failed_new_account">Please enter a valid email address &amp; password</string>
     <string name="message_answer_success">Answer Success!</string>
+    <string name="message_ask_question_success">Question Created!</string>
     <string name="message_reg_error">Register failed, please try again.</string>
     <string name="message_signing_up">Signing up…</string>
     <string name="message_uploading">Uploading…</string>

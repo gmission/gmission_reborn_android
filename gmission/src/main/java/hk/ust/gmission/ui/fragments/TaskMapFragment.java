@@ -41,9 +41,11 @@ import butterknife.ButterKnife;
 import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
+import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.models.Coordinate;
 import hk.ust.gmission.models.GeoLocation;
 import hk.ust.gmission.models.Hit;
@@ -51,15 +53,20 @@ import hk.ust.gmission.models.MapObject;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.services.GeoService;
 import hk.ust.gmission.services.HitService;
+import hk.ust.gmission.ui.activities.AskSpatialTaskActivity;
 import hk.ust.gmission.ui.activities.HitActivity;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.HIT;
+
+import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
+import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
 
 /**
  * Created by bigstone on 3/1/2016.
@@ -86,6 +93,8 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
     private List<MapObject> mSpatialTasks = new ArrayList<>();
     private HashMap<Marker, MapObject> mMarkerMapObjectHashMap;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +114,8 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         ButterKnife.bind(this, view);
 
         mMapView.onCreate(savedInstanceState);
+
+        Locale locale = Locale.getDefault();
         geocoder = new Geocoder(this.getContext(), Locale.getDefault());
 
         initialMap();
@@ -126,21 +137,31 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                     Toast.makeText(getContext(), "Ask Here!", Toast.LENGTH_SHORT).show();
 
 
-//                    LatLng markerPosition = marker.getPosition();
-//                    List<Address> list = null;
-//                    try {
-//                        list = geocoder.getFromLocation(markerPosition.latitude, markerPosition.longitude, 1);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if (list != null & list.size() > 0) {
-//                        Address address = list.get(0);
-//                        clocation = new CurrentLocation(markerPosition, address.getLocality() + " " + address.getFeatureName(), null, 0f);
-//                        Intent intent = new Intent(TaskMapFragment.this, PostNewObjectActivity.class);
-//                        intent.putExtra("location", clocation);
-//                        startActivity(intent);
-//
-//                    }
+                    LatLng markerPosition = marker.getPosition();
+                    List<Address> list = null;
+                    try {
+                        list = geocoder.getFromLocation(markerPosition.latitude, markerPosition.longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    String locationName = null;
+                    if (list != null & list.size() > 0) {
+                        Address address = list.get(0);
+                        locationName = address.getLocality()+ " " + address.getThoroughfare() + " " + address.getFeatureName();
+                        locationName = locationName.replace("null", "");
+                        locationName = locationName.trim();
+                    }
+
+                    Coordinate coordinate = new Coordinate();
+                    coordinate.setAltitude(0);
+                    coordinate.setLatitude(markerPosition.latitude);
+                    coordinate.setLongitude(markerPosition.longitude);
+
+                    Intent intent = new Intent(mFragment.getContext(), AskSpatialTaskActivity.class);
+                    intent.putExtra(COORDINATE, coordinate);
+                    intent.putExtra(LOCATION_NAME, locationName);
+                    startActivity(intent);
 
                     return true;
                 }
@@ -215,6 +236,13 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 .subscribe();
     }
 
+
+    @Subscribe
+    public void onTaskCreatedEvent(TaskCreateSuccessEvent event){
+        askHereMarker.remove();
+        askHereMarker = null;
+    }
+
     private void refreshSpaitalTasks(){
         mSpatialTasks.clear();
 
@@ -273,6 +301,12 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                             refreshSpatialTaskMarkers();
                         }
                     })
+                    .doOnCompleted(new Action0() {
+                        @Override
+                        public void call() {
+                            updateCamera();
+                        }
+                    })
                     .subscribe();
         }
 
@@ -284,6 +318,14 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         mMarkerMapObjectHashMap = new HashMap<>();
         for (MapObject mapObject : mSpatialTasks) {
             MarkerOptions markerOptions = new MarkerOptions();
+            if (mapObject.getHit().getRequester_id().equals(Constants.Http.PARAM_USER_ID)){
+                markerOptions.title("mine");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            } else {
+                markerOptions.title("others");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
+
             markerOptions.position(new LatLng(mapObject.getCoordinate().getLatitude(), mapObject.getCoordinate().getLongitude()));
             mMarkerMapObjectHashMap.put(mMap.addMarker(markerOptions), mapObject);
         }
@@ -345,6 +387,18 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
     @Override
     public void onMapLoaded() {
         mRefreshBtn.callOnClick();
+
+    }
+
+    private void updateCamera(){
+        if (currentLocation != null){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 17));
+        } else if (!mSpatialTasks.isEmpty()) {
+            MapObject mapObject = mSpatialTasks.get(0);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapObject.getCoordinate().getLatLng(), 17));
+        }
+
+
     }
 
 

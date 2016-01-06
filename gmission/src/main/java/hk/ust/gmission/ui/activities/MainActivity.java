@@ -35,6 +35,7 @@ import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.events.RestAdapterErrorEvent;
+import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
@@ -56,7 +57,6 @@ import hk.ust.gmission.util.SafeAsyncTask;
  */
 public class MainActivity extends BootstrapFragmentActivity{
 
-    @Inject protected BootstrapServiceProvider serviceProvider;
     @Inject protected LogoutService logoutService;
     @Inject protected ApiKeyProvider keyProvider;
 
@@ -101,8 +101,7 @@ public class MainActivity extends BootstrapFragmentActivity{
                     break;
                 case 3: //home page
                     title = getString(R.string.title_home);
-                    startActivity(new Intent(this.getActivity(), AskSpatialTaskActivity.class));
-//                    replaceCurrentFragment(homeFragment);
+                    replaceCurrentFragment(homeFragment);
                     break;
                 case 4: //log out
                     Log.d("logout","log out");
@@ -144,6 +143,12 @@ public class MainActivity extends BootstrapFragmentActivity{
     @Subscribe
     public void onRetrofitErrorEvent(RestAdapterErrorEvent restAdapterErrorEvent) {
         Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+    }
+
+
+    @Subscribe
+    public void onTaskCreatedEvent(TaskCreateSuccessEvent event){
+        //TODO: add updates for related lists
     }
 
     @Override

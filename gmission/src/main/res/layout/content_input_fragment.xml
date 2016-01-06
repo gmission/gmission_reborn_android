@@ -1,28 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="240dp">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="@drawable/rounded_text">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/rounded_text">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <EditText
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/et_content"
-            android:hint="@string/label_text_question_hint"
-            android:inputType="textMultiLine"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/text_small_body"
-            android:textColorHint="@color/text_light"
-            android:maxLines="5"
-            android:gravity="top"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:id="@+id/title_layout"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:textColor="@color/dark_grey"
+                android:text="@string/label_title"/>
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_title"
+                android:hint="@string/label_text_question_title_hint"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_small_body"
+                android:textColorHint="@color/text_light"
+                android:gravity="top" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_layout"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:textColor="@color/dark_grey"
+                android:text="@string/label_content"/>
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:id="@+id/et_content"
+                android:hint="@string/label_text_question_content_hint"
+                android:inputType="textMultiLine"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_small_body"
+                android:textColorHint="@color/text_light"
+                android:maxLines="5"
+                android:gravity="top" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,11 +71,13 @@
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" >
+            android:layout_alignParentStart="true"
+            android:gravity="bottom">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
                 android:textColor="@color/dark_grey"
                 android:text="@string/label_location"/>
 
@@ -43,10 +86,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/et_location_name"
                 android:inputType="textMultiLine"
+                android:hint="@string/label_text_question_content_hint"
                 android:textColor="@color/dark_grey"
-                android:textSize="@dimen/text_small_body"
-                />
+                android:textSize="@dimen/text_small_body"/>
         </LinearLayout>
+
+    </RelativeLayout>
+
+
 
 
         <!--<ImageButton-->
@@ -101,7 +148,5 @@
             <!--android:layout_alignEnd="@+id/bt_photo"-->
             <!--android:layout_above="@+id/iv_attchment" />-->
 
-
-    </RelativeLayout>
 
 </LinearLayout>

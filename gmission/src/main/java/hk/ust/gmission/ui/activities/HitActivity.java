@@ -34,7 +34,6 @@ import hk.ust.gmission.ui.fragments.TextHitFragment;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -52,10 +51,8 @@ public class HitActivity extends BootstrapFragmentActivity {
     @Bind(R.id.hit_content) TextView hitContent;
     @Bind(R.id.bad_hid_notification) TextView badHitNotificationText;
 
-    @Inject protected BootstrapServiceProvider serviceProvider;
-
     private BaseAnswerFragment answerFragment = null;
-    private Subscription buttonSubscription = null;
+
     private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
 
 
@@ -115,7 +112,7 @@ public class HitActivity extends BootstrapFragmentActivity {
     }
 
     private void subscribeSubmitButton() {
-        buttonSubscription = RxView.clicks(submitButton)
+        RxView.clicks(submitButton)
                 .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Object, Object>() {
@@ -199,12 +196,8 @@ public class HitActivity extends BootstrapFragmentActivity {
                         Throwable cause = e.getCause() != null ? e.getCause() : e;
 
                         String message;
-                        // A 404 is returned as an Exception with this message
-                        if ("Received authentication challenge is null".equals(cause.getMessage())) {
-                            message = getResources().getString(R.string.message_reg_error);
-                        } else {
-                            message = cause.getMessage();
-                        }
+
+                        message = cause.getMessage();
 
                         Toaster.showLong(HitActivity.this, message);
 

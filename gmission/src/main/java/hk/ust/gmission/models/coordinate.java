@@ -1,6 +1,10 @@
 package hk.ust.gmission.models;
 
-public class Coordinate {
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.Serializable;
+
+public class Coordinate implements Serializable{
 
     private String id;
     private double latitude;
@@ -37,5 +41,10 @@ public class Coordinate {
 
     public void setAltitude(double altitude) {
         this.altitude = altitude;
+    }
+
+
+    public LatLng getLatLng(){
+        return new LatLng(latitude, longitude);
     }
 }

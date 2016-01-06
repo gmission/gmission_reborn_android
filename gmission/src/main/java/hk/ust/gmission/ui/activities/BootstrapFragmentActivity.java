@@ -10,6 +10,7 @@ import com.squareup.otto.Bus;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 
@@ -19,6 +20,7 @@ import hk.ust.gmission.R;
 public class BootstrapFragmentActivity extends ActionBarActivity {
 
     @Inject protected Bus bus;
+    @Inject protected BootstrapServiceProvider serviceProvider;
 
     private ProgressDialog dialog;
 

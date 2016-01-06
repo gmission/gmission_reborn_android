@@ -21,8 +21,6 @@ public final class Constants {
          */
         public static final String BOOTSTRAP_ACCOUNT_NAME = "gMission";
 
-
-
         /**
          * Auth token type
          */
@@ -85,6 +83,9 @@ public final class Constants {
 
         public static final String USER = "user";
         public static final String HIT = "hit";
+        public static final String COORDINATE = "coordinate";
+        public static final String LOCATION_NAME = "location_name";
+
 
         public static final String ANSWRE_BRIEF = "answer_brief";
 
@@ -92,6 +93,10 @@ public final class Constants {
         public static final String CAMPAIGN_ID = "campaign_id";
         public static final String MESSAGE_ID = "message_id";
 
+
+        public static final String CHOICE_TYPE = "selection";
+        public static final String IMAGE_TYPE = "image";
+        public static final String TEXT_TYPE = "text";
 
     }
 
