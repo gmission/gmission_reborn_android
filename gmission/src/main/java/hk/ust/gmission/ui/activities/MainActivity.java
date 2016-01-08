@@ -4,11 +4,17 @@ package hk.ust.gmission.ui.activities;
 
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,27 +26,22 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
-import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.LogoutService;
+import hk.ust.gmission.core.AppUpdateCheckTask;
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
-import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.events.RestAdapterErrorEvent;
 import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
-import hk.ust.gmission.ui.fragments.CarouselFragment;
-import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.TaskMapFragment;
@@ -48,6 +49,8 @@ import hk.ust.gmission.ui.fragments.TaskRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.UserProfilePFragment;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
+
+import static com.github.kevinsawicki.http.HttpRequest.post;
 
 
 /**
@@ -217,6 +220,8 @@ public class MainActivity extends BootstrapFragmentActivity{
         checkAuth();
 
         startAndBindService();
+
+        new AppUpdateCheckTask(this.getActivity()).execute();
 
     }
 
