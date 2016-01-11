@@ -38,11 +38,11 @@ public class TaskRecyclerViewAdapter extends BaseRecyclerViewAdapter<TaskRecycle
         holder.content.setText(hit.getDescription());
 
         if (hit.getStatus().equals("closed")){
-            holder.hitIcon.setImageResource(R.drawable.ic_task_completed);
+            holder.statusIcon.setImageResource(R.drawable.ic_task_completed);
         }
 
         if (hit.getStatus().equals("open")){
-            holder.hitIcon.setImageResource(R.drawable.ic_task_processing);
+            holder.statusIcon.setImageResource(R.drawable.ic_task_processing);
         }
 
 
@@ -51,7 +51,7 @@ public class TaskRecyclerViewAdapter extends BaseRecyclerViewAdapter<TaskRecycle
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @Bind(R.id.task_status) ImageView hitIcon;
+        @Bind(R.id.task_status) ImageView statusIcon;
         @Bind(R.id.title) TextView title;
         @Bind(R.id.answer_count) TextView content;
 

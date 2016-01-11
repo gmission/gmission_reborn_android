@@ -22,7 +22,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/answer_area"
             android:layout_gravity="top|left"
@@ -37,8 +37,8 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <ImageView
                 android:id="@+id/image_answer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
         </LinearLayout>
 
         <ImageView

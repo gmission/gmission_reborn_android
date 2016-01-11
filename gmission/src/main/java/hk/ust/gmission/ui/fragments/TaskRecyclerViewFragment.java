@@ -26,7 +26,7 @@ import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
  * Created by bigstone on 6/1/2016.
  */
 public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, TaskRecyclerViewAdapter> {
-    protected TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter();
+    protected TaskRecyclerViewAdapter mAdapter = new TaskRecyclerViewAdapter();
 
 
     @Override
@@ -43,10 +43,22 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
         setEmptyText(getString(R.string.no_hit));
 
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         configPullToRefresh(getView());
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 
     @Override
     protected void loadData() {

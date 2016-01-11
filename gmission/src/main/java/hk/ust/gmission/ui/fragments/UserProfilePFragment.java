@@ -3,9 +3,11 @@ package hk.ust.gmission.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,18 +38,23 @@ public class UserProfilePFragment extends Fragment {
 
     @Bind(R.id.tv_answernum) TextView mTvAnswernum;
     @Bind(R.id.tv_requestnum) TextView mTvRequestnum;
-    @Bind(R.id.email) TextView mTvEmail;
+    @Bind(R.id.username) TextView mTvUsername;
     @Bind(R.id.credit) TextView mTvCredit;
     @Bind(android.R.id.empty) TextView mTvError;
 
-    @Bind(R.id.rl_profile) RelativeLayout mRlprofile;
+    @Bind(R.id.rl_profile) RelativeLayout mRlProfile;
+    @Bind(R.id.list_container) FrameLayout mFlContainer;
     @Bind(R.id.pb_loading) ProgressBar mPorgressbar;
 
     @Inject protected BootstrapServiceProvider serviceProvider;
 
+
+
     private User currentUser;
     private int requestNum =0;
     private int answerNum =0;
+
+    private TaskRecyclerViewFragment questionFragment = new TaskRecyclerViewFragment();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +74,27 @@ public class UserProfilePFragment extends Fragment {
         Injector.inject(this);
         ButterKnife.bind(this, view);
         loadUserProfile();
+
+        final FragmentManager fragmentManager = getFragmentManager();
+
+        if (mFlContainer.getId() != questionFragment.getId()){
+            fragmentManager.beginTransaction()
+                    .replace(mFlContainer.getId(), questionFragment)
+                    .commitAllowingStateLoss();
+        } else {
+            fragmentManager
+                    .beginTransaction()
+                    .detach(questionFragment)
+                    .attach(questionFragment)
+                    .commit();
+        }
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     private void loadUserProfile(){
 
@@ -97,7 +123,7 @@ public class UserProfilePFragment extends Fragment {
                 .doOnNext(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        mTvEmail.setText(currentUser.getEmail());
+                        mTvUsername.setText(currentUser.getUsername());
                         mTvCredit.setText(String.format("Credit: %d", currentUser.getCredit()));
                         mTvAnswernum.setText(String.valueOf(answerNum));
                         mTvRequestnum.setText(String.valueOf(requestNum));
@@ -106,7 +132,7 @@ public class UserProfilePFragment extends Fragment {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        mRlprofile.setVisibility(View.VISIBLE);
+                        mRlProfile.setVisibility(View.VISIBLE);
                         mPorgressbar.setVisibility(View.GONE);
                     }
                 })

@@ -78,8 +78,7 @@ public class MainActivity extends BootstrapFragmentActivity{
     private Fragment campaignFragment = new CampaignRecyclerViewFragment();
     private Fragment mapFragment = new TaskMapFragment();
     private Fragment messageFragment = new MessageRecyclerViewFragment();
-    private Fragment questionFragment = new TaskRecyclerViewFragment();
-    private Fragment initFragment = campaignFragment;
+    private Fragment initFragment = homeFragment;
 
 
     private static Intent serviceIntent;
@@ -92,27 +91,23 @@ public class MainActivity extends BootstrapFragmentActivity{
         } else {
             currentNavItemPosition = event.getItemPosition();
             switch (currentNavItemPosition) {
-                case 0: //campaign
+                case 0: //home
+                    title = getString(R.string.title_home);
+                    replaceCurrentFragment(homeFragment);
+                    break;
+                case 1: //campaign
                     title = getString(R.string.title_campaign);
                     replaceCurrentFragment(campaignFragment);
                     break;
-                case 1: //map
+                case 2: //map
                     title = getString(R.string.title_map);
                     replaceCurrentFragment(mapFragment);
                     break;
-                case 2: //messages
+                case 3: //messages
                     title = getString(R.string.title_message);
                     replaceCurrentFragment(messageFragment);
                     break;
-                case 3: //messages
-                    title = getString(R.string.title_message);
-                    replaceCurrentFragment(questionFragment);
-                    break;
-                case 4: //my posted questions page
-                    title = getString(R.string.title_question);
-                    replaceCurrentFragment(homeFragment);
-                    break;
-                case 5: //log out
+                case 4: //log out
                     Log.d("logout","log out");
                     logoutService.logout(new Runnable() {
                         @Override
@@ -252,7 +247,7 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     private void initScreen() {
         if (userHasAuthenticated) {
-            title = getString(R.string.title_campaign);
+            title = getString(R.string.title_home);
             getSupportActionBar().setTitle(title);
             replaceCurrentFragment(initFragment);
         }

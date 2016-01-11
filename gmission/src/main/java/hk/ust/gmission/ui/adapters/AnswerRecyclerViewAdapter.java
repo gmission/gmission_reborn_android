@@ -1,6 +1,8 @@
 package hk.ust.gmission.ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
     private HitService hitService;
     private AttachmentService attachmentService;
     private AnswerService answerService;
-
+    private Context context;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,13 +51,18 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
         return new ViewHolder(itemView);
     }
 
-    public AnswerRecyclerViewAdapter(HitService hitService, AttachmentService attachmentService, AnswerService answerService) {
+    public AnswerRecyclerViewAdapter(Context context, HitService hitService, AttachmentService attachmentService, AnswerService answerService) {
         items = new ArrayList<>();
         Injector.inject(this);
 
+        this.context = context;
         this.hitService = hitService;
         this.attachmentService = attachmentService;
         this.answerService = answerService;
+    }
+
+    public int pxFromDp(final float dp) {
+        return (int)(dp * context.getResources().getDisplayMetrics().density);
     }
 
     @Override
@@ -66,7 +73,8 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
 
 
         if (answer.getType().equals(Constants.Extra.IMAGE_TYPE)){
-            holder.frameLayout.getLayoutParams().height = 500;
+
+            holder.frameLayout.getLayoutParams().height = pxFromDp(450);//pixels
             holder.textAnswer.setVisibility(View.GONE);
             holder.imageAnswer.setVisibility(View.VISIBLE);
 
@@ -77,15 +85,13 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
                         public void call(Attachment attachment) {
                             Picasso.with(holder.imageAnswer.getContext())
                                     .load(Constants.Http.URL_IMAGE_ORI + "/" + attachment.getValue())
-                                    .rotate(90)
-                                    .resize(400, 600)
+                                    .centerCrop()
+                                    .resize(holder.imageAnswer.getMeasuredWidth(), holder.imageAnswer.getMeasuredHeight())
                                     .into(holder.imageAnswer);
                         }
                     }).subscribe();
-
-
         } else {
-            holder.frameLayout.getLayoutParams().height = 200;//pixels
+//            holder.frameLayout.getLayoutParams().height = pxFromDp(100);//pixels
             holder.textAnswer.setVisibility(View.VISIBLE);
             holder.imageAnswer.setVisibility(View.GONE);
         }

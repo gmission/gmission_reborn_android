@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,12 +35,20 @@ public class CampaignRecyclerViewAdapter extends BaseRecyclerViewAdapter<Campaig
         holder.title.setText(String.format("%s",
                 campaign.getTitle()));
         holder.content.setText(campaign.getBrief());
+
+        if (campaign.getStatus().equals("closed")){
+            holder.statusIcon.setImageResource(R.drawable.ic_task_completed);
+        }
+
+        if (campaign.getStatus().equals("open")){
+            holder.statusIcon.setImageResource(R.drawable.ic_campaign);
+        }
     }
 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-
+        @Bind(R.id.iv_campaign_icon) ImageView statusIcon;
         @Bind(R.id.title) TextView title;
         @Bind(R.id.content) TextView content;
 

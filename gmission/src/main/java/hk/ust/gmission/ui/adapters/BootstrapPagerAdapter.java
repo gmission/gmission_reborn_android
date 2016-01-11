@@ -13,19 +13,10 @@ import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.HitRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 
-/**
- * Pager adapter
- */
 public class BootstrapPagerAdapter extends FragmentPagerAdapter {
 
     private final Resources resources;
 
-    /**
-     * Create pager adapter
-     *
-     * @param resources
-     * @param fragmentManager
-     */
     public BootstrapPagerAdapter(final Resources resources, final FragmentManager fragmentManager) {
         super(fragmentManager);
         this.resources = resources;

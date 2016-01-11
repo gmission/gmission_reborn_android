@@ -39,7 +39,7 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
         super.onActivityCreated(savedInstanceState);
 
         setEmptyText(getString(R.string.no_answer));
-        mAdapter = new AnswerRecyclerViewAdapter(serviceProvider.getService(this.getActivity()).getHitService()
+        mAdapter = new AnswerRecyclerViewAdapter(this.getActivity(), serviceProvider.getService(this.getActivity()).getHitService()
                 ,serviceProvider.getService(this.getActivity()).getAttachmentService()
                 ,serviceProvider.getService(this.getActivity()).getAnswerService());
 
@@ -47,9 +47,11 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
 
         configPullToRefresh(getView());
 
-
-
     }
+
+
+
+
 
     @Override
     protected void loadData() {
@@ -83,7 +85,6 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
                         }
 
                         getAdapter().notifyDataSetChanged();
-
                     }
                 })
                 .subscribe();
