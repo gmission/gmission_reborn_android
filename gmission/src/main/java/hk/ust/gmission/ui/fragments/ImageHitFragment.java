@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -68,6 +71,12 @@ public class ImageHitFragment extends BaseAnswerFragment {
                 values.put(MediaStore.Images.Media.TITLE, "gmission_task_image");
                 values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
                 currentPicFile = ImageUtils.getTempFile(mFragment.getContext());
+
+                if (currentPicFile == null){
+                    Toast.makeText(getContext(), getString(R.string.message_cannot_create_image), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(currentPicFile));
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
@@ -80,8 +89,14 @@ public class ImageHitFragment extends BaseAnswerFragment {
 
         if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                ImageUtils.setImage(currentPicFile, previewView);
+                Picasso.with(this.getActivity())
+                        .load(currentPicFile)
+                        .resize(previewView.getWidth(), previewView.getHeight())
+                        .centerInside()
+                        .into(previewView);
                 previewView.setVisibility(View.VISIBLE);
+                previewView.bringToFront();
+                previewView.invalidate();
                 bus.post(new HitSubmitEnableEvent());
 
             }

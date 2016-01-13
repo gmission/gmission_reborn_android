@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -83,95 +84,14 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     private static Intent serviceIntent;
 
-    @Subscribe
-    public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
-
-        if (currentNavItemPosition == event.getItemPosition() && currentNavItemPosition != 4){
-            return;
-        } else {
-            currentNavItemPosition = event.getItemPosition();
-            switch (currentNavItemPosition) {
-                case 0: //home
-                    title = getString(R.string.title_home);
-                    replaceCurrentFragment(homeFragment);
-                    break;
-                case 1: //campaign
-                    title = getString(R.string.title_campaign);
-                    replaceCurrentFragment(campaignFragment);
-                    break;
-                case 2: //map
-                    title = getString(R.string.title_map);
-                    replaceCurrentFragment(mapFragment);
-                    break;
-                case 3: //messages
-                    title = getString(R.string.title_message);
-                    replaceCurrentFragment(messageFragment);
-                    break;
-                case 4: //log out
-                    Log.d("logout","log out");
-                    logoutService.logout(new Runnable() {
-                        @Override
-                        public void run() {
-                            checkAuth();
-                        }
-                    });
-                break;
-                default:
-                    return;
-            }
-
-            getSupportActionBar().setTitle(title);
-        }
-
-    }
+    boolean doubleBackToExitPressedOnce = false;
 
 
 
 
-    @Subscribe
-    public void onUnAuthorizedErrorEvent(UnAuthorizedErrorEvent unAuthorizedErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.unauthorized_error_message), Toast.LENGTH_SHORT);
-        logoutService.logout(new Runnable() {
-            @Override
-            public void run() {
-                checkAuth();
-            }
-        });
-    }
-
-    @Subscribe
-    public void onNetworkErrorEvent(NetworkErrorEvent networkErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
-    }
-
-    @Subscribe
-    public void onRetrofitErrorEvent(RestAdapterErrorEvent restAdapterErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
-    }
 
 
-    @Subscribe
-    public void onTaskCreatedEvent(TaskCreateSuccessEvent event){
-        //TODO: add updates for related lists
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-//        bus.unregister(this);
-    }
-
-
-    protected Activity getActivity(){
-        return this;
-    }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -221,10 +141,28 @@ public class MainActivity extends BootstrapFragmentActivity{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        bus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+    protected Activity getActivity(){
+        return this;
+    }
+
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        startService(serviceIntent);
+        stopService(serviceIntent);
+        unbindService(gpsServiceConnection);
 
     }
 
@@ -242,6 +180,131 @@ public class MainActivity extends BootstrapFragmentActivity{
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
 
+    }
+
+
+    /**
+     * support double press return to quit app
+     */
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, getString(R.string.message_double_return_to_quit), Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
+    @Subscribe
+    public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
+
+        if (currentNavItemPosition == event.getItemPosition() && currentNavItemPosition != 4){
+            return;
+        } else {
+            currentNavItemPosition = event.getItemPosition();
+            switch (currentNavItemPosition) {
+                case 0: //home
+                    title = getString(R.string.title_home);
+                    replaceCurrentFragment(homeFragment);
+                    break;
+                case 1: //campaign
+                    title = getString(R.string.title_campaign);
+                    replaceCurrentFragment(campaignFragment);
+                    break;
+                case 2: //map
+                    title = getString(R.string.title_map);
+                    replaceCurrentFragment(mapFragment);
+                    break;
+                case 3: //messages
+                    title = getString(R.string.title_message);
+                    replaceCurrentFragment(messageFragment);
+                    break;
+                case 4: //log out
+                    Log.d("logout","log out");
+                    logoutService.logout(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkAuth();
+                        }
+                    });
+                    break;
+                default:
+                    return;
+            }
+
+            getSupportActionBar().setTitle(title);
+        }
+
+    }
+
+
+
+
+    @Subscribe
+    public void onUnAuthorizedErrorEvent(UnAuthorizedErrorEvent unAuthorizedErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.unauthorized_error_message), Toast.LENGTH_SHORT);
+        logoutService.logout(new Runnable() {
+            @Override
+            public void run() {
+                checkAuth();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onNetworkErrorEvent(NetworkErrorEvent networkErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+    }
+
+    @Subscribe
+    public void onRetrofitErrorEvent(RestAdapterErrorEvent restAdapterErrorEvent) {
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+    }
+
+
+    @Subscribe
+    public void onTaskCreatedEvent(TaskCreateSuccessEvent event){
+        //TODO: add updates for related lists
+    }
+
+
+    /**
+     * Provides a connection to the GPS Logging Service
+     */
+    private final ServiceConnection gpsServiceConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            Ln.d("Disconnected from GPSLoggingService from MainActivity");
+
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Ln.d("Connected to GPSLoggingService from MainActivity");
+        }
+    };
+
+
+    /**
+     * Starts the service and binds the activity to it.
+     */
+    private void startAndBindService() {
+        serviceIntent = new Intent(this, LocationTraceService.class);
+        // Start the service in case it isn't already running
+        startService(serviceIntent);
+        // Now bind to service
+        bindService(serviceIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -323,31 +386,6 @@ public class MainActivity extends BootstrapFragmentActivity{
     }
 
 
-    /**
-     * Provides a connection to the GPS Logging Service
-     */
-    private final ServiceConnection gpsServiceConnection = new ServiceConnection() {
 
-        public void onServiceDisconnected(ComponentName name) {
-            Ln.d("Disconnected from GPSLoggingService from MainActivity");
-
-        }
-
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Ln.d("Connected to GPSLoggingService from MainActivity");
-        }
-    };
-
-
-    /**
-     * Starts the service and binds the activity to it.
-     */
-    private void startAndBindService() {
-        serviceIntent = new Intent(this, LocationTraceService.class);
-        // Start the service in case it isn't already running
-        startService(serviceIntent);
-        // Now bind to service
-        bindService(serviceIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
-    }
 
 }

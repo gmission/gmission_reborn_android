@@ -189,7 +189,8 @@ public abstract class BaseRecyclerViewFragment<E, A> extends Fragment {
 
         final StoreHouseHeader header = new StoreHouseHeader(this.getActivity().getApplicationContext());
         header.setPadding(0, 15, 0, 0);
-        header.initWithString(getString(R.string.loading));
+        String s = getString(R.string.loading);
+        header.initWithString(s);
         final PtrFrameLayout frame = (PtrFrameLayout) view.findViewById(R.id.ptr_frame);
         frame.addPtrUIHandler(new PtrUIHandler() {
 

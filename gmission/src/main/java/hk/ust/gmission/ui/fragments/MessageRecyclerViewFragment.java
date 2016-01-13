@@ -65,6 +65,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
         QueryObject queryObject = new QueryObject();
         queryObject.push("status", "neq", "deleted");
         queryObject.push("receiver_id", "eq", Constants.Http.PARAM_USER_ID);
+        queryObject.setOrder_by("id", "desc");
         serviceProvider.getService(getActivity()).getMessageService().getMessages(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -119,13 +120,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
 
                     @Override
                     public Hit call(Hit hit) {
-                        messageService.updateMessage(message.getId(), message)
-                        .doOnNext(new Action1<Message>() {
-                            @Override
-                            public void call(Message message) {
-                                Ln.d("Read Message:"+message.getId()+"|status:"+message.getStatus());
-                            }
-                        }).subscribe();
+                        messageService.updateMessage(message.getId(), message);
                         return hit;
                     }
                 })

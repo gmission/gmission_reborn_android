@@ -40,22 +40,28 @@
     <string name="label_image_type">Image</string>
     <string name="label_received_answer_count">Answers:</string>
     <string name="label_approve_answer">Approve</string>
+    <string name="label_deadline_time">Deadline:</string>
+
 
     <string name="message_signing_in">Signing in…</string>
-    <string name="message_bad_credentials">Email Address or Password is incorrect</string>
+    <string name="message_bad_credentials">User Name or Password is incorrect</string>
     <string name="message_auth_failed">Please enter a valid password</string>
-    <string name="message_auth_failed_new_account">Please enter a valid email address &amp; password</string>
+    <string name="message_auth_failed_new_account">Please enter a valid user name &amp; password</string>
     <string name="message_answer_success">Answer Success!</string>
     <string name="message_ask_question_success">Question Created!</string>
     <string name="message_reg_error">Register failed, please try again.</string>
     <string name="message_signing_up">Signing up…</string>
     <string name="message_uploading">Uploading…</string>
     <string name="message_still_locating">Waiting for GPS Results …</string>
+    <string name="message_cannot_create_image">Image Cannot Be Created Now…</string>
+    <string name="message_current_location_unavailable">Your Current Location Is Estimating…</string>
     <string name="message_answered">You have already answered this question.</string>
+    <string name="message_double_return_to_quit">Please click BACK again to exit</string>
 
 
-    <string name="loading">Loading...</string>
-    <string name="refreshing">Refreshing...</string>
+
+    <string name="loading">Loading</string>
+    <string name="refreshing">Refreshing</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
 
@@ -63,13 +69,13 @@
     <string name="title_home">Home</string>
     <string name="title_logout">Log Out</string>
     <string name="title_message">Messages</string>
-    <string name="title_question">My Questions</string>
-    <string name="title_map">Map</string>
+    <string name="title_map">Task Map</string>
     <string name="title_activity_hit_list">Question List</string>
     <string name="title_activity_hit">Answer Question</string>
     <string name="title_activity_bootstrap_account_register">Register Account</string>
     <string name="title_activity_ask_spatial_task">Ask Question</string>
     <string name="title_activity_working_area">Working Area</string>
+    <string name="title_activity_answer_list">Answers</string>
 
     <string name="register_check_password_same">You\'ll need to type in your password a second time to confirm it.</string>
     <string name="register_check_email">Invalid email address.</string>
@@ -83,7 +89,7 @@
 
     <string name="app_pic_folder">gmission_data/pic</string>
 
-    <string name="profile_requests">Sent Requests</string>
+    <string name="profile_requests">Sent Questions</string>
     <string name="profile_answers">Sent Answers</string>
 
     <string name="just_now">just now</string>
@@ -93,6 +99,6 @@
     <string name="days_before">day(s) before</string>
     <string name="hours_before">hour(s) before</string>
     <string name="min_before">minute(s) before</string>
-    <string name="title_activity_answer_list">AnswerListActivity</string>
+
 
 </resources>

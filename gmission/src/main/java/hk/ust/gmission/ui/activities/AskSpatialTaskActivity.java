@@ -151,7 +151,7 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                 .doOnNext(new Action1<Hit>() {
                     @Override
                     public void call(Hit hit) {
-                        Toaster.showShort(mActivity, mActivity.getString(R.string.message_answer_success));
+                        Toaster.showShort(mActivity, mActivity.getString(R.string.message_ask_question_success));
                         bus.post(new TaskCreateSuccessEvent());
                         mActivity.hideProgress();
                         finish();

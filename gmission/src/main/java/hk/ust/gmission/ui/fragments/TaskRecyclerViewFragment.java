@@ -10,6 +10,7 @@ import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.HitItemClickEvent;
+import hk.ust.gmission.events.TaskItemClickEvent;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.AnswerListActivity;
@@ -114,7 +115,7 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
 
     @Subscribe
-    public void onListItemClick(HitItemClickEvent event) {
+    public void onListItemClick(TaskItemClickEvent event) {
         int position = mRecyclerView.getChildLayoutPosition(event.getView());
         TaskRecyclerViewAdapter adapter = (TaskRecyclerViewAdapter) mRecyclerView.getAdapter();
 

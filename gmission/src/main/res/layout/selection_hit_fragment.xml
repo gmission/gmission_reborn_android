@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:gravity="center_horizontal"
+        android:gravity="left"
         android:buttonTint="@color/accent_color"
         android:orientation="vertical" >
     </RadioGroup>

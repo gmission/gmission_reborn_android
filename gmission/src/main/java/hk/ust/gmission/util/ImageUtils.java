@@ -16,6 +16,9 @@ import android.provider.MediaStore;
 import android.widget.ImageView;
 
 import hk.ust.gmission.R;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -222,7 +225,12 @@ public final class ImageUtils {
 
 
         if (!path.exists()) {
-            path.mkdir();
+            boolean result = path.mkdirs();
+
+            if (result == false){
+                return null;
+            }
+
         }
 
         Calendar cal = Calendar.getInstance();

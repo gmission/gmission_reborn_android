@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,7 +28,7 @@ import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.util.Ln;
 
-public class LocationTraceService extends Service implements GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class LocationTraceService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
     @Inject
     protected Bus bus;
 
@@ -41,6 +43,7 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     private LocationRequest mLocationRequest;
     private static final long POLLING_FREQ = 1000 * 2;
     private static final long FASTEST_UPDATE_FREQ = 1000;
+    boolean isLocationRequestionSuspend = false;
 
 
     private GoogleApiClient client = null;
@@ -104,12 +107,18 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
         client = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
                 .build();
 
         client.connect();
     }
 
     public void startLocating() {
+        if (!client.isConnected()){
+            isLocationRequestionSuspend = true;
+            return;
+        }
+
         if (!isLocating) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -132,7 +141,12 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
         Ln.d("GpsLoggingService.StopLocating");
         stopForeground(true);
         isLocating = false;
-        LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
+        isLocationRequestionSuspend = false;
+
+        if (client.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
+        }
+
     }
 
     void RestartGpsManagers() {
@@ -152,6 +166,19 @@ public class LocationTraceService extends Service implements GoogleApiClient.OnC
     public void onLocationChanged(Location location) {
         Ln.d(location.toString());
         bus.post(new LocationUpdateEvent(location));
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (isLocationRequestionSuspend){
+            isLocationRequestionSuspend = false;
+            startLocating();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Ln.i("Connection SUspended:"+i);
     }
 
     public class LocationTraceBinder extends Binder {

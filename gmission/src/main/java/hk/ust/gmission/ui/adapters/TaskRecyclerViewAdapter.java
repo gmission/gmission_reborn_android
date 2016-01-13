@@ -13,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.HitItemClickEvent;
+import hk.ust.gmission.events.TaskItemClickEvent;
 import hk.ust.gmission.models.Hit;
 
 /**
@@ -64,7 +65,7 @@ public class TaskRecyclerViewAdapter extends BaseRecyclerViewAdapter<TaskRecycle
 
         @Override
         public void onClick(View view) {
-            bus.post(new HitItemClickEvent(view));
+            bus.post(new TaskItemClickEvent(view));
         }
     }
 }
