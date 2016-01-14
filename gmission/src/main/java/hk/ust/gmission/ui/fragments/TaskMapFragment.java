@@ -65,8 +65,6 @@ import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.HIT;
-
 import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
 import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
@@ -161,7 +159,7 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 if (marker.getTitle().equals(MINE_TASK)) {
                     startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
                 } else if (marker.getTitle().equals(OTHERS_TASK)){
-                    startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, mapObject.getHit()));
+                    startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
                 }
 
             }

@@ -20,7 +20,7 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.HIT;
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
 
 
 public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRecyclerViewAdapter> {
@@ -125,7 +125,7 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
         Hit hit = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
+        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, hit.getId()));
     }
 
 

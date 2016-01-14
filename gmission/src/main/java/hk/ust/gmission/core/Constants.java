@@ -94,7 +94,7 @@ public final class Constants {
         public static final String CAMPAIGN_ID = "campaign_id";
         public static final String HIT_ID = "hit_id";
 
-
+        public static final String IS_VIEW_ANSWER = "is_view_answer";
 
 
         public static final String CHOICE_TYPE = "selection";

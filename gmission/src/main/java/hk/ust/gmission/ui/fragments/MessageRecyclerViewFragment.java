@@ -20,7 +20,6 @@ import hk.ust.gmission.services.AnswerService;
 import hk.ust.gmission.services.MessageService;
 import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.adapters.MessageRecyclerViewAdapter;
-import hk.ust.gmission.util.Ln;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -29,7 +28,8 @@ import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.HIT;
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Message, MessageRecyclerViewAdapter> {
 
@@ -165,7 +165,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                     @Override
                     public void call(Hit hit) {
                         hit.setMessage_id(message.getId());
-                        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT, hit));
+                        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, hit.getId()));
                     }
                 })
                 .doOnCompleted(new Action0() {

@@ -10,7 +10,11 @@ import android.support.v4.app.NotificationCompat;
 import hk.ust.gmission.R;
 import hk.ust.gmission.models.Message;
 import hk.ust.gmission.ui.activities.AnswerListActivity;
+import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.ui.activities.MainActivity;
+
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 /**
  * Created by rui on 14-6-7.
@@ -36,19 +40,18 @@ public class NotificationHelper {
 
         PendingIntent contentIntent = null;
         if(message.getType().equals(Message.MESSAGE_TYPE_FEED)){
-            Intent notificationIntent = new Intent(context, AnswerListActivity.class);
-            notificationIntent.putExtra("id", Integer.parseInt(message.getAttachment()));
+            Intent notificationIntent = new Intent(context, HitActivity.class);
+            notificationIntent.putExtra(HIT_ID, message.getAttachment());
             // # TODO notification with location
             contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else if(message.getType().equals(Message.MESSAGE_TYPE_ANSWER)){
             Intent notificationIntent = new Intent(context, AnswerListActivity.class);
-            notificationIntent.putExtra("id", Integer.parseInt(message.getAttachment()));
+            notificationIntent.putExtra(HIT_ID, message.getAttachment());
             contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             contentIntent = PendingIntent.getActivity(context, 0, select, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         notification.contentIntent = contentIntent;
-
 
         showMessageNotificationLocal(context, nm, notification, notificationId);
     }

@@ -81,6 +81,7 @@ public class ImageHitFragment extends BaseAnswerFragment {
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
+
     }
 
 

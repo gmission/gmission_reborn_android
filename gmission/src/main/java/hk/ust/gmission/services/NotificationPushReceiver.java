@@ -43,6 +43,56 @@ public class NotificationPushReceiver extends PushMessageReceiver {
 
     }
 
+//    @Override
+//    public void onMessage(Context context, String msg,
+//                          String customContentString) {
+//        String messageString = "透传消息 message=\"" + msg
+//                + "\" customContentString=" + customContentString;
+//
+//        Log.d(TAG, messageString);
+//
+//        if (null == nm) {
+//            nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        }
+//
+//        String title = "gMission";
+//        String content = "";
+//
+//        String customContent = msg;
+//
+//        Message message = null;
+//
+//        if (customContent != null && customContent.length() != 0) {
+//            try {
+//                message = GsonUtil.getGson().fromJson(customContent, Message.class);
+//                // ...
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        if(message!=null){
+//            Log.d(TAG, "用户收到了新通知" + message.getType());
+//            if( message.getType().equals(Message.MESSAGE_TYPE_ANSWER)) {
+//                Log.d(TAG, "用户收到了新答案，发送broadcase");
+//                Intent msgIntent = new Intent(context, HitActivity.class);
+////                msgIntent.putExtra("message", message);
+//
+//                context.sendBroadcast(msgIntent);
+//            } else if (message.getType().equals(Message.MESSAGE_TYPE_FEED)){
+//                Log.d(TAG, "用户收到了新任务，发送broadcase");
+//                Intent msgIntent = new Intent(context, HitActivity.class);
+////                msgIntent.putExtra("message", message);
+//
+//                context.sendBroadcast(msgIntent);
+//            }
+//
+//            content = message.getContent();
+//
+//            NotificationHelper.showMessageNotification(context, nm, title, content, message);
+//        }
+//    }
+
     @Override
     public void onMessage(Context context, String msg,
                           String customContentString) {
@@ -59,62 +109,21 @@ public class NotificationPushReceiver extends PushMessageReceiver {
         String content = "";
 
         String customContent = msg;
+        Log.d(TAG, "用户收到了新答案，发送broadcase");
+//        Intent msgIntent = new Intent(context, HitActivity.class);
+//
+//        context.sendBroadcast(msgIntent);
 
-        Message message = null;
+        Message message = new Message();
+        message.setType(Message.MESSAGE_TYPE_ANSWER);
+        message.setAttachment("2");
+        NotificationHelper.showMessageNotification(context, nm, title, content, message);
 
-        if (customContent != null && customContent.length() != 0) {
-            try {
-                message = GsonUtil.getGson().fromJson(customContent, Message.class);
-                // ...
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(message!=null){
-            Log.d(TAG, "用户收到了新通知" + message.getType());
-            if( message.getType().equals(Message.MESSAGE_TYPE_ANSWER)) {
-                Log.d(TAG, "用户收到了新答案，发送broadcase");
-                Intent msgIntent = new Intent(context, HitActivity.class);
-//                msgIntent.putExtra("message", message);
-
-                context.sendBroadcast(msgIntent);
-            } else if (message.getType().equals(Message.MESSAGE_TYPE_FEED)){
-                Log.d(TAG, "用户收到了新任务，发送broadcase");
-                Intent msgIntent = new Intent(context, HitActivity.class);
-//                msgIntent.putExtra("message", message);
-
-                context.sendBroadcast(msgIntent);
-            }
-
-            content = message.getContent();
-
-            NotificationHelper.showMessageNotification(context, nm, title, content, message);
-        }
     }
-
 
     @Override
     public void onNotificationClicked(Context context, String title,
                                       String description, String customContentString) {
-        String notifyString = "Notification clicked title=\"" + title + "\" description=\""
-                + description + "\" customContent=" + customContentString;
-        Log.d(TAG, notifyString);
-
-        // 自定义内容获取方式，mykey和myvalue对应通知推送时自定义内容中设置的键和值
-        if (!TextUtils.isEmpty(customContentString)) {
-            JSONObject customJson = null;
-            try {
-                customJson = new JSONObject(customContentString);
-                String myvalue = null;
-                if (!customJson.isNull("mykey")) {
-                    myvalue = customJson.getString("mykey");
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
 
         //TODO: response for notification clicked
     }
@@ -124,25 +133,6 @@ public class NotificationPushReceiver extends PushMessageReceiver {
     public void onNotificationArrived(Context context, String title,
                                       String description, String customContentString) {
 
-        String notifyString = "onNotificationArrived  title=\"" + title
-                + "\" description=\"" + description + "\" customContent="
-                + customContentString;
-        Log.d(TAG, notifyString);
-
-        // 自定义内容获取方式，mykey和myvalue对应通知推送时自定义内容中设置的键和值
-        if (!TextUtils.isEmpty(customContentString)) {
-            JSONObject customJson = null;
-            try {
-                customJson = new JSONObject(customContentString);
-                String myvalue = null;
-                if (!customJson.isNull("mykey")) {
-                    myvalue = customJson.getString("mykey");
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
         //TODO: response for notification received
 
     }

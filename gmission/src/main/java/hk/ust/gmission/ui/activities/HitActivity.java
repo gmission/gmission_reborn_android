@@ -39,7 +39,8 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.HIT;
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 
 public class HitActivity extends BootstrapFragmentActivity {
@@ -55,6 +56,7 @@ public class HitActivity extends BootstrapFragmentActivity {
 
     private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
 
+    private boolean isViewAnswer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +64,32 @@ public class HitActivity extends BootstrapFragmentActivity {
         setContentView(R.layout.hit_activity);
         mActivity = this;
 
-        initializeAnswerArea();
+        downloadHit();
 
         subscribeSubmitButton();
 
     }
 
+    public void downloadHit(){
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            String hitId = getIntent().getExtras().getString(HIT_ID);
+            isViewAnswer = getIntent().getBooleanExtra(IS_VIEW_ANSWER, false);
+            serviceProvider.getService(mActivity).getHitService().getHit(hitId)
+                    .doOnNext(new Action1<Hit>() {
+                        @Override
+                        public void call(Hit hit) {
+                            mHit = hit;
+                            initializeAnswerArea();
+                        }
+                    })
+                    .subscribe();
+        }
+    }
+
 
     public void initializeAnswerArea(){
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            mHit = (Hit) getIntent().getExtras().get(HIT);
-            hitContent.setText(mHit.getDescription());
-        }
+
+        hitContent.setText(mHit.getDescription());
 
         if (mHit.getType().equals("selection")) {
             answerFragment = SelectionHitFragment.newInstance(mHit, null);
