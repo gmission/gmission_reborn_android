@@ -9,9 +9,10 @@
     <string name="no_message">没有消息</string>
 
 
-    <string name="label_user_name">用户名称</string>
+    <string name="label_user_name">用户名称 （最少6个字符）</string>
     <string name="label_email_address">Email 地址</string>
     <string name="label_password">密码 （最少6个字符）</string>
+    <string name="label_password_again">确认密码（最少6个字符）</string>
     <string name="label_text_answer_hint">在此输入答案：</string>
     <string name="label_text_question_title_hint">在此输入（至少5个字符）：</string>
     <string name="label_text_question_content_hint">在此输入（至少5个字符）：</string>
@@ -48,6 +49,7 @@
     <string name="message_answer_success">回答成功！</string>
     <string name="message_ask_question_success">问题已创建！</string>
     <string name="message_reg_error">注册失败，请重试。</string>
+    <string name="message_reg_ok">注册成功</string>
     <string name="message_signing_up">注册中…</string>
     <string name="message_uploading">上传中…</string>
     <string name="message_still_locating">正在等待GPS定位结果…</string>

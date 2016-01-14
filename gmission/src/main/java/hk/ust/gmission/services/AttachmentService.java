@@ -23,8 +23,8 @@ public interface AttachmentService {
     @POST(Constants.Http.URL_IMAGE + "/upload")
     Observable<ImageVideoResult> createImage(@Part("file") TypedFile photo, @Part("description") TypedString description);
 
-    @GET(Constants.Http.URL_ATTACHMENTS_FRAG + "/{aId}")
-    Observable<Attachment> getAttachment(@Path("aId") String aId);
+    @GET(Constants.Http.URL_ATTACHMENTS_FRAG + "/{id}")
+    Observable<Attachment> getAttachment(@Path("id") String aId);
     @POST(Constants.Http.URL_ATTACHMENTS_FRAG)
     Observable<Attachment> createAttachment(@Body Attachment attachment);
 }

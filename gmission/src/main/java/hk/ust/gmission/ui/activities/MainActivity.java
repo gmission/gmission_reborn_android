@@ -4,17 +4,11 @@ package hk.ust.gmission.ui.activities;
 
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,6 +21,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -46,12 +42,10 @@ import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.NavigationDrawerFragment;
 import hk.ust.gmission.ui.fragments.TaskMapFragment;
-import hk.ust.gmission.ui.fragments.TaskRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.UserProfilePFragment;
+import hk.ust.gmission.util.BaiduPushUtils;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
-
-import static com.github.kevinsawicki.http.HttpRequest.post;
 
 
 /**
@@ -75,11 +69,11 @@ public class MainActivity extends BootstrapFragmentActivity{
     private CharSequence title;
     private NavigationDrawerFragment navigationDrawerFragment;
 
-    private Fragment homeFragment = new UserProfilePFragment();
-    private Fragment campaignFragment = new CampaignRecyclerViewFragment();
-    private Fragment mapFragment = new TaskMapFragment();
-    private Fragment messageFragment = new MessageRecyclerViewFragment();
-    private Fragment initFragment = homeFragment;
+    private Fragment homeFragment;
+    private Fragment campaignFragment;
+    private Fragment mapFragment;
+    private Fragment messageFragment;
+    private Fragment initFragment;
 
 
     private static Intent serviceIntent;
@@ -88,12 +82,11 @@ public class MainActivity extends BootstrapFragmentActivity{
 
 
 
-
-
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
+        checkAuth();
+        checkAuth();
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -131,12 +124,14 @@ public class MainActivity extends BootstrapFragmentActivity{
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_full);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
-        checkAuth();
-
         startAndBindService();
 
         new AppUpdateCheckTask(this.getActivity()).execute();
+
+        //initial baidu push service
+        PushManager.startWork(getApplicationContext(),
+                PushConstants.LOGIN_TYPE_API_KEY,
+                BaiduPushUtils.getMetaValue(MainActivity.this, "api_key"));
 
     }
 
@@ -160,7 +155,6 @@ public class MainActivity extends BootstrapFragmentActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         stopService(serviceIntent);
         unbindService(gpsServiceConnection);
 
@@ -310,6 +304,15 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     private void initScreen() {
         if (userHasAuthenticated) {
+
+            //initial fragments
+            homeFragment = new UserProfilePFragment();
+            campaignFragment = new CampaignRecyclerViewFragment();
+            mapFragment = new TaskMapFragment();
+            messageFragment = new MessageRecyclerViewFragment();
+            initFragment = homeFragment;
+
+
             title = getString(R.string.title_home);
             getSupportActionBar().setTitle(title);
             replaceCurrentFragment(initFragment);
@@ -323,6 +326,12 @@ public class MainActivity extends BootstrapFragmentActivity{
             fragmentManager.beginTransaction()
                     .replace(R.id.container, newFragment)
                     .commitAllowingStateLoss();
+            //refresh fragments
+            fragmentManager
+                    .beginTransaction()
+                    .detach(newFragment)
+                    .attach(newFragment)
+                    .commit();
         } else {
             fragmentManager.beginTransaction()
                     .replace(currentFragment.getId(), newFragment)

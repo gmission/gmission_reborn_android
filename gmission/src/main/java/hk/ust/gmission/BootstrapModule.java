@@ -111,8 +111,8 @@ public class BootstrapModule {
 
     @Provides
     @Singleton
-    LogoutService provideLogoutService(final Context context, final AccountManager accountManager) {
-        return new LogoutService(context, accountManager);
+    LogoutService provideLogoutService(final Context context, final AccountManager accountManager, final BootstrapService bootstrapService) {
+        return new LogoutService(context, accountManager, bootstrapService);
     }
 
     @Provides

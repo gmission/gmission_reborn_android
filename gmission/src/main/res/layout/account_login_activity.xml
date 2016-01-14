@@ -70,6 +70,17 @@
                 android:inputType="textPassword"
                 android:password="true" />
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/ShadowText"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text"
+                android:id="@+id/tv_notice" />
+
             <Button
                 android:id="@+id/b_signin"
                 style="@style/ShadowText"
@@ -78,8 +89,8 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/button_background_states"
                 android:gravity="center"
-                android:onClick="handleLogin"
                 android:padding="10dp"
+                android:enabled="false"
                 android:text="@string/label_sign_in"
                 android:textColor="@color/text"
                 android:textSize="20sp"

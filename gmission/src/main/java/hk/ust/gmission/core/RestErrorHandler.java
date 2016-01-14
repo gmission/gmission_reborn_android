@@ -26,24 +26,20 @@ public class RestErrorHandler implements ErrorHandler {
         if(cause != null) {
             if (cause.isNetworkError()) {
                 bus.post(new NetworkErrorEvent(cause));
+                cause = null;
             } else if(isUnAuthorized(cause)) {
                 bus.post(new UnAuthorizedErrorEvent(cause));
-            } else {
-                bus.post(new RestAdapterErrorEvent(cause));
+                cause = null;
             }
         }
 
-        // Example of how you'd check for a unauthorized result
-        // if (cause != null && cause.getStatus() == 401) {
-        //     return new UnauthorizedException(cause);
-        // }
 
         // You could also put some generic error handling in here so you can start
         // getting analytics on error rates/etc. Perhaps ship your logs off to
         // Splunk, Loggly, etc
         //
 
-        cause = null;//prevent error propagation
+        //cause = null;//prevent error propagation
 
         return cause;
     }
@@ -74,7 +70,8 @@ public class RestErrorHandler implements ErrorHandler {
                 authFailed = true;
             }
         }
-        if(cause.getResponse().getStatus() == HTTP_UNAUTHORIZED) {
+        if(cause.getResponse().getStatus() == HTTP_UNAUTHORIZED || cause.getResponse().getStatus() == HTTP_BAD_REQUEST ) {
+
             authFailed = true;
         }
 

@@ -57,7 +57,9 @@ public class BootstrapService {
         return getRestAdapter().create(GeoService.class);
     }
 
-
+    public BaiduPushInfoService getBaiduPushInfoService() {
+        return getRestAdapter().create(BaiduPushInfoService.class);
+    }
 
     private RestAdapter getRestAdapter() {
         return restAdapter;

@@ -196,7 +196,7 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         }
 
         String locationName = null;
-        if (list != null & list.size() > 0) {
+        if (list != null && list.size() > 0) {
             Address address = list.get(0);
             locationName = address.getLocality()+ " " + address.getThoroughfare() + " " + address.getFeatureName();
             locationName = locationName.replace("null", "");
@@ -270,7 +270,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         askHereMarker.remove();
         askHereMarker = null;
         mRefreshBtn.callOnClick();
-
     }
 
     private void refreshSpaitalTasks(){
@@ -285,7 +284,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
 
         Observable<ModelWrapper<Hit>> tasksObservable = hitService.getHits(queryObject.toString());
-
 
         if (tasksObservable != null){
             tasksObservable
@@ -386,7 +384,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
             time.setText(getString(R.string.label_deadline_time)+ mapObject.getHit().getEnd_time().toLocaleString());
 
-
             return infoWindow;
         }
     }
@@ -399,22 +396,18 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         bus.post(new RequestLocationEvent(true));
     }
 
-
-
-
     @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        isCameraInitialized = false;
         bus.post(new RequestLocationEvent(false));
-        bus.unregister(this);
     }
 
     @Override
     public void onDestroy() {
         mMapView.onDestroy();
-
+        isCameraInitialized = false;
+        bus.unregister(this);
         super.onDestroy();
     }
 

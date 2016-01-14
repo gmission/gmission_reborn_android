@@ -11,9 +11,10 @@
     <string name="no_message">No Messages</string>
 
 
-    <string name="label_user_name">User Name</string>
+    <string name="label_user_name">User Name (min: 6 characters)</string>
     <string name="label_email_address">Email Address</string>
     <string name="label_password">Password (min: 6 characters)</string>
+    <string name="label_password_again">Password Again (min: 6 characters)</string>
     <string name="label_text_answer_hint">Input Answer Here:</string>
     <string name="label_text_question_title_hint">Input Here (at least 5 characters):</string>
     <string name="label_text_question_content_hint">Input Here (at least 5 characters):</string>
@@ -50,6 +51,8 @@
     <string name="message_answer_success">Answer Success!</string>
     <string name="message_ask_question_success">Question Created!</string>
     <string name="message_reg_error">Register failed, please try again.</string>
+    <string name="message_login_error">Login failed, please try again.</string>
+    <string name="message_reg_ok">Register Success</string>
     <string name="message_signing_up">Signing up…</string>
     <string name="message_uploading">Uploading…</string>
     <string name="message_still_locating">Waiting for GPS Results …</string>

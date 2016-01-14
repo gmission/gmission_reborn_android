@@ -6,6 +6,10 @@ import java.util.Date;
  * Created by bigstone on 1/1/2016.
  */
 public class Message extends BaseModel{
+    public final static String MESSAGE_TYPE_FEED = "task assignment";
+    public final static String MESSAGE_TYPE_ANSWER = "new answer noti";
+    public final static String MESSAGE_TYPE_COMMENT = "new comment noti";
+
     String id;
     String type;
     String content;
@@ -15,6 +19,7 @@ public class Message extends BaseModel{
     String receiver_id;
     String status;
     Date created_on;
+
 
     public String getId(){
         return id;

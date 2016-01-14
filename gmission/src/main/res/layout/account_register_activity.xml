@@ -17,56 +17,97 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:layout_marginTop="48dp"
-            android:paddingTop="5dp" >
+            android:layout_marginTop="10dp">
+
+            <TextView
+                style="@style/ShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_user_name"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text" />
 
             <EditText
+                style="@style/SignInEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:hint="@string/label_user_name"
-                android:textColor="@color/text"
                 android:id="@+id/et_name"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:textSize="@dimen/text_small_body"
                 android:nextFocusDown="@+id/et_email"/>
+
+            <TextView
+                style="@style/ShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="@string/label_email_address"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text" />
+
             <AutoCompleteTextView
+                style="@style/SignInEditText"
                 android:id="@+id/et_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:completionThreshold="1"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/text"
-                android:hint="@string/label_email_address"
+                android:textSize="@dimen/text_small_body"
                 android:nextFocusDown="@+id/et_password" />
 
+
+            <TextView
+                style="@style/ShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="@string/label_password"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text" />
             <EditText
+                style="@style/SignInEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:hint="@string/label_password"
-                android:textColor="@color/text"
                 android:id="@+id/et_password"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
-                android:nextFocusDown="@+id/et_password2"
-                android:password="true" />
+                android:textSize="@dimen/text_small_body"
+                android:nextFocusDown="@+id/et_password2"/>
 
+
+            <TextView
+                style="@style/ShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="@string/label_password_again"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text" />
             <EditText
+                style="@style/SignInEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:hint="@string/label_password"
-                android:textColor="@color/text"
                 android:id="@+id/et_password2"
+                android:textSize="@dimen/text_small_body"
                 android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:password="true" />
+                android:inputType="textPassword"/>
 
         </LinearLayout>
 

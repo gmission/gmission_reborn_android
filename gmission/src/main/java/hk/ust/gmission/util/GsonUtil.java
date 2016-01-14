@@ -28,4 +28,8 @@ public class GsonUtil {
     public static String getQueryString(QueryObject queryObject){
         return getInstance().gson.toJson(queryObject);
     }
+
+    public static Gson getGson(){
+        return getInstance().gson;
+    }
 }

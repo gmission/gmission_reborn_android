@@ -85,8 +85,12 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
+                        if (getAdapter().getItemCount() == 0){
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
                         getAdapter().notifyDataSetChanged();
-
                     }
                 })
                 .subscribe();
@@ -167,11 +171,6 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        if (getAdapter().getItemCount() == 0){
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.GONE);
-                        }
                         getAdapter().notifyDataSetChanged();
                     }
                 })

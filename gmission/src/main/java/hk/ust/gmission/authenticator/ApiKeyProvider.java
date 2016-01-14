@@ -11,7 +11,6 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
-import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.services.BootstrapService;
 
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;

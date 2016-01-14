@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -99,78 +100,10 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
     }
 
-
-
     @Override
     public void onPause() {
         super.onPause();
         subcriptions.unsubscribe();
-    }
-
-
-    private void subscribeRegisterButton(){
-
-        Subscription buttonSubscription = RxView.clicks(mBSigninBtn)
-                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Object, Object>() {
-                    @Override
-                    public Object call(Object o) {
-                        showProgress();
-                        return o;
-                    }
-                })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        hideProgress();
-                    }
-                })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable e) {
-                        Throwable cause = e.getCause() != null ? e.getCause() : e;
-
-                        String message;
-                        // A 404 is returned as an Exception with this message
-                        if ("Received authentication challenge is null".equals(cause.getMessage())){
-                            message = getResources().getString(R.string.message_reg_error);
-                        }
-                        else {
-                            message = cause.getMessage();
-                        }
-
-                        Toaster.showLong(BootstrapAccountRegisterActivity.this, message);
-                        hideProgress();
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .doOnNext(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        final String query = String.format("{\"username\":\"%s\", \"password\":\"%s\", \"email\":\"%s\"}", username, passwd, email);
-
-                        Log.i("PostContent", query);
-                        HttpRequest request = post(Constants.Http.URL_REG).contentType(Constants.Http.CONTENT_TYPE_JSON).send(query);
-
-                        Log.i("REGISTER", "Authentication response=" + request.code());
-
-                        if (request.ok()) {
-                            final User model = new Gson().fromJson(Strings.toString(request.buffer()), User.class);
-
-//                            if(!model.isActive()) return;
-
-                            model.setEmail(email);
-                            token = model.getToken();
-                            accountId = String.valueOf(model.getId());
-                        }
-
-                        onAuthenticationResult(request.ok());
-                    }
-                })
-
-                .subscribe();
-        subcriptions.add(buttonSubscription);
     }
 
     private void combineLatestEvents() {
@@ -220,26 +153,83 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
                     }
                 })
-                .subscribe(new Observer<Boolean>() {
+                .doOnNext(new Action1<Boolean>() {
                     @Override
-                    public void onCompleted() {
-                        Ln.d("completed");
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Ln.e(e, "there was an error");
-                    }
-
-                    @Override
-                    public void onNext(Boolean formValid) {
+                    public void call(Boolean formValid) {
                         if (formValid)mTvNotice.setText("");
                         mBSigninBtn.setEnabled(formValid);
                     }
-                });
+                })
+                .subscribe();
 
         subcriptions.add(formSubscription);
+    }
+
+    private void subscribeRegisterButton(){
+
+        Subscription buttonSubscription = RxView.clicks(mBSigninBtn)
+                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object o) {
+                        showProgress();
+                        return o;
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable e) {
+                        Throwable cause = e.getCause() != null ? e.getCause() : e;
+
+                        String message;
+                        // A 404 is returned as an Exception with this message
+                        if ("Received authentication challenge is null".equals(cause.getMessage())){
+                            message = getResources().getString(R.string.message_reg_error);
+                        }
+                        else {
+                            message = cause.getMessage();
+                        }
+
+                        Toaster.showLong(BootstrapAccountRegisterActivity.this, message);
+                        hideProgress();
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Func1<Object, Object>() {
+
+                    @Override
+                    public Object call(Object o) {
+                        final String query = String.format("{\"username\":\"%s\", \"password\":\"%s\", \"email\":\"%s\"}", username, passwd, email);
+
+                        Log.i("PostContent", query);
+                        HttpRequest request = post(Constants.Http.URL_REG).contentType(Constants.Http.CONTENT_TYPE_JSON).send(query);
+
+                        Log.i("REGISTER", "Authentication response=" + request.code());
+
+                        if (request.ok()) {
+                            final User model = new Gson().fromJson(Strings.toString(request.buffer()), User.class);
+
+//                            if(!model.isActive()) return;
+
+                            model.setEmail(email);
+                            token = model.getToken();
+                            accountId = String.valueOf(model.getId());
+                        }
+
+                        onRegistrationResult(request.ok());
+                        return o;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+                        hideProgress();
+                    }
+                })
+                .subscribe();
+        subcriptions.add(buttonSubscription);
     }
 
     /**
@@ -260,37 +250,40 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
 
 
     protected void finishLogin() {
-        final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
-
-        authToken = token;
-        Constants.Http.PARAM_SESSION_TOKEN = authToken;
-        accountManager.addAccountExplicitly(account, passwd, null);
-        accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
-        accountManager.setUserData(account, Constants.Auth.USER_ID, accountId);
-
-        final Intent intent = new Intent();
-        intent.putExtra(KEY_ACCOUNT_NAME, username);
-        intent.putExtra(KEY_ACCOUNT_TYPE, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
-
-        if (authTokenType != null
-                && authTokenType.equals(Constants.Auth.AUTHTOKEN_TYPE)) {
-            intent.putExtra(KEY_AUTHTOKEN, authToken);
-        }
-
-
-
-        intent.putExtra( KEY_BOOLEAN_RESULT, accountId);
-
-        setAccountAuthenticatorResult(intent.getExtras());
-        setResult(RESULT_OK, intent);
+//        final Account account = new Account(username, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
+//
+//        authToken = token;
+//        Constants.Http.PARAM_SESSION_TOKEN = authToken;
+//        accountManager.addAccountExplicitly(account, passwd, null);
+//        accountManager.setAuthToken(account, Constants.Auth.AUTHTOKEN_TYPE, authToken);
+//        accountManager.setUserData(account, Constants.Auth.USER_ID, accountId);
+//
+//        final Intent intent = new Intent();
+//        intent.putExtra(KEY_ACCOUNT_NAME, username);
+//        intent.putExtra(KEY_ACCOUNT_TYPE, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
+//
+//        if (authTokenType != null
+//                && authTokenType.equals(Constants.Auth.AUTHTOKEN_TYPE)) {
+//            intent.putExtra(KEY_AUTHTOKEN, authToken);
+//        }
+//
+//
+//
+//        intent.putExtra( KEY_BOOLEAN_RESULT, accountId);
+//
+//        setAccountAuthenticatorResult(intent.getExtras());
+//        setResult(RESULT_OK, intent);
 
         finish();
     }
 
-    public void onAuthenticationResult(boolean result) {
-        if (result)
-            finishLogin();
-        else {
+    public void onRegistrationResult(boolean result) {
+        if (result) {
+            Toaster.showLong(BootstrapAccountRegisterActivity.this,
+                    getResources().getString(
+                            R.string.message_reg_ok));
+            finish();
+        } else {
             Toaster.showLong(BootstrapAccountRegisterActivity.this,
                     getResources().getString(
                             R.string.message_reg_error));
@@ -309,5 +302,12 @@ public class BootstrapAccountRegisterActivity extends ActionBarAccountAuthentica
             }
         });
         return dialog;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
+
     }
 }

@@ -25,20 +25,16 @@
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true">
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal">
 
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/profile_image"
-                            android:layout_width="40dip"
-                            android:layout_height="40dip"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="20dp"
-                            android:layout_marginLeft="40dp"
-                            android:src="@drawable/menu_background"
-                            android:layout_alignParentLeft="true"/>
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/menu_background"/>
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -53,7 +49,6 @@
                                 android:text="userName"
                                 android:textStyle="italic"
                                 android:textSize="25sp"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginLeft="20dp"
                                 android:textColor="@color/text_shadow"
                                 />
@@ -75,7 +70,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="80dp">
+                    android:layout_height="50dp">
 
 
                     <RelativeLayout
@@ -94,8 +89,8 @@
                             android:id="@+id/tv_requestnum"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
-                            android:drawablePadding="6dp"
-                            android:layout_marginTop="20dp"
+                            android:drawablePadding="5dp"
+                            android:layout_marginTop="5dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true" />
 
@@ -125,8 +120,8 @@
                             android:id="@+id/tv_answernum"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
-                            android:drawablePadding="6dp"
-                            android:layout_marginTop="20dp"
+                            android:drawablePadding="5dp"
+                            android:layout_marginTop="5dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true" />
 
@@ -143,20 +138,15 @@
 
                 </LinearLayout>
 
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:background="?android:attr/listDivider" />
 
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
-                        android:background="?android:attr/listDivider"
-                        />
-
-
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1px"
-                        android:background="?android:attr/listDivider"
-                    />
+                        android:background="?android:attr/listDivider" />
 
                 </LinearLayout>
 
