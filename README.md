@@ -20,7 +20,7 @@
 ## Try the latest version
 - We upload the latest app to [our server](http://lccpu4.cse.ust.hk/indoorLocalizationService/gmission.apk). You can download it directly.
 
-##Screenshots
+## Screenshots
 
 - Home Page:
 - 
@@ -82,8 +82,8 @@ Some used techniques:
     [Dagger](http://square.github.io/dagger/) is a fast dependency injector for Android and Java.
     
     
-    
- ##License
+
+## License
  
  Everyone can use this open source project for learning or study. If one use this project, please mention [gMission project](http://gmission.github.io) on its home page. 
  For research usage, please cite our related spatial crowdsourcing papers listed on the [home page of gMission](http://gmission.github.io). 
