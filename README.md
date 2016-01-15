@@ -28,7 +28,7 @@
 
 - campaign:
 - 
-<img src="https://https://www.dropbox.com/s/cniegfb75sngbeq/campaign.png?dl=1" alt="campaign" width="320"/>
+<img src="https://www.dropbox.com/s/cniegfb75sngbeq/campaign.png?dl=1" alt="campaign" width="320"/>
 
 - Task Map:
 - 
@@ -85,6 +85,6 @@ Some used techniques:
     
  ##License
  
- Everyone can use this open source project for learning or study. If one use this project, please mention gMission project on its home page. 
+ Everyone can use this open source project for learning or study. If one use this project, please mention [gMission project](http://gmission.github.io) on its home page. 
  For research usage, please cite our related spatial crowdsourcing papers listed on the [home page of gMission](http://gmission.github.io). 
  For any questions or suggestions, please contact us with methods provided on the [home page of gMission](http://gmission.github.io). 
