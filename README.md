@@ -79,6 +79,7 @@ Some used techniques:
     [Otto](http://square.github.io/otto/) is an event bus designed to decouple different parts of your application while still allowing them to communicate efficiently.Forked from Guava, Otto adds unique functionality to an already refined event bus as well as specializing it to the Android platform.
     
 3. Dagger (Dependency Injector)
+
     [Dagger](http://square.github.io/dagger/) is a fast dependency injector for Android and Java.
     
     
