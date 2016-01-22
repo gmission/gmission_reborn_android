@@ -46,7 +46,16 @@
                 android:layout_margin="@dimen/text_margin"
                 android:textColor="@color/text_shadow"
                 android:text="@string/bad_hit_notification"
+                android:visibility="invisible"
                 android:id="@+id/bad_hid_notification"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/text_shadow"
+                android:text="@string/loading_notification"
+                android:visibility="visible"
+                android:id="@+id/loading_notification"/>
         </FrameLayout>
 
     </LinearLayout>

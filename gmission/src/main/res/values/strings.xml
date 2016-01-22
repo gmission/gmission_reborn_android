@@ -89,6 +89,7 @@
     <string name="unauthorized_error_message">Fail to authorize, please login again.</string>
 
     <string name="bad_hit_notification">Broken Question! Please ignore this question.</string>
+    <string name="loading_notification">Loading...</string>
 
     <string name="app_pic_folder">gmission_data/pic</string>
 

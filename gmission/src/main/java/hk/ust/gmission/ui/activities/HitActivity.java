@@ -35,6 +35,7 @@ import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -51,6 +52,7 @@ public class HitActivity extends BootstrapFragmentActivity {
     @Bind(R.id.submit_btn) Button submitButton;
     @Bind(R.id.hit_content) TextView hitContent;
     @Bind(R.id.bad_hid_notification) TextView badHitNotificationText;
+    @Bind(R.id.loading_notification) TextView loadingNotificationText;
 
     private BaseAnswerFragment answerFragment = null;
 
@@ -75,11 +77,24 @@ public class HitActivity extends BootstrapFragmentActivity {
             String hitId = getIntent().getExtras().getString(HIT_ID);
             isViewAnswer = getIntent().getBooleanExtra(IS_VIEW_ANSWER, false);
             serviceProvider.getService(mActivity).getHitService().getHit(hitId)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<Hit>() {
                         @Override
                         public void call(Hit hit) {
                             mHit = hit;
                             initializeAnswerArea();
+                        }
+                    })
+                    .doOnCompleted(new Action0() {
+                        @Override
+                        public void call() {
+                            if (mHit == null){
+                                badHitNotificationText.setVisibility(View.VISIBLE);
+                                loadingNotificationText.setVisibility(View.INVISIBLE);
+                            } else {
+                                badHitNotificationText.setVisibility(View.INVISIBLE);
+                                loadingNotificationText.setVisibility(View.INVISIBLE);
+                            }
                         }
                     })
                     .subscribe();

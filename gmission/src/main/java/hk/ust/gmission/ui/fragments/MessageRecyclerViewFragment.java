@@ -124,7 +124,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
 
                     @Override
                     public Hit call(Hit hit) {
-                        messageService.updateMessage(message.getId(), message);
+                        messageService.updateMessage(message.getId(), message).subscribe();
                         return hit;
                     }
                 })
