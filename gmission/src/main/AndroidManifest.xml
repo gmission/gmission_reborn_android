@@ -171,7 +171,7 @@
 
         <!-- API Key in baidu developer center -->
         <!--<meta-data android:name="api_key" android:value="LQpGHpuTYA0lkjQj6zY3ZVfB" />-->
-        <meta-data android:name="api_key" android:value="V9cjcv3ZOQyY7Pfymhr9wZeL" />
+        <meta-data android:name="api_key" android:value="OLYzDQA0lCtvhxR8VKPoE19D" />
         <!-- end baidu push service section -->
 
 

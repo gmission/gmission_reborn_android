@@ -350,6 +350,10 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
         intent.putExtra(KEY_ACCOUNT_TYPE, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
 
 
+        Constants.Http.PARAM_SESSION_TOKEN = token;
+        Constants.Http.PARAM_USERNAME = mUsername;
+        Constants.Http.PARAM_USER_ID = accountId;
+
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();

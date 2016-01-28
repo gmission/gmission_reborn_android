@@ -86,7 +86,6 @@ public class MainActivity extends BootstrapFragmentActivity{
     protected void onCreate(final Bundle savedInstanceState) {
 
         checkAuth();
-        checkAuth();
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -126,7 +125,7 @@ public class MainActivity extends BootstrapFragmentActivity{
 
         startAndBindService();
 
-        new AppUpdateCheckTask(this.getActivity()).execute();
+//        new AppUpdateCheckTask(this.getActivity()).execute();
 
         //initial baidu push service
         PushManager.startWork(getApplicationContext(),

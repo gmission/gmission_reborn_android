@@ -49,6 +49,7 @@
     <string name="message_answer_success">回答成功！</string>
     <string name="message_ask_question_success">问题已创建！</string>
     <string name="message_reg_error">注册失败，请重试。</string>
+    <string name="message_login_error">登陆失败，请重试。</string>
     <string name="message_reg_ok">注册成功</string>
     <string name="message_signing_up">注册中…</string>
     <string name="message_uploading">上传中…</string>

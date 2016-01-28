@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.google.maps.android:android-maps-utils:0.2.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.google.code.findbugs:jsr305:2.0.2'
     compile files('libs/pushservice-4.6.0.66.jar')
 }
 
@@ -53,8 +54,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         multiDexEnabled true
-        versionCode 116
-        versionName '1.2.1'
+        versionCode 117
+        versionName '1.0.0'
     }
 
     packagingOptions {
@@ -63,14 +64,14 @@ android {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 
-//    signingConfigs {
-//        release {
-//            storeFile file('../hkust2014_gmission.jks')
-//            storePassword 'hkust2014'
-//            keyAlias 'hkust2014_gmission'
-//            keyPassword 'hkust2014'
-//        }
-//    }
+    signingConfigs {
+        release {
+            storeFile file('../hkust2014_gmission.jks')
+            storePassword 'hkust2014'
+            keyAlias 'hkust2014_gmission'
+            keyPassword 'hkust2014'
+        }
+    }
 
     lintOptions {
         abortOnError false
@@ -82,18 +83,14 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix '.debug'
+            signingConfig signingConfigs.release
             minifyEnabled false
-            // zipAlign false // this is default for debug
         }
 
-//        release {
-//            minifyEnabled true
-//            proguardFile '../proguard.cfg'
-//            signingConfig signingConfigs.release
-////             zipAlign true // this is default for release
-////             testPackageName 'hk.ust.gmission.test'
-////             testInstrumentationRunner 'android.test.InstrumentationTestRunner' // this is the default
-//        }
+        release {
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard.cfg'
+            signingConfig signingConfigs.release
+        }
     }
 }
