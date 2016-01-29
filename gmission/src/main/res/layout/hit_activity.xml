@@ -14,23 +14,33 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/footer_layout"
         android:orientation="vertical"
-        android:weightSum="2" >
+        android:weightSum="5" >
 
         <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:id="@+id/hit_content_scroll_view"
             tools:context="hk.ust.gmission.ui.fragments.SelectionHitFragment"
             tools:showIn="@layout/hit_activity">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:textColor="@color/text_shadow"
-                android:id="@+id/hit_content"/>
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textColor="@color/text_shadow"
+                    android:id="@+id/hit_content"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hit_attachment_img"/>
+
+            </LinearLayout>
+
 
         </android.support.v4.widget.NestedScrollView>
 
@@ -38,7 +48,8 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:layout_marginTop="10dp"
             >
             <TextView
                 android:layout_width="match_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hk.ust.gmission">
+    package="hk.ust.gmission" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -9,14 +9,12 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <!-- Permissions for Push service -->
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
@@ -26,16 +24,11 @@
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-
-
-
-
-
     <application
         android:name=".BootstrapApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Bootstrap.Dark">
+        android:theme="@style/Theme.Bootstrap.Dark" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -46,7 +39,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +50,7 @@
 
         <service
             android:name=".authenticator.AccountAuthenticatorService"
-            android:process=":auth">
+            android:process=":auth" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -73,7 +66,7 @@
 
         <activity
             android:name=".authenticator.BootstrapAuthenticatorActivity"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true" >
 
             <!--
                 No intent-filter here! This activity is only ever launched by
@@ -83,7 +76,7 @@
         <activity
             android:name=".authenticator.BootstrapAccountRegisterActivity"
             android:label="@string/title_activity_bootstrap_account_register"
-            android:parentActivityName=".authenticator.ActionBarAccountAuthenticatorActivity">
+            android:parentActivityName=".authenticator.ActionBarAccountAuthenticatorActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hk.ust.gmission.authenticator.ActionBarAccountAuthenticatorActivity" />
@@ -102,9 +95,7 @@
             android:label="@string/title_activity_working_area" />
         <activity
             android:name=".ui.activities.AnswerListActivity"
-            android:label="@string/title_activity_answer_list"/>
-
-
+            android:label="@string/title_activity_answer_list" />
 
         <!-- start baidu push service section -->
 
@@ -115,7 +106,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- receiver of push service -->
-        <receiver android:name="hk.ust.gmission.services.NotificationPushReceiver" >
+        <receiver android:name=".services.NotificationPushReceiver" >
             <intent-filter>
 
                 <!-- receive push message -->
@@ -135,7 +126,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="com.baidu.android.pushservice.action.notification.SHOW" />
                 <action android:name="com.baidu.android.pushservice.action.media.CLICK" />
-                <!-- option action declaration. Improve service survive rate and message arriving speed-->
+                <!-- option action declaration. Improve service survive rate and message arriving speed -->
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
@@ -168,12 +159,12 @@
             android:name="com.baidu.android.pushservice.CommandService"
             android:exported="true" />
 
-
         <!-- API Key in baidu developer center -->
-        <!--<meta-data android:name="api_key" android:value="LQpGHpuTYA0lkjQj6zY3ZVfB" />-->
-        <meta-data android:name="api_key" android:value="OLYzDQA0lCtvhxR8VKPoE19D" />
+        <!-- <meta-data android:name="api_key" android:value="LQpGHpuTYA0lkjQj6zY3ZVfB" /> -->
+        <meta-data
+            android:name="api_key"
+            android:value="OLYzDQA0lCtvhxR8VKPoE19D" />
         <!-- end baidu push service section -->
-
 
     </application>
 

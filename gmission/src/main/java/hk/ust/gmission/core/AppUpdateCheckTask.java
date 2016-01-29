@@ -57,7 +57,7 @@ public class AppUpdateCheckTask extends AsyncTask<Void, Void, String> {
                     .setMessage("Do you want to download the latest version?")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("http://lccpu4.cse.ust.hk/indoorLocalizationService/gmission.apk"));
+                            Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("https://play.google.com/store/apps/details?id=hk.ust.gmission"));
                             context.startActivity(intent);
                         }
                     })

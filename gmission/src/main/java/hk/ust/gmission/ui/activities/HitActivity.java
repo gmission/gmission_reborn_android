@@ -6,11 +6,13 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.kevinsawicki.wishlist.Toaster;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +53,7 @@ public class HitActivity extends BootstrapFragmentActivity {
 
     @Bind(R.id.submit_btn) Button submitButton;
     @Bind(R.id.hit_content) TextView hitContent;
+    @Bind(R.id.hit_attachment_img) ImageView hitAttachmentImage;
     @Bind(R.id.bad_hid_notification) TextView badHitNotificationText;
     @Bind(R.id.loading_notification) TextView loadingNotificationText;
 
@@ -78,11 +81,28 @@ public class HitActivity extends BootstrapFragmentActivity {
             isViewAnswer = getIntent().getBooleanExtra(IS_VIEW_ANSWER, false);
             serviceProvider.getService(mActivity).getHitService().getHit(hitId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<Hit>() {
+                    .flatMap(new Func1<Hit, Observable<Attachment>>() {
                         @Override
-                        public void call(Hit hit) {
+                        public Observable<Attachment> call(Hit hit) {
                             mHit = hit;
                             initializeAnswerArea();
+                            return serviceProvider.getService(mActivity).getAttachmentService()
+                                    .getAttachment(hit.getAttachment_id());
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<Attachment>() {
+                        @Override
+                        public void call(Attachment attachment) {
+                            if (attachment.getType().equals("image")) {
+                                Picasso.with(mActivity)
+                                        .load(Constants.Http.URL_IMAGE_ORI + "/" + attachment.getValue())
+                                        .resize(hitAttachmentImage.getWidth(), 0)//0 means variable height
+                                        .into(hitAttachmentImage);
+                                hitAttachmentImage.setVisibility(View.VISIBLE);
+                                hitAttachmentImage.bringToFront();
+                                hitAttachmentImage.invalidate();
+                            }
                         }
                     })
                     .doOnCompleted(new Action0() {
