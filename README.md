@@ -18,7 +18,7 @@
 - Technical details are introduced at bottom of this page.
 
 ## Try the latest version
-- We upload the latest app to [our server](http://lccpu4.cse.ust.hk/indoorLocalizationService/gmission.apk). You can download it directly.
+- You can search 'gmission' in Google Play. Or directly get the app from [this link](https://play.google.com/store/apps/details?id=hk.ust.gmission).
 
 ## Screenshots
 
