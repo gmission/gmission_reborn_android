@@ -23,6 +23,7 @@
     <string name="label_register">注册</string>
     <string name="label_reject">拒绝</string>
     <string name="label_submit">提交</string>
+    <string name="label_join">加入</string>
     <string name="label_ask_here">提问此处！</string>
 
     <string name="label_location">地点：</string>
@@ -75,6 +76,7 @@
     <string name="title_activity_hit">回答问题</string>
     <string name="title_activity_bootstrap_account_register">注册账户</string>
     <string name="title_activity_ask_spatial_task">提问</string>
+    <string name="title_activity_view_3d_model">查看 Sparse Model</string>
     <string name="title_activity_working_area">工作区域</string>
     <string name="title_activity_answer_list">答案</string>
 

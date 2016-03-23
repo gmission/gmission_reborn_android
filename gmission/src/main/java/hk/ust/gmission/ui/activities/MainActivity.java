@@ -47,6 +47,9 @@ import hk.ust.gmission.util.BaiduPushUtils;
 import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
 
+import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
+import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
+
 
 /**
  * Initial activity for the application.
@@ -215,6 +218,9 @@ public class MainActivity extends BootstrapFragmentActivity{
                 case 1: //campaign
                     title = getString(R.string.title_campaign);
                     replaceCurrentFragment(campaignFragment);
+//                    Intent intent = new Intent(this, MeshViewActivity.class);
+                    Intent intent = new Intent(this, HitSummaryActivity.class);
+                    startActivity(intent);
                     break;
                 case 2: //map
                     title = getString(R.string.title_map);

@@ -25,6 +25,7 @@
     <string name="label_register">Register</string>
     <string name="label_reject">Reject</string>
     <string name="label_submit">Submit</string>
+    <string name="label_join">Join</string>
     <string name="label_ask_here">Ask Here!</string>
 
     <string name="label_location">Location:</string>
@@ -62,7 +63,6 @@
     <string name="message_double_return_to_quit">Please click BACK again to exit</string>
 
 
-
     <string name="loading">Loading</string>
     <string name="refreshing">Refreshing</string>
     <string name="navigation_drawer_open">Drawer Open</string>
@@ -77,6 +77,7 @@
     <string name="title_activity_hit">Answer Question</string>
     <string name="title_activity_bootstrap_account_register">Register Account</string>
     <string name="title_activity_ask_spatial_task">Ask Question</string>
+    <string name="title_activity_view_3d_model">View Sparse Model</string>
     <string name="title_activity_working_area">Working Area</string>
     <string name="title_activity_answer_list">Answers</string>
 

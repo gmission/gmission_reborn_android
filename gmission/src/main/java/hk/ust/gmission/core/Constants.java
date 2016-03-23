@@ -36,7 +36,9 @@ public final class Constants {
         private Http() {}
 
         public static final String CONTENT_TYPE_JSON = "application/json";
-        public final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
+//        public final static String URL_BASE = "http://lccpu3.cse.ust.hk/gmission-dev";
+        public final static String URL_BASE = "http://lccpu4.cse.ust.hk/gmission";
+
         public final static String URL_REST = "/rest";
         public final static String URL_IMAGE = "/image";
         public final static String URL_VIDEO = "/video";

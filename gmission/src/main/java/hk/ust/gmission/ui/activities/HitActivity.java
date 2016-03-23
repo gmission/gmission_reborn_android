@@ -86,8 +86,10 @@ public class HitActivity extends BootstrapFragmentActivity {
                         public Observable<Attachment> call(Hit hit) {
                             mHit = hit;
                             initializeAnswerArea();
+                            loadingNotificationText.setVisibility(View.INVISIBLE);
+
                             return serviceProvider.getService(mActivity).getAttachmentService()
-                                    .getAttachment(hit.getAttachment_id());
+                                    .getAttachment(hit.getAttachment_id()); // if no attachment, the flow will stop here
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
@@ -110,11 +112,10 @@ public class HitActivity extends BootstrapFragmentActivity {
                         public void call() {
                             if (mHit == null){
                                 badHitNotificationText.setVisibility(View.VISIBLE);
-                                loadingNotificationText.setVisibility(View.INVISIBLE);
                             } else {
                                 badHitNotificationText.setVisibility(View.INVISIBLE);
-                                loadingNotificationText.setVisibility(View.INVISIBLE);
                             }
+
                         }
                     })
                     .subscribe();

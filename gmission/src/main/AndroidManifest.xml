@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hk.ust.gmission" >
+    package="hk.ust.gmission">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -28,7 +28,7 @@
         android:name=".BootstrapApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Bootstrap.Dark" >
+        android:theme="@style/Theme.Bootstrap.Dark">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -39,7 +39,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +50,7 @@
 
         <service
             android:name=".authenticator.AccountAuthenticatorService"
-            android:process=":auth" >
+            android:process=":auth">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -66,7 +66,7 @@
 
         <activity
             android:name=".authenticator.BootstrapAuthenticatorActivity"
-            android:excludeFromRecents="true" >
+            android:excludeFromRecents="true">
 
             <!--
                 No intent-filter here! This activity is only ever launched by
@@ -76,7 +76,7 @@
         <activity
             android:name=".authenticator.BootstrapAccountRegisterActivity"
             android:label="@string/title_activity_bootstrap_account_register"
-            android:parentActivityName=".authenticator.ActionBarAccountAuthenticatorActivity" >
+            android:parentActivityName=".authenticator.ActionBarAccountAuthenticatorActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hk.ust.gmission.authenticator.ActionBarAccountAuthenticatorActivity" />
@@ -90,6 +90,9 @@
         <activity
             android:name=".ui.activities.AskSpatialTaskActivity"
             android:label="@string/title_activity_ask_spatial_task" />
+        <activity
+            android:name=".ui.activities.MeshViewActivity"
+            android:label="@string/title_activity_view_3d_model" />
         <activity
             android:name=".ui.activities.WorkingAreaSetupActivity"
             android:label="@string/title_activity_working_area" />
@@ -106,7 +109,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- receiver of push service -->
-        <receiver android:name=".services.NotificationPushReceiver" >
+        <receiver android:name=".services.NotificationPushReceiver">
             <intent-filter>
 
                 <!-- receive push message -->
@@ -120,7 +123,7 @@
         <!-- necessary receiver service of push -->
         <receiver
             android:name="com.baidu.android.pushservice.PushServiceReceiver"
-            android:process=":bdservice_v1" >
+            android:process=":bdservice_v1">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -135,7 +138,7 @@
         </receiver>
         <receiver
             android:name="com.baidu.android.pushservice.RegistrationReceiver"
-            android:process=":bdservice_v1" >
+            android:process=":bdservice_v1">
             <intent-filter>
                 <action android:name="com.baidu.android.pushservice.action.METHOD" />
                 <action android:name="com.baidu.android.pushservice.action.BIND_SYNC" />
@@ -150,7 +153,7 @@
         <service
             android:name="com.baidu.android.pushservice.PushService"
             android:exported="true"
-            android:process=":bdservice_v1" >
+            android:process=":bdservice_v1">
             <intent-filter>
                 <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE" />
             </intent-filter>
@@ -166,6 +169,7 @@
             android:value="OLYzDQA0lCtvhxR8VKPoE19D" />
         <!-- end baidu push service section -->
 
+        <activity android:name=".ui.activities.HitSummaryActivity"></activity>
     </application>
 
 </manifest>
