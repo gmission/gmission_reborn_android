@@ -11,6 +11,7 @@ import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.CampaignItemClickEvent;
 import hk.ust.gmission.models.Campaign;
 import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.ui.activities.CampaignSummaryActivity;
 import hk.ust.gmission.ui.activities.HitListActivity;
 import hk.ust.gmission.ui.adapters.CampaignRecyclerViewAdapter;
 import rx.android.schedulers.AndroidSchedulers;
@@ -100,7 +101,7 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
 
         Campaign campaign = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), HitListActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(campaign.getId())));
+        startActivity(new Intent(getActivity(), CampaignSummaryActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(campaign.getId())));
     }
 
 

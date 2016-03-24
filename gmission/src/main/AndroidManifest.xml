@@ -169,7 +169,9 @@
             android:value="OLYzDQA0lCtvhxR8VKPoE19D" />
         <!-- end baidu push service section -->
 
-        <activity android:name=".ui.activities.HitSummaryActivity"></activity>
+        <activity android:name=".ui.activities.HitSummaryActivity" />
+        <activity android:name=".ui.activities.CampaignSummaryActivity" />
+        <activity android:name=".ui.activities.SpatialDirectHitActivity"></activity>
     </application>
 
 </manifest>

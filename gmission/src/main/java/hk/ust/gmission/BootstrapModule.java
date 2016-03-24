@@ -57,6 +57,7 @@ import retrofit.converter.GsonConverter;
                 MeshViewActivity.class,
                 MainActivity.class,
                 HitActivity.class,
+                CampaignSummaryActivity.class,
                 HitSummaryActivity.class,
                 AnswerListActivity.class,
                 WorkingAreaSetupActivity.class,

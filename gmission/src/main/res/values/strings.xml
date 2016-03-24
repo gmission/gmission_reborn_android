@@ -26,6 +26,8 @@
     <string name="label_reject">Reject</string>
     <string name="label_submit">Submit</string>
     <string name="label_join">Join</string>
+    <string name="label_quit">Quit</string>
+    <string name="label_view_campaign">View Campaign</string>
     <string name="label_ask_here">Ask Here!</string>
 
     <string name="label_location">Location:</string>
@@ -43,7 +45,10 @@
     <string name="label_received_answer_count">Answers:</string>
     <string name="label_approve_answer">Approve</string>
     <string name="label_deadline_time">Deadline:</string>
-
+    <string name="label_contribute_photo">Contribute An Answer</string>
+    <string name="label_view_photos">View Photos</string>
+    <string name="label_view_3d_model">View Sparse Model</string>
+    <string name="label_view_tasks">View Tasks List</string>
 
     <string name="message_signing_in">Signing in…</string>
     <string name="message_bad_credentials">User Name or Password is incorrect</string>
@@ -61,7 +66,11 @@
     <string name="message_current_location_unavailable">Your Current Location Is Estimating…</string>
     <string name="message_answered">You have already answered this question.</string>
     <string name="message_double_return_to_quit">Please click BACK again to exit</string>
-
+    <string name="message_prompt_campaign">Please join this campaign to start contribution!</string>
+    <string name="message_join_campaign_success">Join Campaign Success!</string>
+    <string name="message_quit_campaign_success">Quit Campaign Success!</string>
+    <string name="message_fail">Failed! Please try again later...</string>
+    <string name="message_task_instruction_3d">Please take a photo along the direction indicated by the red arrow on the map.</string>
 
     <string name="loading">Loading</string>
     <string name="refreshing">Refreshing</string>
@@ -91,8 +100,10 @@
 
     <string name="bad_hit_notification">Broken Question! Please ignore this question.</string>
     <string name="loading_notification">Loading...</string>
+    <string name="verifying_location_notification">Verifying your location... (Please turn on your GPS and stand close to the indicated site)</string>
 
     <string name="app_pic_folder">gmission_data/pic</string>
+    <string name="ply_folder">gmission_data/ply</string>
 
     <string name="profile_requests">Sent Questions</string>
     <string name="profile_answers">Sent Answers</string>

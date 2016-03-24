@@ -48,6 +48,7 @@ import hk.ust.gmission.util.Ln;
 import hk.ust.gmission.util.SafeAsyncTask;
 
 import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
+import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
 import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
 
 
@@ -219,8 +220,8 @@ public class MainActivity extends BootstrapFragmentActivity{
                     title = getString(R.string.title_campaign);
                     replaceCurrentFragment(campaignFragment);
 //                    Intent intent = new Intent(this, MeshViewActivity.class);
-                    Intent intent = new Intent(this, HitSummaryActivity.class);
-                    startActivity(intent);
+                    Intent intent = new Intent(this, HitSummaryActivity.class).putExtra(HIT_ID, "1");
+//                    startActivity(intent);
                     break;
                 case 2: //map
                     title = getString(R.string.title_map);

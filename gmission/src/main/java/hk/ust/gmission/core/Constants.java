@@ -53,6 +53,8 @@ public final class Constants {
 
         public static final String URL_CAMPAIGNS_FRAG =  "/rest/campaign";
 
+        public static final String URL_CAMPAIGN_USER_FRAG =  "/rest/campaign_user";
+
         public static final String URL_HITS_FRAG =  "/rest/hit";
 
         public static final String URL_MESSAGES_FRAG =  "/rest/message";

@@ -13,11 +13,14 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,7 +49,7 @@ public class GLView extends GLSurfaceView {
     }
 
     public void setNewRenderer(){
-        renderer = new Renderer(this.getContext());
+        renderer = new Renderer(this.getContext(), "test");
         setRenderer(renderer);
     }
 
@@ -114,11 +117,19 @@ public class GLView extends GLSurfaceView {
         private InputStream plyInput;
 
 
-        public Renderer(Context context) {
+        public Renderer(Context context, String plyFileName) {
             current_context = context;
             // Just in case we don't use the PLY in the future,
             // we need to give the user the option of switching out.
-            plyInput = context.getResources().openRawResource(R.raw.controller_ascii);
+
+
+
+            File file = new File(plyFileName);
+            try {
+                plyInput= new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {

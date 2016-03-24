@@ -13,6 +13,7 @@ import hk.ust.gmission.events.HitItemClickEvent;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.HitActivity;
+import hk.ust.gmission.ui.activities.HitSummaryActivity;
 import hk.ust.gmission.ui.adapters.HitRecyclerViewAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -125,7 +126,12 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
 
         Hit hit = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, hit.getId()));
+        if (hit.getType().equals("3d")) {
+            startActivity(new Intent(getActivity(), HitSummaryActivity.class).putExtra(HIT_ID, hit.getId()));
+        } else {
+            startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, hit.getId()));
+        }
+
     }
 
 

@@ -222,6 +222,11 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 .position(point)
                 .title(getString(R.string.label_ask_here))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+
+//        askHereMarker = mMap.addMarker(new MarkerOptions()
+//                .position(point)
+//                .title(getString(R.string.label_ask_here))
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_3d_model)));
     }
 
     private void subcribeButtons(){

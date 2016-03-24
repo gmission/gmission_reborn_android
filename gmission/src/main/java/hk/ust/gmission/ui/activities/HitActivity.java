@@ -61,7 +61,6 @@ public class HitActivity extends BootstrapFragmentActivity {
 
     private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
 
-    private boolean isViewAnswer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class HitActivity extends BootstrapFragmentActivity {
     public void downloadHit(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             String hitId = getIntent().getExtras().getString(HIT_ID);
-            isViewAnswer = getIntent().getBooleanExtra(IS_VIEW_ANSWER, false);
             serviceProvider.getService(mActivity).getHitService().getHit(hitId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .flatMap(new Func1<Hit, Observable<Attachment>>() {
