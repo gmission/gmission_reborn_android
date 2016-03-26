@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -78,6 +80,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
     private GoogleMap mMap;
     private Coordinate taskCoordinate = null;
     private Coordinate currentCoordinate = null;
+    private Location latestLocation = null;
 
 
 
@@ -159,16 +162,16 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<Coordinate>() {
+                    .flatMap(new Func1<Coordinate, Observable<String>>() {
                         @Override
-                        public void call(Coordinate coordinate) {
+                        public Observable<String> call(Coordinate coordinate) {
                             taskCoordinate = coordinate;
                             LatLng taskLatLng = new LatLng(taskCoordinate.getLatitude(), taskCoordinate.getLongitude());
 
                             mMap.addMarker(new MarkerOptions()
-                                .position(taskLatLng)
-                                .title(getString(R.string.label_ask_here))
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_3d_model)));
+                                    .position(taskLatLng)
+                                    .title(getString(R.string.label_ask_here))
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_3d_model)));
 
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(taskLatLng, CAMERA_ZOOM_LEVEL));
 
@@ -179,10 +182,44 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                             co.strokeColor(0xff38bfc3);
                             co.strokeWidth(8);
                             mMap.addCircle(co);
+
+                            return serviceProvider.getService(mActivity).getExtraService().get3DReconstructionTaskDirection(hitId);
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            float nextDirection = Float.valueOf(s);
+                            float arrowLeft = nextDirection - 0.25f;
+                            float arrowRight = nextDirection + 0.25f;
+
+                            LatLng taskLatLng = new LatLng(taskCoordinate.getLatitude(), taskCoordinate.getLongitude());
+
+                            drawDirectionLine(taskLatLng, nextDirection, 0.001f);
+                            drawDirectionLine(taskLatLng, arrowLeft, 0.0005f);
+                            drawDirectionLine(taskLatLng, arrowRight, 0.0005f);
                         }
                     })
                     .subscribe();
+
         }
+
+    }
+
+    private void drawDirectionLine(LatLng taskLocation, float direction, float length){
+        double targetLatitude = taskLocation.latitude + Math.sin(direction) * length;
+        double targetLongitude = taskLocation.longitude + Math.cos(direction) * length;
+
+
+
+        PolylineOptions lineOptions = new PolylineOptions();
+        lineOptions.color(Color.RED);
+        lineOptions.width(8);
+        lineOptions.geodesic(true);
+        lineOptions.add(taskLocation).add(new LatLng(targetLatitude, targetLongitude));
+
+        mMap.addPolyline(lineOptions);
     }
 
     private void initialMap() {

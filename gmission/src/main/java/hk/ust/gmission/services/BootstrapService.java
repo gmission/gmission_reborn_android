@@ -39,6 +39,9 @@ public class BootstrapService {
         return getRestAdapter().create(HitService.class);
     }
 
+    public ExtraService getExtraService() {
+        return getRestAdapter().create(ExtraService.class);
+    }
 
 
     public AttachmentService getAttachmentService() {
