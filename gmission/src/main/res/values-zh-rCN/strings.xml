@@ -70,7 +70,7 @@
     <string name="message_quit_campaign_success">成功推出活动！</string>
     <string name="message_fail">失败，请稍后重试...</string>
     <string name="message_task_instruction_3d">请沿着地图上红色箭头指示的方向拍一张照片。</string>
-
+    <string name="message_model_not_build">散点模型还未构建，请稍后再来...</string>
 
     <string name="loading">Loading</string>
     <string name="refreshing">Refreshing</string>
@@ -101,7 +101,7 @@
 
     <string name="bad_hit_notification">此问题已损坏，请忽略。</string>
     <string name="loading_notification">正在加载</string>
-    <string name="verifying_location_notification">正在校验你的位置... (请打开GPS并站在任务位置附近)</string>
+    <string name="verifying_location_notification">正在校验你的位置... (请打开GPS并站在任务位置附近的蓝色圆圈内)</string>
 
     <string name="app_pic_folder">gmission_data/pic</string>
     <string name="ply_folder">gmission_data/ply</string>

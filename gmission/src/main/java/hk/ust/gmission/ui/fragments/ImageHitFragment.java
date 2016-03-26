@@ -13,14 +13,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import hk.ust.gmission.R;
 import hk.ust.gmission.events.HitSubmitEnableEvent;
 import hk.ust.gmission.util.ImageUtils;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class ImageHitFragment extends BaseAnswerFragment {
 
@@ -32,6 +36,8 @@ public class ImageHitFragment extends BaseAnswerFragment {
     private File currentPicFile = null;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static int BUTTON_PRESS_DELAY_MILLIS = 1000;
+
 
 
     public ImageHitFragment() {
@@ -63,24 +69,28 @@ public class ImageHitFragment extends BaseAnswerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.TITLE, "gmission_task_image");
-                values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-                currentPicFile = ImageUtils.getTempFile(mFragment.getContext());
+        RxView.clicks(captureButton)
+                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.TITLE, "gmission_task_image");
+                        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+                        currentPicFile = ImageUtils.getTempFile(getActivity());
 
-                if (currentPicFile == null){
-                    Toast.makeText(getContext(), getString(R.string.message_cannot_create_image), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        if (currentPicFile == null){
+                            Toast.makeText(getActivity(), getString(R.string.message_cannot_create_image), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(currentPicFile));
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        });
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(currentPicFile));
+                        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
+                })
+                .subscribe();
 
     }
 

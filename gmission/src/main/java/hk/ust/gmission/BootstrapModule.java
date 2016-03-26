@@ -59,6 +59,7 @@ import retrofit.converter.GsonConverter;
                 HitActivity.class,
                 CampaignSummaryActivity.class,
                 HitSummaryActivity.class,
+                SpatialDirectHitActivity.class,
                 AnswerListActivity.class,
                 WorkingAreaSetupActivity.class,
                 AskSpatialTaskActivity.class,

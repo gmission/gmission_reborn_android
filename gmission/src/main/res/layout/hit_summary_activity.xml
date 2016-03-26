@@ -9,96 +9,97 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hk.ust.gmission.ui.activities.HitSummaryActivity">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="wrap_content"
+        android:id="@+id/hit_content_scroll_view"
+        tools:context="hk.ust.gmission.ui.fragments.SelectionHitFragment"
+        tools:showIn="@layout/hit_activity">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/hit_content_scroll_view"
-            tools:context="hk.ust.gmission.ui.fragments.SelectionHitFragment"
-            tools:showIn="@layout/hit_activity">
-            <LinearLayout
+            android:orientation="vertical">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textColor="@color/text_shadow"
-                    android:text="@string/message_prompt_campaign"
-                    android:id="@+id/message_prompt_campaign"/>
-                <Button
-                    android:id="@+id/view_compain_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_background_states"
-                    android:padding="10dp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/label_view_campaign"
-                    android:textColor="@color/text"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:background="@android:color/darker_gray"/>
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/text_shadow"
+                android:text="@string/message_prompt_campaign"
+                android:id="@+id/message_prompt_campaign"/>
+            <Button
+                android:id="@+id/view_compain_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_states"
+                android:padding="10dp"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/label_view_campaign"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/text_margin"
+                android:background="@android:color/darker_gray"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textColor="@color/text_shadow"
-                    android:text="@string/label_view_campaign"
-                    android:id="@+id/hit_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/text_shadow"
+                android:text="@string/label_view_campaign"
+                android:id="@+id/hit_content"/>
 
-                <Button
-                    android:id="@+id/answer_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_background_states"
-                    android:padding="10dp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/label_contribute_photo"
-                    android:textColor="@color/text"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+            <Button
+                android:id="@+id/answer_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_states"
+                android:padding="10dp"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/label_contribute_photo"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/view_answers_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_background_states"
-                    android:padding="10dp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/label_view_photos"
-                    android:textColor="@color/text"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <Button
-                    android:id="@+id/view_model_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_background_states"
-                    android:padding="10dp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/label_view_3d_model"
-                    android:textColor="@color/text"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+            <Button
+                android:id="@+id/view_answers_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_states"
+                android:padding="10dp"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/label_view_photos"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/view_model_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_states"
+                android:padding="10dp"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/label_view_3d_model"
+                android:textColor="@color/text"
+                android:enabled="false"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/text_shadow"
+                android:text="@string/message_model_not_build"
+                android:id="@+id/message_model_not_build"/>
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
-        </android.support.v4.widget.NestedScrollView>
-
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </RelativeLayout>

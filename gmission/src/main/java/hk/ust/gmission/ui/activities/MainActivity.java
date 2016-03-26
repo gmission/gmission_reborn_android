@@ -220,7 +220,7 @@ public class MainActivity extends BootstrapFragmentActivity{
                     title = getString(R.string.title_campaign);
                     replaceCurrentFragment(campaignFragment);
 //                    Intent intent = new Intent(this, MeshViewActivity.class);
-                    Intent intent = new Intent(this, HitSummaryActivity.class).putExtra(HIT_ID, "1");
+                    Intent intent = new Intent(this, SpatialDirectHitActivity.class).putExtra(HIT_ID, "1");
 //                    startActivity(intent);
                     break;
                 case 2: //map

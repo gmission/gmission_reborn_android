@@ -57,6 +57,7 @@ import hk.ust.gmission.services.HitService;
 import hk.ust.gmission.ui.activities.AnswerListActivity;
 import hk.ust.gmission.ui.activities.AskSpatialTaskActivity;
 import hk.ust.gmission.ui.activities.HitActivity;
+import hk.ust.gmission.ui.activities.HitSummaryActivity;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -67,6 +68,7 @@ import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
 
 /**
@@ -157,9 +159,13 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 MapObject mapObject = mMarkerMapObjectHashMap.get(marker);
 
                 if (marker.getTitle().equals(MINE_TASK)) {
-                    startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
+                    startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()).putExtra(IS_VIEW_ANSWER, false));
                 } else if (marker.getTitle().equals(OTHERS_TASK)){
-                    startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
+                    if (mapObject.getHit().getType().equals("3d")){
+                        startActivity(new Intent(getActivity(), HitSummaryActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
+                    } else {
+                        startActivity(new Intent(getActivity(), HitActivity.class).putExtra(HIT_ID, mapObject.getHit().getId()));
+                    }
                 }
 
             }
@@ -280,7 +286,8 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
         QueryObject queryObject = new QueryObject();
         queryObject.push("status", "eq", "open");
-        queryObject.push("campaign_id", "is_null", "");
+//        queryObject.push("campaign_id", "is_null", "");
+        queryObject.push("location_id", "is_not_null", "");
 
         final HitService hitService= serviceProvider.getService(this.getActivity()).getHitService();
         final GeoService geoService = serviceProvider.getService(this.getActivity()).getGeoService();
@@ -357,7 +364,12 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             } else {
                 markerOptions.title(OTHERS_TASK);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                if (mapObject.getHit().getType().equals("3d")){
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_3d_model));
+                } else {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                }
+
             }
 
             markerOptions.position(new LatLng(mapObject.getCoordinate().getLatitude(), mapObject.getCoordinate().getLongitude()));
@@ -385,7 +397,9 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
             content.setText(mapObject.getHit().getTitle());
             location.setText(mapObject.getLocation().getName());
 
-            time.setText(getString(R.string.label_deadline_time)+ mapObject.getHit().getEnd_time().toLocaleString());
+            if (mapObject.getHit().getEnd_time() != null){
+                time.setText(getString(R.string.label_deadline_time)+ mapObject.getHit().getEnd_time().toLocaleString());
+            }
 
             return infoWindow;
         }

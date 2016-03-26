@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,20 +15,24 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import hk.ust.gmission.R;
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.Hit;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static hk.ust.gmission.core.Constants.Extra.CAMPAIGN_ID;
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 public class HitSummaryActivity extends BootstrapFragmentActivity {
 
 
     @Bind(R.id.view_compain_btn) Button viewCampaignButton;
+    @Bind(R.id.answer_btn) Button answerButton;
     @Bind(R.id.view_answers_btn) Button viewAnswersButton;
     @Bind(R.id.view_model_btn) Button viewModelButton;
     @Bind(R.id.hit_content) TextView hitContent;
+    @Bind(R.id.message_model_not_build) TextView modelMessage;
 
     private Hit mHit = null;
     private HitSummaryActivity mActivity;
@@ -76,6 +81,10 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
                     public void call(Hit hit) {
                         mHit = hit;
                         hitContent.setText(hit.getTitle() + "\n" + hit.getDescription());
+                        if (mHit.getAttachment_id() != null) {
+                            viewModelButton.setEnabled(true);
+                            modelMessage.setVisibility(View.GONE);
+                        }
                     }
                 })
                 .subscribe();
@@ -84,6 +93,7 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
 
 
     private void subscribeButtons() {
+
         RxView.clicks(viewCampaignButton)
                 .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -95,13 +105,29 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
                 })
                 .subscribe();
 
+        RxView.clicks(answerButton)
+                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(mActivity, SpatialDirectHitActivity.class).putExtra(HIT_ID, String.valueOf(mHit.getId())));
+                    }
+                })
+                .subscribe();
+
         RxView.clicks(viewAnswersButton)
                 .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(mActivity, AnswerListActivity.class).putExtra(HIT_ID, mHit.getId()));
+                        if (Constants.Http.PARAM_USER_ID.equals(mHit.getRequester_id())) {
+                            startActivity(new Intent(mActivity, AnswerListActivity.class).putExtra(HIT_ID, mHit.getId()).putExtra(IS_VIEW_ANSWER, false));
+                        } else {
+                            startActivity(new Intent(mActivity, AnswerListActivity.class).putExtra(HIT_ID, mHit.getId()).putExtra(IS_VIEW_ANSWER, true));
+                        }
+
                     }
                 })
                 .subscribe();

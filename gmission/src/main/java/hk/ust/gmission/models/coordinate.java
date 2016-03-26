@@ -11,6 +11,14 @@ public class Coordinate implements Serializable{
     private double longitude;
     private double altitude;
 
+    public Coordinate() {
+    }
+
+    public Coordinate(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getId() {
         return id;
     }

@@ -22,6 +22,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
+import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 /**
  * Created by bigstone on 6/1/2016.
@@ -67,7 +68,6 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
         QueryObject queryObject = new QueryObject();
         queryObject.push("requester_id", "eq", Constants.Http.PARAM_USER_ID);
-        queryObject.push("campaign_id", "is_null", "");
         observable = serviceProvider.getService(getActivity()).getHitService().getHits(queryObject.toString());
 
 
@@ -121,7 +121,7 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
         Hit hit = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, hit.getId()));
+        startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, hit.getId()).putExtra(IS_VIEW_ANSWER, false));
     }
 
 

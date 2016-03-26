@@ -103,6 +103,7 @@ public final class Constants {
 
         public static final String CHOICE_TYPE = "selection";
         public static final String IMAGE_TYPE = "image";
+        public static final String MODEL_IMAGE_TYPE = "3d";
         public static final String TEXT_TYPE = "text";
 
     }

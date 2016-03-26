@@ -43,6 +43,12 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
     private AnswerService answerService;
     private Context context;
 
+    private boolean isViewOnly;
+
+    public void setViewOnly(boolean viewOnly) {
+        isViewOnly = viewOnly;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -72,7 +78,7 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
         holder.answeredTime.setText(answer.getCreated_on().toLocaleString());
 
 
-        if (answer.getType().equals(Constants.Extra.IMAGE_TYPE)){
+        if (answer.getType().equals(Constants.Extra.IMAGE_TYPE) || answer.getType().equals(Constants.Extra.MODEL_IMAGE_TYPE)){
 
             holder.frameLayout.getLayoutParams().height = pxFromDp(450);//pixels
             holder.textAnswer.setVisibility(View.GONE);
@@ -140,6 +146,10 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
 
         @Override
         public void onClick(View view) {
+            if (isViewOnly) {
+                return;
+            }
+
             final Answer answer = getItem(getAdapterPosition());
             Boolean hasApproved = false;
 
@@ -153,32 +163,26 @@ public class AnswerRecyclerViewAdapter extends BaseRecyclerViewAdapter<AnswerRec
 
             Observable.just(hasApproved)
                     .observeOn(Schedulers.io())
-                    .map(new Func1<Boolean, Boolean>() {
-
+                    .flatMap(new Func1<Boolean, Observable<Answer>>() {
                         @Override
-                        public Boolean call(Boolean hasApproved) {
-
-                            if (hasApproved == false) {
+                        public Observable<Answer> call(Boolean hasApproved) {
+                            if (!hasApproved) {
                                 answer.setAccepted(true);
                             }
 
-                            if (!hasApproved) {
+                            if (hasApproved) {
                                 answer.setAccepted(false);
                             }
 
-                            answerService.updateAnswer(answer.getId(), answer)
-                                    .observeOn(Schedulers.io())
-                                    .subscribe();
-
-                            hasApproved = !hasApproved;
-                            return hasApproved;
+                            return answerService.updateAnswer(answer.getId(), answer);
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<Boolean>() {
+                    .doOnNext(new Action1<Answer>() {
                         @Override
-                        public void call(Boolean hasApproved) {
-                            if (hasApproved) {
+                        public void call(Answer answer) {
+
+                            if (answer.isAccepted()) {
                                 approvedIcon.setVisibility(View.VISIBLE);
                             } else {
                                 approvedIcon.setVisibility(View.INVISIBLE);

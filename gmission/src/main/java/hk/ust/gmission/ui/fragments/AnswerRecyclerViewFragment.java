@@ -22,8 +22,14 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
 
     private String hitId = null;
 
+    private boolean isViewOnly = true;
+
     public void setHitId(String hitId) {
         this.hitId = hitId;
+    }
+
+    public void setViewOnly(boolean viewOnly) {
+        isViewOnly = viewOnly;
     }
 
     @Override
@@ -42,6 +48,8 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
         mAdapter = new AnswerRecyclerViewAdapter(this.getActivity(), serviceProvider.getService(this.getActivity()).getHitService()
                 ,serviceProvider.getService(this.getActivity()).getAttachmentService()
                 ,serviceProvider.getService(this.getActivity()).getAnswerService());
+
+        mAdapter.setViewOnly(isViewOnly);
 
         mRecyclerView.setAdapter(mAdapter);
 
