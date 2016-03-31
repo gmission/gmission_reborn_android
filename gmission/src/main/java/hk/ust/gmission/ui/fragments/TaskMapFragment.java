@@ -289,8 +289,8 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 //        queryObject.push("campaign_id", "is_null", "");
         queryObject.push("location_id", "is_not_null", "");
 
-        final HitService hitService= serviceProvider.getService(this.getActivity()).getHitService();
-        final GeoService geoService = serviceProvider.getService(this.getActivity()).getGeoService();
+        final HitService hitService= serviceProvider.getService().getHitService();
+        final GeoService geoService = serviceProvider.getService().getGeoService();
 
 
         Observable<ModelWrapper<Hit>> tasksObservable = hitService.getHits(queryObject.toString());

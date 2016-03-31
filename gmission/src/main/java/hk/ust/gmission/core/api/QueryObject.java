@@ -3,7 +3,7 @@ package hk.ust.gmission.core.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import hk.ust.gmission.util.GsonUtil;
+import hk.ust.gmission.util.GsonUtils;
 
 /**
  * Created by rui on 14-5-5.
@@ -45,7 +45,7 @@ public class QueryObject {
 
     @Override
     public String toString() {
-        return GsonUtil.getQueryString(this);
+        return GsonUtils.getQueryString(this);
     }
 
     public void clear(){

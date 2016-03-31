@@ -74,7 +74,7 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
     public void downloadHit(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             String hitId = getIntent().getExtras().getString(HIT_ID);
-            serviceProvider.getService(mActivity).getHitService().getHit(hitId)
+            serviceProvider.getService().getHitService().getHit(hitId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Action1<Hit>() {
                     @Override
@@ -127,7 +127,6 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
                         } else {
                             startActivity(new Intent(mActivity, AnswerListActivity.class).putExtra(HIT_ID, mHit.getId()).putExtra(IS_VIEW_ANSWER, true));
                         }
-
                     }
                 })
                 .subscribe();

@@ -25,6 +25,7 @@ public interface AttachmentService {
 
     @GET(Constants.Http.URL_ATTACHMENTS_FRAG + "/{id}")
     Observable<Attachment> getAttachment(@Path("id") String aId);
+
     @POST(Constants.Http.URL_ATTACHMENTS_FRAG)
     Observable<Attachment> createAttachment(@Body Attachment attachment);
 }

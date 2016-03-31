@@ -98,16 +98,16 @@ public class UserProfilePFragment extends Fragment {
 
     private void loadUserProfile(){
 
-        Observable<User> userObservable = serviceProvider.getService(this.getActivity()).getUserService().getUser(Constants.Http.PARAM_USER_ID);
+        Observable<User> userObservable = serviceProvider.getService().getUserService().getUser(Constants.Http.PARAM_USER_ID);
 
 
         QueryObject queryObject = new QueryObject();
         queryObject.push("requester_id", "eq", Constants.Http.PARAM_USER_ID);
-        Observable<ModelWrapper<Hit>> hitObservable = serviceProvider.getService(this.getActivity()).getHitService().getHits(queryObject.toString());
+        Observable<ModelWrapper<Hit>> hitObservable = serviceProvider.getService().getHitService().getHits(queryObject.toString());
 
         queryObject = new QueryObject();
         queryObject.push("worker_id", "eq", Constants.Http.PARAM_USER_ID);
-        Observable<ModelWrapper<Answer>> answerObservable = serviceProvider.getService(this.getActivity()).getAnswerService().getAnswers(queryObject.toString());
+        Observable<ModelWrapper<Answer>> answerObservable = serviceProvider.getService().getAnswerService().getAnswers(queryObject.toString());
 
         Observable.combineLatest(userObservable, hitObservable, answerObservable,
                 new Func3<User, ModelWrapper<Hit>, ModelWrapper<Answer>, Boolean>() {

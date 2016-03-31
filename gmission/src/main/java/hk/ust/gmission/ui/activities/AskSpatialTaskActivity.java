@@ -100,7 +100,7 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                 .flatMap(new Func1<Object, Observable<Coordinate>>() {
                     @Override
                     public Observable<Coordinate> call(Object o) {
-                        return serviceProvider.getService(mActivity).getGeoService().createCoordinate(mCoordinate);
+                        return serviceProvider.getService().getGeoService().createCoordinate(mCoordinate);
                     }
                 })
                 .flatMap(new Func1<Coordinate, Observable<GeoLocation>>() {
@@ -110,7 +110,7 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                         geoLocation.setCoordinate_id(coordinate.getId());
                         geoLocation.setName(mEtLocation.getText().toString());
 
-                        return serviceProvider.getService(mActivity).getGeoService().createGeoLocation(geoLocation);
+                        return serviceProvider.getService().getGeoService().createGeoLocation(geoLocation);
                     }
                 })
                 .flatMap(new Func1<GeoLocation, Observable<Hit>>() {
@@ -144,7 +144,7 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                         int requiredAnswers = mSkbAnswersCount.getProgress() + 1;
                         hit.setRequired_answer_count(requiredAnswers);
 
-                        return serviceProvider.getService(mActivity).getHitService().createHit(hit);
+                        return serviceProvider.getService().getHitService().createHit(hit);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

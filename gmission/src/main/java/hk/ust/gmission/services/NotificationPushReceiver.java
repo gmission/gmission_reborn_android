@@ -3,21 +3,15 @@ package hk.ust.gmission.services;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.baidu.android.pushservice.PushMessageReceiver;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import hk.ust.gmission.models.Message;
-import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.util.BaiduPushUtils;
-import hk.ust.gmission.util.GsonUtil;
+import hk.ust.gmission.util.GsonUtils;
 
 
 public class NotificationPushReceiver extends PushMessageReceiver {
@@ -64,7 +58,7 @@ public class NotificationPushReceiver extends PushMessageReceiver {
 
         if (customContent != null && customContent.length() != 0) {
             try {
-                message = GsonUtil.getGson().fromJson(customContent, Message.class);
+                message = GsonUtils.getGson().fromJson(customContent, Message.class);
                 // ...
             } catch (Exception e) {
                 e.printStackTrace();

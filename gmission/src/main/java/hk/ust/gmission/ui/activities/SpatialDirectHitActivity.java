@@ -144,7 +144,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
     public void downloadHit(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             final String hitId = getIntent().getExtras().getString(HIT_ID);
-            serviceProvider.getService(mActivity).getHitService().getHit(hitId)
+            serviceProvider.getService().getHitService().getHit(hitId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .flatMap(new Func1<Hit, Observable<GeoLocation>>() {
                         @Override
@@ -152,13 +152,13 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                             mHit = hit;
                             answer.setHit_id(mHit.getId());
                             answer.setType(mHit.getType());
-                            return serviceProvider.getService(mActivity).getGeoService().getGeoLocation(hit.getLocation_id());
+                            return serviceProvider.getService().getGeoService().getGeoLocation(hit.getLocation_id());
                         }
                     })
                     .flatMap(new Func1<GeoLocation, Observable<Coordinate>>() {
                         @Override
                         public Observable<Coordinate> call(GeoLocation geoLocation) {
-                            return serviceProvider.getService(mActivity).getGeoService().getCoordinate(geoLocation.getCoordinate_id());
+                            return serviceProvider.getService().getGeoService().getCoordinate(geoLocation.getCoordinate_id());
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
@@ -183,7 +183,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                             co.strokeWidth(8);
                             mMap.addCircle(co);
 
-                            return serviceProvider.getService(mActivity).getExtraService().get3DReconstructionTaskDirection(hitId);
+                            return serviceProvider.getService().getExtraService().get3DReconstructionTaskDirection(hitId);
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
@@ -215,7 +215,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
 
         PolylineOptions lineOptions = new PolylineOptions();
         lineOptions.color(Color.RED);
-        lineOptions.width(8);
+        lineOptions.width(5);
         lineOptions.geodesic(true);
         lineOptions.add(taskLocation).add(new LatLng(targetLatitude, targetLongitude));
 
@@ -323,7 +323,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                         File imageFile = currentPicFile;
                         TypedFile typedFile = new TypedFile("image/jpeg", imageFile);
                         TypedString typedString = new TypedString("file");
-                        return serviceProvider.getService(mActivity).getAttachmentService().createImage(typedFile, typedString);
+                        return serviceProvider.getService().getAttachmentService().createImage(typedFile, typedString);
                     }
                 })
                 .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
@@ -335,7 +335,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                         attachment.setType("image");
                         attachment.setName(imageFile.getName());
                         attachment.setValue(imageVideoResult.getFilename());
-                        return serviceProvider.getService(mActivity).getAttachmentService().createAttachment(attachment);
+                        return serviceProvider.getService().getAttachmentService().createAttachment(attachment);
                     }
                 })
                 .flatMap(new Func1<Attachment, Observable<String>>() {
@@ -348,7 +348,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                 .flatMap(new Func1<String, Observable<Coordinate>>() {
                     @Override
                     public Observable<Coordinate> call(String o) {
-                        return serviceProvider.getService(mActivity).getGeoService().createCoordinate(currentCoordinate);
+                        return serviceProvider.getService().getGeoService().createCoordinate(currentCoordinate);
                     }
                 })
                 .flatMap(new Func1<Coordinate, Observable<GeoLocation>>() {
@@ -358,14 +358,14 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                         geoLocation.setCoordinate_id(coordinate.getId());
                         geoLocation.setName("dummy");
 
-                        return serviceProvider.getService(mActivity).getGeoService().createGeoLocation(geoLocation);
+                        return serviceProvider.getService().getGeoService().createGeoLocation(geoLocation);
                     }
                 })
                 .flatMap(new Func1<GeoLocation, Observable<Answer>>() {
                     @Override
                     public Observable<Answer> call(GeoLocation geoLocation) {
                         answer.setLocation_id(geoLocation.getId());
-                        return serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer);
+                        return serviceProvider.getService().getAnswerService().postAnswer(answer);
                     }
                 })
                 .doOnError(new Action1<Throwable>() {

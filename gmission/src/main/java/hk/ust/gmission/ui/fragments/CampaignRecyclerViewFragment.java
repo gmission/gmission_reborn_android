@@ -51,7 +51,7 @@ public class CampaignRecyclerViewFragment extends BaseRecyclerViewFragment<Campa
     protected void loadData(){
         QueryObject queryObject = new QueryObject();
         queryObject.push("status", "eq", "open");
-        serviceProvider.getService(getActivity()).getCampaignService().getCampaigns(queryObject.toString())
+        serviceProvider.getService().getCampaignService().getCampaigns(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnNext(new Action1<ModelWrapper<Campaign>>() {

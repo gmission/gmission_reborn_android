@@ -64,9 +64,9 @@ public class HitRecyclerViewFragment extends BaseRecyclerViewFragment<Hit, HitRe
         if (campaignId != null){
             QueryObject queryObject = new QueryObject();
             queryObject.push("campaign_id", "eq", campaignId);
-            observable = serviceProvider.getService(getActivity()).getHitService().getHits(queryObject.toString());
+            observable = serviceProvider.getService().getHitService().getHits(queryObject.toString());
         } else {
-            observable = serviceProvider.getService(getActivity()).getHitService().getHits();
+            observable = serviceProvider.getService().getHitService().getHits();
         }
 
 

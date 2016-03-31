@@ -66,7 +66,7 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
         queryObject.push("status", "neq", "deleted");
         queryObject.push("receiver_id", "eq", Constants.Http.PARAM_USER_ID);
         queryObject.setOrder_by("id", "desc");
-        serviceProvider.getService(getActivity()).getMessageService().getMessages(queryObject.toString())
+        serviceProvider.getService().getMessageService().getMessages(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnNext(new Action1<ModelWrapper<Message>>() {
@@ -115,10 +115,10 @@ public class MessageRecyclerViewFragment extends BaseRecyclerViewFragment<Messag
         final Message message = adapter.getItem(position);
         message.setStatus("read");
 
-        final MessageService messageService = serviceProvider.getService(this.getActivity()).getMessageService();
-        final AnswerService answerService = serviceProvider.getService(this.getActivity()).getAnswerService();
+        final MessageService messageService = serviceProvider.getService().getMessageService();
+        final AnswerService answerService = serviceProvider.getService().getAnswerService();
 
-        serviceProvider.getService(this.getActivity()).getHitService().getHit(message.getAttachment())
+        serviceProvider.getService().getHitService().getHit(message.getAttachment())
                 .observeOn(Schedulers.io())
                 .map(new Func1<Hit, Hit>() {
 

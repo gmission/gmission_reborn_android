@@ -85,7 +85,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             minifyEnabled false
-            debuggable false //when upload to google play, disable this option
+            debuggable true //when upload to google play, disable this option
         }
 
     }

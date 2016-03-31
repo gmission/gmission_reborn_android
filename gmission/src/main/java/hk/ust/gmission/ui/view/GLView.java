@@ -48,8 +48,8 @@ public class GLView extends GLSurfaceView {
         SGD = new ScaleGestureDetector(context, new ScaleListener());
     }
 
-    public void setNewRenderer(){
-        renderer = new Renderer(this.getContext(), "test");
+    public void setNewRenderer(String filePath){
+        renderer = new Renderer(this.getContext(), filePath);
         setRenderer(renderer);
     }
 
@@ -117,14 +117,14 @@ public class GLView extends GLSurfaceView {
         private InputStream plyInput;
 
 
-        public Renderer(Context context, String plyFileName) {
+        public Renderer(Context context, String plyFilePath) {
             current_context = context;
             // Just in case we don't use the PLY in the future,
             // we need to give the user the option of switching out.
 
 
 
-            File file = new File(plyFileName);
+            File file = new File(plyFilePath);
             try {
                 plyInput= new FileInputStream(file);
             } catch (FileNotFoundException e) {

@@ -38,7 +38,7 @@ import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.activities.*;
 import hk.ust.gmission.ui.adapters.*;
 import hk.ust.gmission.ui.fragments.*;
-import hk.ust.gmission.util.GsonUtil;
+import hk.ust.gmission.util.GsonUtils;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
@@ -81,7 +81,7 @@ import retrofit.converter.GsonConverter;
                 MessageRecyclerViewAdapter.class,
                 CampaignRecyclerViewAdapter.class,
                 QueryObject.class,
-                GsonUtil.class,
+                GsonUtils.class,
                 LocationTraceService.class
         }
 )

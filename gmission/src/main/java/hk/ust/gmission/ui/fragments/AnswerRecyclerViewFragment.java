@@ -45,9 +45,9 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
         super.onActivityCreated(savedInstanceState);
 
         setEmptyText(getString(R.string.no_answer));
-        mAdapter = new AnswerRecyclerViewAdapter(this.getActivity(), serviceProvider.getService(this.getActivity()).getHitService()
-                ,serviceProvider.getService(this.getActivity()).getAttachmentService()
-                ,serviceProvider.getService(this.getActivity()).getAnswerService());
+        mAdapter = new AnswerRecyclerViewAdapter(this.getActivity(), serviceProvider.getService().getHitService()
+                ,serviceProvider.getService().getAttachmentService()
+                ,serviceProvider.getService().getAnswerService());
 
         mAdapter.setViewOnly(isViewOnly);
 
@@ -67,7 +67,7 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
         QueryObject queryObject = new QueryObject();
         queryObject.push("hit_id", "eq", hitId);
 
-        serviceProvider.getService(getActivity()).getAnswerService().getAnswers(queryObject.toString())
+        serviceProvider.getService().getAnswerService().getAnswers(queryObject.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnNext(new Action1<ModelWrapper<Answer>>() {

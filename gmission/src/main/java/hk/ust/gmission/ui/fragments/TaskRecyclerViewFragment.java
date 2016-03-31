@@ -14,6 +14,7 @@ import hk.ust.gmission.events.TaskItemClickEvent;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.ui.activities.AnswerListActivity;
+import hk.ust.gmission.ui.activities.HitSummaryActivity;
 import hk.ust.gmission.ui.adapters.TaskRecyclerViewAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -68,7 +69,7 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
         QueryObject queryObject = new QueryObject();
         queryObject.push("requester_id", "eq", Constants.Http.PARAM_USER_ID);
-        observable = serviceProvider.getService(getActivity()).getHitService().getHits(queryObject.toString());
+        observable = serviceProvider.getService().getHitService().getHits(queryObject.toString());
 
 
         observable.subscribeOn(Schedulers.io())
@@ -121,7 +122,11 @@ public class TaskRecyclerViewFragment  extends BaseRecyclerViewFragment<Hit, Tas
 
         Hit hit = adapter.getItem(position);
 
-        startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, hit.getId()).putExtra(IS_VIEW_ANSWER, false));
+        if (hit.getType().equals("3d")) {
+            startActivity(new Intent(getActivity(), HitSummaryActivity.class).putExtra(HIT_ID, hit.getId()));
+        } else {
+            startActivity(new Intent(getActivity(), AnswerListActivity.class).putExtra(HIT_ID, hit.getId()).putExtra(IS_VIEW_ANSWER, false));
+        }
     }
 
 

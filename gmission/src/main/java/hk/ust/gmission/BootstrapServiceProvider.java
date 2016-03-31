@@ -29,7 +29,7 @@ public class BootstrapServiceProvider {
      * @throws IOException
      * @throws AccountsException
      */
-    public BootstrapService getService(final Activity activity){
+    public BootstrapService getService(){
 
         // TODO: See how that affects the bootstrap service.
         return new BootstrapService(restAdapter);

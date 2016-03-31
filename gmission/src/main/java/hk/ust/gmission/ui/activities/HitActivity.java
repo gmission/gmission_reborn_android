@@ -17,10 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
-import hk.ust.gmission.BootstrapServiceProvider;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.HitAnswerSuccessEvent;
@@ -43,7 +40,6 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
-import static hk.ust.gmission.core.Constants.Extra.IS_VIEW_ANSWER;
 
 
 public class HitActivity extends BootstrapFragmentActivity {
@@ -77,7 +73,7 @@ public class HitActivity extends BootstrapFragmentActivity {
     public void downloadHit(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             String hitId = getIntent().getExtras().getString(HIT_ID);
-            serviceProvider.getService(mActivity).getHitService().getHit(hitId)
+            serviceProvider.getService().getHitService().getHit(hitId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .flatMap(new Func1<Hit, Observable<Attachment>>() {
                         @Override
@@ -86,7 +82,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                             initializeAnswerArea();
                             loadingNotificationText.setVisibility(View.INVISIBLE);
 
-                            return serviceProvider.getService(mActivity).getAttachmentService()
+                            return serviceProvider.getService().getAttachmentService()
                                     .getAttachment(hit.getAttachment_id()); // if no attachment, the flow will stop here
                         }
                     })
@@ -186,7 +182,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         TypedString typedString = new TypedString("file");
 
 
-                        return serviceProvider.getService(mActivity).getAttachmentService().createImage(typedFile, typedString);
+                        return serviceProvider.getService().getAttachmentService().createImage(typedFile, typedString);
                     }
                 })
                 .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
@@ -204,7 +200,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         attachment.setValue(imageVideoResult.getFilename());
 
 
-                        return serviceProvider.getService(mActivity).getAttachmentService().createAttachment(attachment);
+                        return serviceProvider.getService().getAttachmentService().createAttachment(attachment);
                     }
                 })
                 .flatMap(new Func1<Attachment, Observable<Answer>>() {
@@ -221,7 +217,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         }
 
 
-                        return serviceProvider.getService(mActivity).getAnswerService().postAnswer(answer);
+                        return serviceProvider.getService().getAnswerService().postAnswer(answer);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

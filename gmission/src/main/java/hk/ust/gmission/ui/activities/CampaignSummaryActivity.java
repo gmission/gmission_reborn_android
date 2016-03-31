@@ -77,7 +77,7 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
     public void downloadCampaign(){
         if (getIntent() != null && getIntent().getExtras() != null) {
             String campaignId = getIntent().getExtras().getString(CAMPAIGN_ID);
-            CampaignService service = serviceProvider.getService(mActivity).getCampaignService();
+            CampaignService service = serviceProvider.getService().getCampaignService();
             service.getCampaign(campaignId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<Campaign>() {
@@ -130,7 +130,7 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        final CampaignService service = serviceProvider.getService(mActivity).getCampaignService();
+                        final CampaignService service = serviceProvider.getService().getCampaignService();
                         if (joinButton.getText().equals(getString(R.string.label_join))) {
                             CampaignUser campaignUser = new CampaignUser();
                             campaignUser.setCampaign_id(mCampaign.getId());

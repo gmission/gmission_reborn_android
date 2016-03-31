@@ -10,17 +10,17 @@ import hk.ust.gmission.core.api.QueryObject;
 /**
  * Created by bigstone on 28/12/2015.
  */
-public class GsonUtil {
+public class GsonUtils {
     @Inject protected Gson gson;
-    private static GsonUtil instance = null;
+    private static GsonUtils instance = null;
 
-    private GsonUtil() {
+    private GsonUtils() {
         Injector.inject(this);
     }
 
-    public static GsonUtil getInstance(){
+    public static GsonUtils getInstance(){
         if (instance == null){
-            instance = new GsonUtil();
+            instance = new GsonUtils();
         }
         return instance;
     }
