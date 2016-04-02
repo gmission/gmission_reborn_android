@@ -2,7 +2,7 @@
 
 package hk.ust.gmission.ui.activities;
 
-import android.accounts.OperationCanceledException;
+import android.accounts.AccountsException;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,12 +25,13 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.squareup.otto.Subscribe;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
 import hk.ust.gmission.authenticator.LogoutService;
-import hk.ust.gmission.core.AppUpdateCheckTask;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
@@ -45,11 +46,14 @@ import hk.ust.gmission.ui.fragments.TaskMapFragment;
 import hk.ust.gmission.ui.fragments.UserProfilePFragment;
 import hk.ust.gmission.util.BaiduPushUtils;
 import hk.ust.gmission.util.Ln;
-import hk.ust.gmission.util.SafeAsyncTask;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
-import static hk.ust.gmission.core.Constants.Extra.COORDINATE;
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
-import static hk.ust.gmission.core.Constants.Extra.LOCATION_NAME;
 
 
 /**
@@ -84,17 +88,19 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     boolean doubleBackToExitPressedOnce = false;
 
+    boolean isAuthenticating = false;
+
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
-        checkAuth();
+
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         super.onCreate(savedInstanceState);
-
+        checkAuth();
 
 
         setContentView(R.layout.main_activity);
@@ -349,38 +355,92 @@ public class MainActivity extends BootstrapFragmentActivity{
     }
 
     private void checkAuth() {
-        new SafeAsyncTask<Boolean>() {
 
-            @Override
-            public Boolean call() throws Exception {
+        if (isAuthenticating) {
+            return;
+        } else {
+            isAuthenticating = true;
+        }
 
-                // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
-                String sessionToken = keyProvider.getAuthKey(MainActivity.this);
+        Observable.just(true)
+                .observeOn(Schedulers.io())
+                .flatMap(new Func1<Boolean, Observable<Boolean>>() {
+                    @Override
+                    public Observable<Boolean> call(Boolean aBoolean) {
+                        String sessionToken = null;
+                        try {
+                            sessionToken = keyProvider.getAuthKey(MainActivity.this);
+                            Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
+                            Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
+                            Constants.Http.PARAM_USER_ID = keyProvider.getUserId();
 
-                Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
-                Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
-                Constants.Http.PARAM_USER_ID = keyProvider.getUserId();
+                        } catch (AccountsException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                return sessionToken == null;
-            }
+                        return Observable.just(sessionToken != null);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean hasSessionToken) {
 
-            @Override
-            protected void onException(final Exception e) throws RuntimeException {
-                super.onException(e);
-                if (e instanceof OperationCanceledException) {
-                    // User cancelled the authentication process (back button, etc).
-                    // Since auth could not take place, lets finish this activity.
-                    finish();
-                }
-            }
+                        if  (hasSessionToken) {
+                            userHasAuthenticated = true;
+                            initScreen();
+                        }
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        finish();
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        isAuthenticating = false;
+                    }
+                })
+                .subscribe();
 
-            @Override
-            protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
-                super.onSuccess(hasAuthenticated);
-                userHasAuthenticated = true;
-                initScreen();
-            }
-        }.execute();
+
+//        new SafeAsyncTask<Boolean>() {
+//
+//            @Override
+//            public Boolean call() throws Exception {
+//
+//                // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
+//                String sessionToken = keyProvider.getAuthKey(MainActivity.this);
+//
+//                Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
+//                Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
+//                Constants.Http.PARAM_USER_ID = keyProvider.getUserId();
+//
+//                return sessionToken == null;
+//            }
+//
+//            @Override
+//            protected void onException(final Exception e) throws RuntimeException {
+//                super.onException(e);
+//                if (e instanceof OperationCanceledException) {
+//                    // User cancelled the authentication process (back button, etc).
+//                    // Since auth could not take place, lets finish this activity.
+//                    finish();
+//                }
+//            }
+//
+//            @Override
+//            protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
+//                super.onSuccess(hasAuthenticated);
+//                userHasAuthenticated = true;
+//                initScreen();
+//            }
+//        }.execute();
     }
 
     @Override

@@ -171,7 +171,7 @@
 
         <activity android:name=".ui.activities.HitSummaryActivity" />
         <activity android:name=".ui.activities.CampaignSummaryActivity" />
-        <activity android:name=".ui.activities.SpatialDirectHitActivity"></activity>
+        <activity android:name=".ui.activities.SpatialDirectHitActivity" />
     </application>
 
 </manifest>
