@@ -82,7 +82,7 @@
                 android:background="@drawable/button_background_states"
                 android:padding="10dp"
                 android:layout_margin="@dimen/text_margin"
-                android:text="@string/label_view_3d_model"
+                android:text="@string/label_request_3d_model"
                 android:textColor="@color/text"
                 android:enabled="false"
                 android:textSize="20sp"

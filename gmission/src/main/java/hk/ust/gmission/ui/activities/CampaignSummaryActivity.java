@@ -43,6 +43,7 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
     @Bind(R.id.campaign_content_text) TextView campaignContentText;
     @Bind(R.id.view_tasks_btn) Button viewTasksButton;
     @Bind(R.id.join_btn) Button joinButton;
+    @Bind(R.id.create_task_btn) Button createTaskButton;
 
     private Campaign mCampaign = null;
     private CampaignSummaryActivity mActivity;
@@ -86,6 +87,11 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                             mCampaign = campaign;
                             campaignTitleText.setText(mCampaign.getTitle());
                             campaignContentText.setText(mCampaign.getBrief());
+                            if (campaign.getTitle().equals("Crowd the World")){
+                                createTaskButton.setVisibility(View.VISIBLE);
+                            } else {
+                                createTaskButton.setVisibility(View.GONE);
+                            }
                         }
                     })
                     .subscribe();
@@ -103,8 +109,10 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                             joinButton.setVisibility(View.VISIBLE);
                             if (campaignUserModelWrapper.getNum_results() > 0) {
                                 joinButton.setText(getString(R.string.label_quit));
+                                createTaskButton.setEnabled(true);
                             } else {
                                 joinButton.setText(getString(R.string.label_join));
+                                createTaskButton.setEnabled(false);
                             }
                         }
                     })
@@ -120,6 +128,17 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(mActivity, HitListActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(mCampaign.getId())));
+                    }
+                })
+                .subscribe();
+
+        RxView.clicks(createTaskButton)
+                .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(mActivity, Create3DHitActivity.class).putExtra(CAMPAIGN_ID, String.valueOf(mCampaign.getId())));
                     }
                 })
                 .subscribe();
@@ -143,6 +162,7 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                                         public void call(CampaignUser dummy) {
                                             Toast.makeText(mActivity.getApplicationContext(), getString(R.string.message_join_campaign_success), Toast.LENGTH_SHORT).show();
                                             joinButton.setText(getString(R.string.label_quit));
+                                            createTaskButton.setEnabled(true);
                                         }
                                     })
                                     .doOnError(new Action1<Throwable>() {
@@ -171,6 +191,7 @@ public class CampaignSummaryActivity extends BootstrapFragmentActivity {
                                         public void call() {
                                             Toast.makeText(mActivity.getApplicationContext(), getString(R.string.message_quit_campaign_success), Toast.LENGTH_SHORT).show();
                                             joinButton.setText(getString(R.string.label_join));
+                                            createTaskButton.setEnabled(false);
                                         }
                                     })
                                     .subscribe();

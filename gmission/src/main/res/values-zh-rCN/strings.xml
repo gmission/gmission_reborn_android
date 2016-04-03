@@ -45,8 +45,9 @@
     <string name="label_deadline_time">截止时间：</string>
     <string name="label_contribute_photo">贡献一个答案</string>
     <string name="label_view_photos">查看图片</string>
-    <string name="label_view_3d_model">查看散点模型</string>
+    <string name="label_request_3d_model">请求模型邮件</string>
     <string name="label_view_tasks">查看任务列表</string>
+    <string name="label_create_task">创建一个任务</string>
 
 
     <string name="message_signing_in">正在登陆…</string>
@@ -71,6 +72,9 @@
     <string name="message_fail">失败，请稍后重试...</string>
     <string name="message_task_instruction_3d">请沿着地图上红色箭头指示的方向拍一张照片。</string>
     <string name="message_model_not_build">散点模型还未构建，请稍后再来...</string>
+    <string name="message_email_sent">邮件已经发送。</string>
+    <string name="message_select_location">请在以下的地图中选择任务的位置。</string>
+
 
     <string name="loading">Loading</string>
     <string name="refreshing">Refreshing</string>
@@ -86,7 +90,6 @@
     <string name="title_activity_hit">回答问题</string>
     <string name="title_activity_bootstrap_account_register">注册账户</string>
     <string name="title_activity_ask_spatial_task">提问</string>
-    <string name="title_activity_view_3d_model">查看 Sparse Model</string>
     <string name="title_activity_working_area">工作区域</string>
     <string name="title_activity_answer_list">答案</string>
 

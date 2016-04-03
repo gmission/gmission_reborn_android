@@ -293,7 +293,7 @@ public class SpatialDirectHitActivity extends BootstrapFragmentActivity implemen
                         currentPicFile = ImageUtils.getTempFile(mActivity);
 
                         if (currentPicFile == null){
-                            Toast.makeText(mActivity, getString(R.string.message_cannot_create_image), Toast.LENGTH_SHORT).show();
+                            Toaster.showLong(mActivity,getString(R.string.message_cannot_create_image));
                             return;
                         }
 

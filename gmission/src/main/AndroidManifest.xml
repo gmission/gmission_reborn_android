@@ -91,9 +91,6 @@
             android:name=".ui.activities.AskSpatialTaskActivity"
             android:label="@string/title_activity_ask_spatial_task" />
         <activity
-            android:name=".ui.activities.MeshViewActivity"
-            android:label="@string/title_activity_view_3d_model" />
-        <activity
             android:name=".ui.activities.WorkingAreaSetupActivity"
             android:label="@string/title_activity_working_area" />
         <activity
@@ -172,6 +169,7 @@
         <activity android:name=".ui.activities.HitSummaryActivity" />
         <activity android:name=".ui.activities.CampaignSummaryActivity" />
         <activity android:name=".ui.activities.SpatialDirectHitActivity" />
+        <activity android:name=".ui.activities.Create3DHitActivity"></activity>
     </application>
 
 </manifest>

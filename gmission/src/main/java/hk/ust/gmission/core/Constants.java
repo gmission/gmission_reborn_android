@@ -43,7 +43,6 @@ public final class Constants {
         public final static String URL_IMAGE = "/image";
         public final static String URL_VIDEO = "/video";
         public final static String URL_AUDIO = "/audio";
-        public static final String URL_PLY =  "/d3/ply";
         public  final static String URL_IMAGE_ORI = URL_BASE + URL_IMAGE + "/original";
         public  final static String URL_VIDEO_ORI = URL_BASE + URL_VIDEO + "/original";
         public  final static String URL_VIDEO_THUMB = URL_BASE + URL_VIDEO + "/thumb";
@@ -59,6 +58,9 @@ public final class Constants {
         public static final String URL_HITS_FRAG =  "/rest/hit";
 
         public static final String URL_3D_TASK_DIRECTION_FRAG =  "/d3/3d_request_direction";
+
+        public static final String URL_REQUEST_3D_EMAIL_FRAG =  "/d3/email_model";
+
 
         public static final String URL_MESSAGES_FRAG =  "/rest/message";
 

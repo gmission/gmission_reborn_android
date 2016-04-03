@@ -8,7 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.kevinsawicki.wishlist.Toaster;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
@@ -16,9 +18,13 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.models.Attachment;
 import hk.ust.gmission.models.Hit;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static hk.ust.gmission.core.Constants.Extra.CAMPAIGN_ID;
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
@@ -81,6 +87,9 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
                     public void call(Hit hit) {
                         mHit = hit;
                         hitContent.setText(hit.getTitle() + "\n" + hit.getDescription());
+                        if (mHit.getStatus().equals("closed")) {
+                            answerButton.setEnabled(false);
+                        }
                         if (mHit.getAttachment_id() != null) {
                             viewModelButton.setEnabled(true);
                             modelMessage.setVisibility(View.GONE);
@@ -137,7 +146,32 @@ public class HitSummaryActivity extends BootstrapFragmentActivity {
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(mActivity, MeshViewActivity.class).putExtra(HIT_ID, mHit.getId()));
+
+                        serviceProvider.getService().getAttachmentService().getAttachment(mHit.getAttachment_id())
+                                .observeOn(Schedulers.io())
+                                .flatMap(new Func1<Attachment, Observable<String>>() {
+                                    @Override
+                                    public Observable<String> call(Attachment attachment) {
+                                        if (attachment == null) return null;
+
+                                        return Observable.just(attachment.getValue());
+                                    }
+                                })
+                                .flatMap(new Func1<String, Observable<String>>() {
+                                    @Override
+                                    public Observable<String> call(String filename) {
+                                        return serviceProvider.getService().getExtraService().request3DEmail(Constants.Http.PARAM_USER_ID, mHit.getId(), filename);
+                                    }
+                                })
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext(new Action1<String>() {
+                                    @Override
+                                    public void call(String s) {
+                                        Toaster.showLong(mActivity,getString(R.string.message_email_sent));
+                                    }
+                                })
+                                .subscribe();
+
                     }
                 })
                 .subscribe();

@@ -76,6 +76,18 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <Button
+                android:id="@+id/create_task_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_states"
+                android:padding="10dp"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/label_create_task"
+                android:visibility="invisible"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
                 android:id="@+id/join_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
