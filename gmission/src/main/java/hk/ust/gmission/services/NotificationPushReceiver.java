@@ -3,13 +3,16 @@ package hk.ust.gmission.services;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.baidu.android.pushservice.PushMessageReceiver;
 
 import java.util.List;
 
+import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.models.Message;
+import hk.ust.gmission.ui.activities.HitActivity;
 import hk.ust.gmission.util.BaiduPushUtils;
 import hk.ust.gmission.util.GsonUtils;
 
@@ -52,13 +55,11 @@ public class NotificationPushReceiver extends PushMessageReceiver {
         String title = "gMission";
         String content = "";
 
-        String customContent = msg;
-
         Message message = null;
 
-        if (customContent != null && customContent.length() != 0) {
+        if (msg != null && msg.length() != 0) {
             try {
-                message = GsonUtils.getGson().fromJson(customContent, Message.class);
+                message = GsonUtils.getGson().fromJson(msg, Message.class);
                 // ...
             } catch (Exception e) {
                 e.printStackTrace();
@@ -66,20 +67,6 @@ public class NotificationPushReceiver extends PushMessageReceiver {
         }
 
         if(message!=null){
-//            Log.d(TAG, "用户收到了新通知" + message.getType());
-//            if( message.getType().equals(Message.MESSAGE_TYPE_ANSWER)) {
-//                Log.d(TAG, "用户收到了新答案，发送broadcase");
-//                Intent msgIntent = new Intent(context, HitActivity.class);
-////                msgIntent.putExtra("message", message);
-//
-//                context.sendBroadcast(msgIntent);
-//            } else if (message.getType().equals(Message.MESSAGE_TYPE_FEED)){
-//                Log.d(TAG, "用户收到了新任务，发送broadcase");
-//                Intent msgIntent = new Intent(context, HitActivity.class);
-////                msgIntent.putExtra("message", message);
-//
-//                context.sendBroadcast(msgIntent);
-//            }
 
             content = message.getContent();
 
@@ -127,7 +114,7 @@ public class NotificationPushReceiver extends PushMessageReceiver {
     public void onNotificationArrived(Context context, String title,
                                       String description, String customContentString) {
 
-        //TODO: response for notification received
+        Log.d(TAG, title);
 
     }
 

@@ -2,6 +2,9 @@ package hk.ust.gmission.authenticator;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -23,6 +26,7 @@ import com.google.gson.Gson;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -40,13 +44,10 @@ import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.models.User;
 import hk.ust.gmission.services.BaiduPushInfoService;
 import hk.ust.gmission.services.BootstrapService;
+import hk.ust.gmission.ui.activities.MainActivity;
 import hk.ust.gmission.util.BaiduPushUtils;
 import hk.ust.gmission.util.Ln;
-import hk.ust.gmission.util.SafeAsyncTask;
 import hk.ust.gmission.util.Strings;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -56,7 +57,6 @@ import rx.schedulers.Schedulers;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.text.TextUtils.isEmpty;
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.KEYCODE_ENTER;
@@ -338,6 +338,31 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
      */
 
     protected void finishLogin() {
+
+
+        //clean other accounts
+        if (accountManager != null) {
+            final Account[] accounts = accountManager
+                    .getAccountsByType(Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
+            if (accounts.length > 0) {
+
+                final AccountManagerFuture<Boolean> removeAccountFuture
+                        = accountManager.removeAccount(accounts[0], null, null);
+
+                try {
+                    removeAccountFuture.getResult();
+                } catch (OperationCanceledException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (AuthenticatorException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Ln.w("accountManagerWithContext is null");
+        }
+
         final Account account = new Account(mUsername, Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE);
         accountManager.addAccountExplicitly(account, mPassword, null);
 
@@ -382,7 +407,6 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
      */
     public void onAuthenticationResult(final boolean result) {
         if (result) {
-            updateBaiduPushInfo();
             finishLogin();
         } else {
             Ln.d("onAuthenticationResult: failed to authenticate");
@@ -390,5 +414,12 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
                     string.message_auth_failed_new_account);
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MainActivity.mActivity.finish();
+        finish();
+        return;
     }
 }

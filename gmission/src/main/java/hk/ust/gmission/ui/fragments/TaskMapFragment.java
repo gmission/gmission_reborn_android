@@ -178,17 +178,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
-
-//        //make a marker follow the center of the screen
-//        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//            public void onCameraChange(CameraPosition arg0) {
-//                mMap.clear();
-//                mMap.addMarker(new MarkerOptions().position(arg0.target));
-//
-//            }
-//        });
-
-
     }
 
     private void askPosition(LatLng position){
@@ -228,11 +217,6 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                 .position(point)
                 .title(getString(R.string.label_ask_here))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-
-//        askHereMarker = mMap.addMarker(new MarkerOptions()
-//                .position(point)
-//                .title(getString(R.string.label_ask_here))
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_3d_model)));
     }
 
     private void subcribeButtons(){

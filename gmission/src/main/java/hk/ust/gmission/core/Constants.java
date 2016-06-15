@@ -57,6 +57,8 @@ public final class Constants {
 
         public static final String URL_HITS_FRAG =  "/rest/hit";
 
+        public static final String URL_EXTRA_FRAG =  "/rest/extra";
+
         public static final String URL_3D_TASK_DIRECTION_FRAG =  "/d3/3d_request_direction";
 
         public static final String URL_REQUEST_3D_EMAIL_FRAG =  "/d3/email_model";

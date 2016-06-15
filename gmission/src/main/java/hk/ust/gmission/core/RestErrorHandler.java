@@ -1,9 +1,14 @@
 package hk.ust.gmission.core;
 
+import hk.ust.gmission.Injector;
+import hk.ust.gmission.events.AuthorizationInitializedEvent;
+import hk.ust.gmission.events.BadReqestEvent;
+import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
 import hk.ust.gmission.events.RestAdapterErrorEvent;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
@@ -17,20 +22,30 @@ public class RestErrorHandler implements ErrorHandler {
 
     private Bus bus;
 
+    private boolean authInitialized = false;
+
     public RestErrorHandler(Bus bus) {
         this.bus = bus;
+        this.bus.register(this);
+    }
+
+    @Subscribe
+    public void onNavItemSelectedEvent(AuthorizationInitializedEvent event) {
+        authInitialized = true;
     }
 
     @Override
     public Throwable handleError(RetrofitError cause) {
-        if(cause != null) {
+        if(cause != null && authInitialized) {
             if (cause.isNetworkError()) {
                 bus.post(new NetworkErrorEvent(cause));
-                cause = null;
             } else if(isUnAuthorized(cause)) {
                 bus.post(new UnAuthorizedErrorEvent(cause));
-                cause = null;
+            } else if (cause.getResponse().getStatus() == HTTP_BAD_REQUEST ){
+                bus.post(new BadReqestEvent(cause));
             }
+            cause.printStackTrace();
+            cause = null;
         }
 
 
@@ -70,7 +85,7 @@ public class RestErrorHandler implements ErrorHandler {
                 authFailed = true;
             }
         }
-        if(cause.getResponse().getStatus() == HTTP_UNAUTHORIZED || cause.getResponse().getStatus() == HTTP_BAD_REQUEST ) {
+        if(cause.getResponse().getStatus() == HTTP_UNAUTHORIZED ) {
 
             authFailed = true;
         }
@@ -79,5 +94,15 @@ public class RestErrorHandler implements ErrorHandler {
 
 
         return authFailed;
+    }
+
+    private boolean isBadRequest(RetrofitError cause) {
+        boolean badRequested = false;
+
+        if(cause.getResponse().getStatus() == HTTP_BAD_REQUEST ) {
+            badRequested = true;
+        }
+
+        return badRequested;
     }
 }

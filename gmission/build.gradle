@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
 //        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha3'
     }
 }
 apply plugin: 'com.android.application'
@@ -54,8 +54,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         multiDexEnabled true
-        versionCode 119
-        versionName '1.0.2'
+        versionCode 123
+        versionName '1.1.3'
     }
 
     packagingOptions {
@@ -85,7 +85,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             minifyEnabled false
-            debuggable true //when upload to google play, disable this option
+            debuggable false //when upload to google play, disable this option
         }
 
     }

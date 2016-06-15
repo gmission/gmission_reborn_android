@@ -72,8 +72,8 @@ public class AnswerRecyclerViewFragment extends BaseRecyclerViewFragment<Answer,
                 .observeOn(Schedulers.io())
                 .doOnNext(new Action1<ModelWrapper<Answer>>() {
                     @Override
-                    public void call(ModelWrapper<Answer> campaigns) {
-                        getAdapter().setItems(campaigns.getObjects());
+                    public void call(ModelWrapper<Answer> answers) {
+                        getAdapter().setItems(answers.getObjects());
                     }
                 })
                 .doOnError(new Action1<Throwable>() {

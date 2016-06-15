@@ -20,10 +20,13 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.models.Coordinate;
+import hk.ust.gmission.models.Extra;
 import hk.ust.gmission.models.GeoLocation;
 import hk.ust.gmission.models.Hit;
+import hk.ust.gmission.models.ModelWrapper;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -144,7 +147,30 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                         int requiredAnswers = mSkbAnswersCount.getProgress() + 1;
                         hit.setRequired_answer_count(requiredAnswers);
 
-                        return serviceProvider.getService().getHitService().createHit(hit);
+
+
+                        Observable<Hit> hitObservable = Observable.just(hit);
+
+                        QueryObject queryObject = new QueryObject();
+                        queryObject.push("content", "eq", "##spatial");
+                        Observable<ModelWrapper<Extra>> extrasObservable = serviceProvider.getService().getExtraService().getExtras(queryObject.toString());
+                        Observable.combineLatest(hitObservable, extrasObservable, new Func2<Hit, ModelWrapper<Extra>, Hit>() {
+                            @Override
+                            public Hit call(Hit hit, ModelWrapper<Extra> extraModelWrapper) {
+                                if (extraModelWrapper.getNum_results() != 0) {
+                                    hit.setCampaign_id(extraModelWrapper.getObjects().get(0).getCampaign_id());
+                                }
+                                return hit;
+                            }
+                        })
+                                .doOnNext(new Action1<Hit>() {
+                                    @Override
+                                    public void call(Hit hit) {
+                                        serviceProvider.getService().getHitService().createHit(hit).subscribe();
+                                    }
+                                })
+                                .subscribe();
+                        return Observable.just(hit);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

@@ -7,10 +7,16 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AccountsException;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.squareup.otto.Bus;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
+import hk.ust.gmission.Injector;
 import hk.ust.gmission.services.BootstrapService;
 
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
@@ -26,6 +32,7 @@ public class ApiKeyProvider {
     private AccountManager accountManager;
 
     public ApiKeyProvider(AccountManager accountManager) {
+
         this.accountManager = accountManager;
     }
 
@@ -46,11 +53,28 @@ public class ApiKeyProvider {
      * @throws IOException
      */
     public String getAuthKey(final Activity activity) throws AccountsException, IOException {
-        final AccountManagerFuture<Bundle> accountManagerFuture
+        final AccountManagerFuture<Bundle> future
                 = accountManager.getAuthTokenByFeatures(BOOTSTRAP_ACCOUNT_TYPE,
                 AUTHTOKEN_TYPE, new String[0], activity, null, null, null, null);
 
-        return accountManagerFuture.getResult().getString(KEY_AUTHTOKEN);
+//        Bundle bundle = future.getResult();
+//        String session = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+//        String userId = bundle.getString(USER_ID);
+
+        Bundle result = null;
+        try {
+            result = future.getResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String authToken = null;
+        if (future.isDone() && !future.isCancelled()) {
+            authToken = result.getString(AccountManager.KEY_AUTHTOKEN);
+        }
+
+        return authToken;
+
     }
 
     public String getUserName() throws AccountsException, IOException {

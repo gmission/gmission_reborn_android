@@ -31,13 +31,19 @@ import javax.inject.Inject;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
+import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.Constants;
+import hk.ust.gmission.core.api.QueryObject;
+import hk.ust.gmission.events.AuthorizationInitializedEvent;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
 import hk.ust.gmission.events.RestAdapterErrorEvent;
 import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
+import hk.ust.gmission.models.BaiduPushInfo;
+import hk.ust.gmission.models.ModelWrapper;
+import hk.ust.gmission.services.BaiduPushInfoService;
 import hk.ust.gmission.services.LocationTraceService;
 import hk.ust.gmission.ui.fragments.CampaignRecyclerViewFragment;
 import hk.ust.gmission.ui.fragments.MessageRecyclerViewFragment;
@@ -90,22 +96,19 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     boolean isAuthenticating = false;
 
-
+    public static MainActivity mActivity;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
-
+        Log.i("MainActivity", "MainActivity Creating!");
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         super.onCreate(savedInstanceState);
+        mActivity = this;
         checkAuth();
 
-
         setContentView(R.layout.main_activity);
-
-
 
         // Set up navigation drawer
         title = getString(R.string.title_home);
@@ -120,7 +123,6 @@ public class MainActivity extends BootstrapFragmentActivity{
 
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
-
 
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -141,12 +143,12 @@ public class MainActivity extends BootstrapFragmentActivity{
         PushManager.startWork(getApplicationContext(),
                 PushConstants.LOGIN_TYPE_API_KEY,
                 BaiduPushUtils.getMetaValue(MainActivity.this, "api_key"));
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         bus.register(this);
     }
 
@@ -210,6 +212,53 @@ public class MainActivity extends BootstrapFragmentActivity{
     }
 
 
+    public void updateBaiduPushInfo(){
+
+        final String baidu_user_id = BaiduPushUtils.getBaiduPushUserID(MainActivity.this);
+        final String baidu_channel_id = BaiduPushUtils.getBaiduPushChannelID(MainActivity.this);
+
+        QueryObject queryObject = new QueryObject();
+        queryObject.push("user_id", "eq", Constants.Http.PARAM_USER_ID);
+
+        final BaiduPushInfoService baiduPushInfoService = serviceProvider.getService().getBaiduPushInfoService();
+
+        baiduPushInfoService.getBaiduPushInfoList(queryObject.toString())
+                .flatMap(new Func1<ModelWrapper<BaiduPushInfo>, Observable<BaiduPushInfo>>() {
+                    @Override
+                    public Observable<BaiduPushInfo> call(ModelWrapper<BaiduPushInfo> wrapper) {
+                        if (wrapper.getNum_results() > 0){
+                            return Observable.just(wrapper.getObjects().get(0));
+                        }
+                        return Observable.just(new BaiduPushInfo());
+                    }
+                })
+                .flatMap(new Func1<BaiduPushInfo, Observable<BaiduPushInfo>>() {
+
+                    @Override
+                    public Observable<BaiduPushInfo> call(BaiduPushInfo baiduPushInfo) {
+                        baiduPushInfo.setIs_valid(true);
+                        baiduPushInfo.setType("android");
+                        baiduPushInfo.setBaidu_user_id(baidu_user_id);
+                        baiduPushInfo.setBaidu_channel_id(baidu_channel_id);
+
+                        if (baiduPushInfo.getId() == null) {
+                            baiduPushInfo.setUser_id(Constants.Http.PARAM_USER_ID);
+                            return baiduPushInfoService.postBaiduPushInfo(baiduPushInfo);
+                        } else {
+                            return baiduPushInfoService.updateBaiduPushInfo(baiduPushInfo.getId(), baiduPushInfo);
+                        }
+                    }
+                })
+                .doOnNext(new Action1<BaiduPushInfo>() {
+
+                    @Override
+                    public void call(BaiduPushInfo baiduPushInfo) {
+                        Ln.d("baidu Push info updated:" + baiduPushInfo.getId());
+                    }
+                })
+                .subscribe();
+    }
+
     @Subscribe
     public void onNavItemSelectedEvent(NavItemSelectedEvent event) {
 
@@ -225,7 +274,6 @@ public class MainActivity extends BootstrapFragmentActivity{
                 case 1: //campaign
                     title = getString(R.string.title_campaign);
                     replaceCurrentFragment(campaignFragment);
-//                    Intent intent = new Intent(this, MeshViewActivity.class);
                     Intent intent = new Intent(this, SpatialDirectHitActivity.class).putExtra(HIT_ID, "1");
 //                    startActivity(intent);
                     break;
@@ -260,23 +308,21 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     @Subscribe
     public void onUnAuthorizedErrorEvent(UnAuthorizedErrorEvent unAuthorizedErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.unauthorized_error_message), Toast.LENGTH_SHORT);
-        logoutService.logout(new Runnable() {
-            @Override
-            public void run() {
-                checkAuth();
-            }
-        });
+        if (isAuthenticating) return;
+        Log.e("authorizedError", "failed");
+        Toast.makeText(this.getApplicationContext(), getString(R.string.unauthorized_error_message), Toast.LENGTH_LONG).show();
+//        Intent intent = new Intent(this, BootstrapAuthenticatorActivity.class);
+//        startActivity(intent);
     }
 
     @Subscribe
     public void onNetworkErrorEvent(NetworkErrorEvent networkErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
     }
 
     @Subscribe
     public void onRetrofitErrorEvent(RestAdapterErrorEvent restAdapterErrorEvent) {
-        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_SHORT);
+        Toast.makeText(this.getApplicationContext(), getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
     }
 
 
@@ -328,6 +374,7 @@ public class MainActivity extends BootstrapFragmentActivity{
             title = getString(R.string.title_home);
             getSupportActionBar().setTitle(title);
             replaceCurrentFragment(initFragment);
+            updateBaiduPushInfo();
         }
 
     }
@@ -356,7 +403,7 @@ public class MainActivity extends BootstrapFragmentActivity{
 
     private void checkAuth() {
 
-        if (isAuthenticating) {
+        if (isAuthenticating){
             return;
         } else {
             isAuthenticating = true;
@@ -397,6 +444,7 @@ public class MainActivity extends BootstrapFragmentActivity{
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        throwable.printStackTrace();
                         finish();
                     }
                 })
@@ -404,43 +452,10 @@ public class MainActivity extends BootstrapFragmentActivity{
                     @Override
                     public void call() {
                         isAuthenticating = false;
+                        bus.post(new AuthorizationInitializedEvent());
                     }
                 })
                 .subscribe();
-
-
-//        new SafeAsyncTask<Boolean>() {
-//
-//            @Override
-//            public Boolean call() throws Exception {
-//
-//                // The call to keyProvider.getAuthKey(...) is what initiates the login screen. Call that now.
-//                String sessionToken = keyProvider.getAuthKey(MainActivity.this);
-//
-//                Constants.Http.PARAM_SESSION_TOKEN = sessionToken;
-//                Constants.Http.PARAM_USERNAME = keyProvider.getUserName();
-//                Constants.Http.PARAM_USER_ID = keyProvider.getUserId();
-//
-//                return sessionToken == null;
-//            }
-//
-//            @Override
-//            protected void onException(final Exception e) throws RuntimeException {
-//                super.onException(e);
-//                if (e instanceof OperationCanceledException) {
-//                    // User cancelled the authentication process (back button, etc).
-//                    // Since auth could not take place, lets finish this activity.
-//                    finish();
-//                }
-//            }
-//
-//            @Override
-//            protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
-//                super.onSuccess(hasAuthenticated);
-//                userHasAuthenticated = true;
-//                initScreen();
-//            }
-//        }.execute();
     }
 
     @Override
