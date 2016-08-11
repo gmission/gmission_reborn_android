@@ -21,6 +21,7 @@ import hk.ust.gmission.Injector;
 import hk.ust.gmission.R;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
+import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.models.Answer;
 import hk.ust.gmission.models.Hit;
 import hk.ust.gmission.models.ModelWrapper;
@@ -88,6 +89,7 @@ public class UserProfilePFragment extends Fragment {
                     .attach(questionFragment)
                     .commit();
         }
+
 
     }
 

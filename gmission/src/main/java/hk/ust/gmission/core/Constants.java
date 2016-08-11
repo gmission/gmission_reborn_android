@@ -75,6 +75,7 @@ public final class Constants {
         public static final String URL_USERS_FRAG =  "/rest/user";
 
         public static final String URL_LOCATIONS_FRAG =  "/rest/location";
+        public static final String URL_LOCATION_TRACE_FRAG =  "/rest/position_trace";
 
         public static final String URL_COORDINATES_FRAG =  "/rest/coordinate";
         public static final String URL_BAIDU_PUSH_INFO_FRAG =  "/rest/baidu_push_info";

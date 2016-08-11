@@ -284,7 +284,12 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
                     .flatMap(new Func1<ModelWrapper<Hit>, Observable<Hit>>() {
                         @Override
                         public Observable<Hit> call(ModelWrapper<Hit> hitModelWrapper) {
-                            return Observable.from(hitModelWrapper.getObjects());
+                            if (hitModelWrapper.getNum_results() > 50) {
+                                return Observable.from(hitModelWrapper.getObjects().subList(hitModelWrapper.getNum_results() - 50, hitModelWrapper.getNum_results() - 1));
+                            } else {
+                                return Observable.from(hitModelWrapper.getObjects());
+                            }
+
                         }
                     })
                     .flatMap(new Func1<Hit, Observable<MapObject>>() {

@@ -31,17 +31,19 @@ import javax.inject.Inject;
 
 import hk.ust.gmission.R;
 import hk.ust.gmission.authenticator.ApiKeyProvider;
-import hk.ust.gmission.authenticator.BootstrapAuthenticatorActivity;
 import hk.ust.gmission.authenticator.LogoutService;
 import hk.ust.gmission.core.Constants;
 import hk.ust.gmission.core.api.QueryObject;
 import hk.ust.gmission.events.AuthorizationInitializedEvent;
+import hk.ust.gmission.events.LocationUpdateEvent;
 import hk.ust.gmission.events.NavItemSelectedEvent;
 import hk.ust.gmission.events.NetworkErrorEvent;
+import hk.ust.gmission.events.RequestLocationEvent;
 import hk.ust.gmission.events.RestAdapterErrorEvent;
 import hk.ust.gmission.events.TaskCreateSuccessEvent;
 import hk.ust.gmission.events.UnAuthorizedErrorEvent;
 import hk.ust.gmission.models.BaiduPushInfo;
+import hk.ust.gmission.models.PositionTrace;
 import hk.ust.gmission.models.ModelWrapper;
 import hk.ust.gmission.services.BaiduPushInfoService;
 import hk.ust.gmission.services.LocationTraceService;
@@ -143,6 +145,7 @@ public class MainActivity extends BootstrapFragmentActivity{
         PushManager.startWork(getApplicationContext(),
                 PushConstants.LOGIN_TYPE_API_KEY,
                 BaiduPushUtils.getMetaValue(MainActivity.this, "api_key"));
+
     }
 
     @Override
@@ -150,6 +153,7 @@ public class MainActivity extends BootstrapFragmentActivity{
         super.onResume();
 
         bus.register(this);
+        bus.post(new RequestLocationEvent(true));
     }
 
     @Override
@@ -270,6 +274,7 @@ public class MainActivity extends BootstrapFragmentActivity{
                 case 0: //home
                     title = getString(R.string.title_home);
                     replaceCurrentFragment(homeFragment);
+
                     break;
                 case 1: //campaign
                     title = getString(R.string.title_campaign);
@@ -332,6 +337,27 @@ public class MainActivity extends BootstrapFragmentActivity{
     }
 
 
+    @Subscribe
+    public void onLocationUpdate(LocationUpdateEvent event){
+        Log.i("locationTrace","create LocationTrace");
+        PositionTrace positionTrace = new PositionTrace();
+        positionTrace.setLatitude(event.getLocation().getLatitude());
+        positionTrace.setLongitude(event.getLocation().getLongitude());
+        positionTrace.setZ(event.getLocation().getAltitude());
+        positionTrace.setUser_id(Constants.Http.PARAM_USER_ID);
+
+        serviceProvider.getService().getGeoService()
+                .createPositionTrace(positionTrace)
+                .observeOn(Schedulers.io())
+                .doOnNext(new Action1<PositionTrace>() {
+                    @Override
+                    public void call(PositionTrace positionTrace) {
+                        Log.i("locationTrace ID", positionTrace.getId());
+                    }
+                }).subscribe();
+
+    }
+
     /**
      * Provides a connection to the GPS Logging Service
      */
@@ -375,6 +401,7 @@ public class MainActivity extends BootstrapFragmentActivity{
             getSupportActionBar().setTitle(title);
             replaceCurrentFragment(initFragment);
             updateBaiduPushInfo();
+            bus.post(new RequestLocationEvent(true));
         }
 
     }

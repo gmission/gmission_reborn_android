@@ -1,9 +1,9 @@
 package hk.ust.gmission.services;
 
 import hk.ust.gmission.core.Constants;
-import hk.ust.gmission.models.Attachment;
 import hk.ust.gmission.models.Coordinate;
 import hk.ust.gmission.models.GeoLocation;
+import hk.ust.gmission.models.PositionTrace;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -26,6 +26,12 @@ public interface GeoService {
 
     @POST(Constants.Http.URL_COORDINATES_FRAG)
     Observable<Coordinate> createCoordinate(@Body Coordinate coordinate);
+
+    @GET(Constants.Http.URL_LOCATION_TRACE_FRAG + "/{id}")
+    Observable<PositionTrace> getPositionTrace(@Path("id") String id);
+
+    @POST(Constants.Http.URL_LOCATION_TRACE_FRAG)
+    Observable<PositionTrace> createPositionTrace(@Body PositionTrace positionTrace);
 
 
 }

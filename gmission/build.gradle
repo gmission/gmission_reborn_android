@@ -4,7 +4,8 @@ buildscript {
     }
     dependencies {
 //        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath 'com.android.tools.build:gradle:2.2.0-alpha3'
+//        classpath 'com.android.tools.build:gradle:2.2.0-alpha5'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -85,7 +86,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             minifyEnabled false
-            debuggable false //when upload to google play, disable this option
+            debuggable true //when upload to google play, disable this option
         }
 
     }
