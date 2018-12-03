@@ -25,7 +25,7 @@ public class AppUpdateCheckTask extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            String url = "http://lccpu4.cse.ust.hk/indoorLocalizationService/checkgmission.php";
+            String url = "http://lccpu4/indoorLocalizationService/checkgmission.php";
 
             return post(url).body();
 
