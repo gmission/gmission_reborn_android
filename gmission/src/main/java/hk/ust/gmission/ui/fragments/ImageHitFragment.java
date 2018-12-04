@@ -72,9 +72,9 @@ public class ImageHitFragment extends BaseAnswerFragment {
         RxView.clicks(captureButton)
                 .debounce(BUTTON_PRESS_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<Void>() {
+                .doOnNext(new Action1<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void call(Object o) {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         ContentValues values = new ContentValues();
                         values.put(MediaStore.Images.Media.TITLE, "gmission_task_image");

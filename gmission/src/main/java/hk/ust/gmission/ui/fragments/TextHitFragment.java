@@ -1,6 +1,5 @@
 package hk.ust.gmission.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ public class TextHitFragment extends BaseAnswerFragment {
 
     @Bind(R.id.hit_edit_text) EditText answerText;
 
-    private static int BUTTON_PRESS_DELAY_MILLIS = 3000;
+    private static int BUTTON_PRESS_DELAY_MILLIS = 500;
 
 
     public TextHitFragment() {
@@ -66,12 +65,14 @@ public class TextHitFragment extends BaseAnswerFragment {
                         bus.post(new HitSubmitEnableEvent());
                     }
                 }
+
             })
             .doOnError(new Action1<Throwable>() {
                 @Override
                 public void call(Throwable throwable) {
-
+                    throwable.printStackTrace();
                 }
+
             })
             .subscribe();
 

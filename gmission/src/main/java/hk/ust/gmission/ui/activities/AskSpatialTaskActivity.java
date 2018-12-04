@@ -8,7 +8,6 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.kevinsawicki.wishlist.Toaster;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -162,8 +161,7 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                                 }
                                 return hit;
                             }
-                        })
-                                .doOnNext(new Action1<Hit>() {
+                        }).doOnNext(new Action1<Hit>() {
                                     @Override
                                     public void call(Hit hit) {
                                         serviceProvider.getService().getHitService().createHit(hit).subscribe();
@@ -177,7 +175,6 @@ public class AskSpatialTaskActivity extends BootstrapFragmentActivity {
                 .doOnNext(new Action1<Hit>() {
                     @Override
                     public void call(Hit hit) {
-                        Toaster.showShort(mActivity, mActivity.getString(R.string.message_ask_question_success));
                         bus.post(new TaskCreateSuccessEvent());
                         mActivity.hideProgress();
                         finish();

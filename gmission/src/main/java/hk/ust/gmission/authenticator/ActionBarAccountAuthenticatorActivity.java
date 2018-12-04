@@ -3,7 +3,7 @@ package hk.ust.gmission.authenticator;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import hk.ust.gmission.Injector;
 
@@ -23,7 +23,7 @@ import hk.ust.gmission.Injector;
  * {@link android.accounts.AccountManager#ERROR_CODE_CANCELED}
  * will be called on the response.
  */
-public class ActionBarAccountAuthenticatorActivity extends ActionBarActivity {
+public class ActionBarAccountAuthenticatorActivity extends AppCompatActivity {
     private AccountAuthenticatorResponse accountAuthenticatorResponse = null;
     private Bundle resultBundle = null;
 

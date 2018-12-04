@@ -221,9 +221,9 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
     private void subcribeButtons(){
         RxView.clicks(mMyLocationBtn)
-                .doOnNext(new Action1<Void>() {
+                .doOnNext(new Action1<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void call(Object o) {
                         if (currentLocation != null){
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), CAMERA_ZOOM_LEVEL));
                         } else {
@@ -235,18 +235,19 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
         RxView.clicks(mRefreshBtn)
                 .observeOn(Schedulers.io())
-                .doOnNext(new Action1<Void>() {
+                .doOnNext(new Action1<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void call(Object o) {
                         refreshSpaitalTasks();
+
                     }
                 })
                 .subscribe();
 
         RxView.clicks(mAddTaskBtn)
-                .doOnNext(new Action1<Void>() {
+                .doOnNext(new Action1<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void call(Object o) {
                         if (currentLocation == null){
                             Toast.makeText(getContext(), getString(R.string.message_current_location_unavailable), Toast.LENGTH_SHORT).show();
                         } else {
@@ -260,7 +261,9 @@ public class TaskMapFragment extends Fragment implements GoogleMap.OnMapLoadedCa
 
     @Subscribe
     public void onTaskCreatedEvent(TaskCreateSuccessEvent event){
-        askHereMarker.remove();
+        if (askHereMarker != null){
+            askHereMarker.remove();
+        }
         askHereMarker = null;
         mRefreshBtn.callOnClick();
     }

@@ -5,7 +5,6 @@ package hk.ust.gmission;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
-import android.support.multidex.MultiDex;
 
 /**
  * gMission application
@@ -44,7 +43,7 @@ public class BootstrapApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+//        MultiDex.install(this);
     }
 
     private Object getRootModule() {

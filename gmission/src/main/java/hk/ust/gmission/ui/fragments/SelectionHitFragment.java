@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 
 import java.util.List;
@@ -95,6 +96,7 @@ public class SelectionHitFragment extends BaseAnswerFragment {
                     @Override
                     public void call(Integer integer) {
                         bus.post(new HitSubmitEnableEvent());
+
                     }
                 })
                 .subscribe();

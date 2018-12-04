@@ -3,7 +3,7 @@ package hk.ust.gmission.ui.activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.squareup.otto.Bus;
 
@@ -17,7 +17,7 @@ import hk.ust.gmission.R;
 /**
  * Base class for all Bootstrap Activities that need fragments.
  */
-public class BootstrapFragmentActivity extends ActionBarActivity {
+public class BootstrapFragmentActivity extends AppCompatActivity {
 
     @Inject protected Bus bus;
     @Inject protected BootstrapServiceProvider serviceProvider;

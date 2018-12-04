@@ -142,9 +142,9 @@ public class MainActivity extends BootstrapFragmentActivity{
 //        new AppUpdateCheckTask(this.getActivity()).execute();
 
         //initial baidu push service
-        PushManager.startWork(getApplicationContext(),
-                PushConstants.LOGIN_TYPE_API_KEY,
-                BaiduPushUtils.getMetaValue(MainActivity.this, "api_key"));
+//        PushManager.startWork(getApplicationContext(),
+//                PushConstants.LOGIN_TYPE_API_KEY,
+//                BaiduPushUtils.getMetaValue(MainActivity.this, "api_key"));
 
     }
 

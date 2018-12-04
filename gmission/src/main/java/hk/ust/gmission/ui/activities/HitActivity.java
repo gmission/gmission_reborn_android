@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.kevinsawicki.wishlist.Toaster;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -38,6 +37,7 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
 
 import static hk.ust.gmission.core.Constants.Extra.HIT_ID;
 
@@ -74,23 +74,26 @@ public class HitActivity extends BootstrapFragmentActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             String hitId = getIntent().getExtras().getString(HIT_ID);
             serviceProvider.getService().getHitService().getHit(hitId)
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
                     .flatMap(new Func1<Hit, Observable<Attachment>>() {
                         @Override
                         public Observable<Attachment> call(Hit hit) {
                             mHit = hit;
                             initializeAnswerArea();
                             loadingNotificationText.setVisibility(View.INVISIBLE);
+                            if (hit.getAttachment_id() == null){
+                                return Observable.just(null);
+                            }
 
                             return serviceProvider.getService().getAttachmentService()
                                     .getAttachment(hit.getAttachment_id()); // if no attachment, the flow will stop here
                         }
                     })
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<Attachment>() {
                         @Override
                         public void call(Attachment attachment) {
-                            if (attachment.getType().equals("image")) {
+                            if (attachment != null && attachment.getType().equals("image")) {
                                 Picasso.with(mActivity)
                                         .load(Constants.Http.URL_IMAGE_ORI + "/" + attachment.getValue())
                                         .resize(hitAttachmentImage.getWidth(), 0)//0 means variable height
@@ -166,12 +169,12 @@ public class HitActivity extends BootstrapFragmentActivity {
                         mActivity.showProgress();
                         return o;
                     }
+
                 })
                 .observeOn(Schedulers.io())
                 .flatMap(new Func1<Object, Observable<ImageVideoResult>>() {
                     @Override
-                    public Observable<ImageVideoResult> call(Object stringObservable) {
-
+                    public Observable<ImageVideoResult> call(Object o) {
                         File imageFile = answerFragment.getImageFile();
                         if (imageFile == null){
                             ImageVideoResult imageVideoResult = new ImageVideoResult();
@@ -182,8 +185,7 @@ public class HitActivity extends BootstrapFragmentActivity {
                         TypedString typedString = new TypedString("file");
 
 
-                        return serviceProvider.getService().getAttachmentService().createImage(typedFile, typedString);
-                    }
+                        return serviceProvider.getService().getAttachmentService().createImage(typedFile, typedString).asObservable();                    }
                 })
                 .flatMap(new Func1<ImageVideoResult, Observable<Attachment>>() {
                     @Override
@@ -230,7 +232,6 @@ public class HitActivity extends BootstrapFragmentActivity {
                             bus.post(new HitAnswerSuccessEvent(answer.getHit_id(), null, HitAnswerSuccessEvent.CAMPAIGN_TYPE));
                         }
 
-                        Toaster.showShort(mActivity, mActivity.getString(R.string.message_answer_success));
                         mActivity.hideProgress();
                         finish();
                     }
@@ -239,13 +240,6 @@ public class HitActivity extends BootstrapFragmentActivity {
                     @Override
                     public void call(Throwable e) {
                         Throwable cause = e.getCause() != null ? e.getCause() : e;
-
-                        String message;
-
-                        message = cause.getMessage();
-
-                        Toaster.showLong(HitActivity.this, message);
-
                     }
                 })
                 .subscribe();
